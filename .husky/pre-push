@@ -12,8 +12,12 @@ echo "remote : $remote"
 url="$2"
 echo "url : $url"
 
-echo "밖 local_ref : $local_ref"
 
+if [ "$url" != "$FORBIDDEN_HTTPS_URL" -a "$url" != "$FORBIDDEN_SSH_URL" ]
+then
+    echo "forked branch can push your commits"
+    exit 0 # Forked Project 에서는 제한하지 않음
+fi
 
 if read local_ref local_sha remote_ref remote_sha
 then
@@ -27,7 +31,6 @@ then
         echo "DO NOT PUSH TO MAIN OR DEV"
         exit 1 # 금지된 ref 로 push 를 실행하면 에러
     fi
-  exit 1
 fi
 
-exit 1
+exit 0
