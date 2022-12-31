@@ -17,8 +17,6 @@
 
 ## 👩‍💻 Coding Conventions
 
----
-
 <details>
 <summary>명명규칙(Naming Conventions)</summary>
 <div markdown="1">
@@ -228,8 +226,6 @@
 
 ## 🌳 Branch
 
----
-
 🌱 git branch 전략
 
 `main branch` : 배포 단위 branch
@@ -267,7 +263,7 @@
 
 `ex) feat(변경한 파일) : 변경 내용 (/#issue num)`
 
-```ruby
+```plain
 - ✨ feat:      새로운 기능 구현
 - 🐛 fix:       버그, 오류 해결
 - 🧹 chore:     src 또는 test 파일을 수정하지 않는 기타 변경 사항 ( 새로운 파일 생성, 파일 이동, 이름 변경 등 )
