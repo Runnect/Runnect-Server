@@ -252,31 +252,33 @@
 - main
 - dev
 - feat
-   ├── #1-isuue name 1
-   └── #2-isuue name 2
+   ├── #1-isuue name1
+   └── #2-isuue name2
 ```
 
 </aside>
 <hr>
 </br>
 
-## 🧳 Commit Convention
+## 🧵 Commit Convention
 
 <aside>
-👻 git commit message convention
+🪡  git commit message convention
 
-`ex) Feat/#`issue num`User API 파일 추가`
+`ex) feat(변경한 파일) : 변경 내용 (/#issue num)`
 
 ```ruby
-- Chore : 코드 수정, 내부 파일 수정
-- Feat : 새로운 기능 구현
-- Add : Feat 이외의 부수적인 코드 추가, 라이브러리 추가, 새로운 파일 생성 시
-- Fix : 버그, 오류 해결
-- Del : 쓸모없는 코드 삭제
-- Docs : README나 WIKI 등의 문서 개정
-- Move : 프로젝트 내 파일이나 코드의 이동
-- Rename : 파일 이름의 변경
+- ✨ feat:      새로운 기능 구현
+- 🐛 fix:       버그, 오류 해결
+- 🧹 chore:     src 또는 test 파일을 수정하지 않는 기타 변경 사항 ( 새로운 파일 생성, 파일 이동, 이름 변경 등 )
+- ♻️ refactor:  버그를 수정이나 기능을 추가가 없는 코드 변경 ( 가독성, 재사용성 등을 위해 기존 소스 코드를 다시 작성)
+- 💎 style:     코드의 의미에 영향을 미치지 않는 변경 사항 ( 코드가 아닌 스타일 변경 )
+- 🏗️ build:    빌드 시스템 또는 외부에 영향을 미치는 변경 사항 종속성 ( 라이브러리 추가 등 )
+- 📈 perf:      성능을 향상 시키기 위한 코드 변경
+- 🧪 test:      테스트 추가 또는 이전 테스트 수정
+- 📝 docs:      README나 WIKI 등의 문서 개정
+- ⏪️ revert:    이전 커밋을 되돌리는 경우
+- 📦 ci:      CI 구성 파일 및 스크립트 변경
 - Merge: 다른브렌치를 merge하는 경우
-- Style : 코드가 아닌 스타일 변경을 하는 경우
 - Init : Initial commit을 하는 경우
 ```
