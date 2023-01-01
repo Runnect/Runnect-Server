@@ -255,7 +255,7 @@
 ## 🧵 Commit Convention
 
 <aside>
-🪡  git commit message convention
+📍  git commit message convention
 
 `ex) feat(변경한 파일) : 변경 내용 (/#issue num)`
 
