@@ -32,7 +32,7 @@ const createCourse = async (req: Request, res: Response) => {
         if (!data) {
             return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.CREATE_COURSE_FAIL));
         }
-        return res.status(sc.OK).send(success(sc.OK, rm.CREATE_COURSE_SUCCESS));
+        return res.status(sc.OK).send(success(sc.OK, rm.CREATE_COURSE_SUCCESS, data));
     } catch (e) {
         console.error(e);
         return res.status(sc.INTERNAL_SERVER_ERROR).send(fail(sc.INTERNAL_SERVER_ERROR, rm.INTERNAL_SERVER_ERROR));
