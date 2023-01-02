@@ -3,6 +3,7 @@
 .vscode
 .husky/
 
+
 # Logs
 logs
 *.log
