@@ -1,7 +1,7 @@
+
 #!/usr/bin/env sh
 . "$(dirname -- "$0")/_/husky.sh"
 
-echo "start $HOME $SHELL"
 MAC_SHELL_PATH="/bin/zsh"
 WINDOW_SHELL_PATH="/usr/bin/bash.exe"
 if [ "$SHELL" == "$MAC_SHELL_PATH" ]
@@ -11,3 +11,4 @@ then
 else
     echo "윈도우에서는 ‘npx cz’ 커맨드를 사용해 commitizen 사용가능 "
 fi
+
