@@ -1,4 +1,16 @@
 #!/usr/bin/env sh
 . "$(dirname -- "$0")/_/husky.sh"
 
-exec </dev/tty&&node_modules/.bin/cz --hook||true
+
+
+echo "start $HOME"
+SUHWA_HOME_PATH="/Users/yusuhwa"
+#WINDOW_SHELL_PATH=“/usr/bin/bash.exe”
+if [ "$HOME"=="$SUHWA_HOME_PATH" ]
+then
+    echo "맥 ㅇㅇ" 
+    exec </dev/tty&&node_modules/.bin/cz --hook||true
+else
+    echo " 윈도우에는 'npx cz' 커맨드를 사용해 commitizen 사용가능 "
+fi
+
