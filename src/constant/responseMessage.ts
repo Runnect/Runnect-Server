@@ -19,7 +19,7 @@ export default {
   UPDATE_USER_SUCCESS: "유저 수정 성공",
   DELETE_USER_SUCCESS: "유저 탈퇴 성공",
   DELETE_USER_FAIL: "유저 탈퇴 실패",
-  NO_USER: "탈퇴했거나 가입하지 않은 유저입니다.",
+  NO_USER: "존재하지 않는 유저",
 
   // 토큰
   CREATE_TOKEN_SUCCESS: "토큰 재발급 성공",
@@ -31,4 +31,8 @@ export default {
 
   // 서버 내 오류
   INTERNAL_SERVER_ERROR: "서버 내 오류",
+
+  //public Course
+  NO_CONTENT: "제목과 설명이 없습니다.",
+  UPLOAD_PUBLIC_COURSE: "코스 업로드 성공",
 };
