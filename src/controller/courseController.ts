@@ -13,10 +13,30 @@ import { requestConvertDeparture } from '../module/convert/requestConvertDepartu
  */
 const createCourse = async (req: Request, res: Response) => {
     const error = validationResult(req);
-    if (!error.isEmpty()) {
-        return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.BAD_REQUEST));
-    }
-    console.log(`ddd`)
+    if (error) {
+        const nonValue = error['errors'][0]['param'];
+        let errorMsg;
+        console.log(nonValue);
+        switch (nonValue) {
+            case 'machineid': {
+                errorMsg = rm.NO_USER;
+                break;
+            }
+            case 'path': {
+                errorMsg = rm.NO_PATH;
+                break;
+            }
+            case 'distance': {
+                errorMsg = rm.NO_DISTANCE;
+                break;
+            }
+            default: {
+                errorMsg = rm.NO_DEPARTURE;
+                break;
+            }    
+        }
+        return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, errorMsg));
+    } 
 
     const image: Express.MulterS3.File = req.file as Express.MulterS3.File;
     const { location } = image;
@@ -24,7 +44,7 @@ const createCourse = async (req: Request, res: Response) => {
     const departureObject = requestConvertDeparture(req.body.departureAddress, req.body.departureName);
     const courseCreateDTO: CourseCreateDTO = {machineId: req.header("machineId") as string, path: req.body.path, distance: Number(req.body.distance), region: departureObject.region, city: departureObject.city, town: departureObject.town, detail: departureObject.detail, name: departureObject.name, image: location};
 
-    console.dir(courseCreateDTO);
+    // console.dir(courseCreateDTO);
 
     try {
         const data = await courseService.createCourse(courseCreateDTO);

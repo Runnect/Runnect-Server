@@ -28,6 +28,7 @@ export default {
   NO_DISTANCE: "거리 정보 없음",
   NO_DEPARTURE: "출발지 정보 없음",
   NO_IMAGE: "이미지 정보 없음",
+  NO_PATH: "경로 정보 없음",
 
   // 토큰
   CREATE_TOKEN_SUCCESS: "토큰 재발급 성공",
