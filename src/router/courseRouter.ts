@@ -7,7 +7,7 @@ const router: Router = Router();
 
 router.post(
     "/",
-    upload.single('file'),
+    upload.single('image'),
     [
         header("machineId").notEmpty(),
         body("path").notEmpty(),

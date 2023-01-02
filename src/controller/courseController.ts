@@ -3,6 +3,7 @@ import { validationResult } from 'express-validator';
 import { success, fail } from './../constant/response';
 import { Request, Response } from "express";
 import { rm, sc } from '../constant';
+import { courseService } from '../service';
 
 /**
  * @route  POST/course
@@ -14,14 +15,18 @@ const createCourse = async (req: Request, res: Response) => {
     if (!error.isEmpty()) {
         return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.BAD_REQUEST));
     }
+    console.log(`ddd`)
 
-    const courseCreateDTO: CourseCreateDTO = req.body;
     const machineId = req.header("machineId");
     const image: Express.MulterS3.File = req.file as Express.MulterS3.File;
     const { location } = image;
 
+
+    const courseCreateDTO: CourseCreateDTO = req.body;
+    console.dir(courseCreateDTO);
+
     try {
-        const data = await courseService.createCourse(courseCreateDTO, location, machineId);
+        const data = await courseService.createCourse(courseCreateDTO, location, machineId as string);
 
         if (!data) {
             return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.CREATE_COURSE_FAIL));

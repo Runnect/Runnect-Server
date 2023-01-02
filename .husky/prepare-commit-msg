@@ -1,16 +1,13 @@
 #!/usr/bin/env sh
 . "$(dirname -- "$0")/_/husky.sh"
 
-
-
-echo "start $HOME"
-SUHWA_HOME_PATH="/Users/yusuhwa"
-#WINDOW_SHELL_PATH=“/usr/bin/bash.exe”
-if [ "$HOME"=="$SUHWA_HOME_PATH" ]
+echo "start $HOME $SHELL"
+MAC_SHELL_PATH="/bin/zsh"
+WINDOW_SHELL_PATH="/usr/bin/bash.exe"
+if [ "$SHELL" == "$MAC_SHELL_PATH" ]
 then
-    echo "맥 ㅇㅇ" 
+    echo "맥에서는 commitizen 사용가능 "
     exec </dev/tty&&node_modules/.bin/cz --hook||true
 else
-    echo " 윈도우에는 'npx cz' 커맨드를 사용해 commitizen 사용가능 "
+    echo "윈도우에서는 ‘npx cz’ 커맨드를 사용해 commitizen 사용가능 "
 fi
-

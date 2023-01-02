@@ -1,6 +1,6 @@
 export interface CourseCreateDTO {
-    path: any[],
-    distance: number,
+    path: string,
+    distance: string,
     departureAddress: string,
     departureName: string,
 };
