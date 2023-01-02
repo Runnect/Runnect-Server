@@ -4,6 +4,7 @@ import { rm, sc } from "../constant";
 import { success, fail } from "../constant/response";
 import { PublicCourseCreateRequestDTO, PublicCourseCreateResponseDTO } from "../interface/DTO/PublicCourseCreateDTO";
 import { validationResult } from "express-validator";
+import { timestampConvertString } from "../module/convert/convertTime";
 
 const createPublicCourse = async (req: Request, res: Response) => {
   const error = validationResult(req);
@@ -21,9 +22,10 @@ const createPublicCourse = async (req: Request, res: Response) => {
       //여기에 존재하지 않는 코스아이디, 없는 유저있으면 좋겠다. 분기처리필요
       return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.BAD_REQUEST));
     } else {
+      const createdAt = timestampConvertString(createdPublicCourse.created_at);
       const publicCourseCreateResponseDTO: PublicCourseCreateResponseDTO = {
         publicCourse: {
-          createdAt: createdPublicCourse.created_at,
+          createdAt: createdAt,
           id: createdPublicCourse.id,
         },
       };
