@@ -1,7 +1,7 @@
 // src/modules/jwtHandler.ts
 
 import jwt from "jsonwebtoken";
-import { tokenType } from "../constants";
+import { tokenType } from "../constant";
 
 //* 받아온 userId를 담는 access token 생성
 const sign = (userId: number) => {
