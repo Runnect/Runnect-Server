@@ -13,7 +13,7 @@ import { requestConvertDeparture } from '../module/convert/requestConvertDepartu
  */
 const createCourse = async (req: Request, res: Response) => {
     const error = validationResult(req);
-    if (error) {
+    if (!error.isEmpty()) {
         const nonValue = error['errors'][0]['param'];
         let errorMsg;
         console.log(nonValue);
@@ -33,7 +33,7 @@ const createCourse = async (req: Request, res: Response) => {
             default: {
                 errorMsg = rm.NO_DEPARTURE;
                 break;
-            }    
+            }   
         }
         return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, errorMsg));
     } 
