@@ -4,7 +4,7 @@ import { rm, sc } from "../constant";
 import { success, fail } from "../constant/response";
 import { PublicCourseCreateRequestDTO, PublicCourseCreateResponseDTO } from "../interface/DTO/PublicCourseCreateDTO";
 import { validationResult } from "express-validator";
-import { timestampConvertString } from "../module/convert/convertTime";
+import { dateConvertString } from "../module/convert/convertTime";
 
 const createPublicCourse = async (req: Request, res: Response) => {
   const error = validationResult(req);
@@ -26,7 +26,7 @@ const createPublicCourse = async (req: Request, res: Response) => {
       return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, createdPublicCourse as string));
     } else {
       //db에서 출력받은 timestamp를 string으로 변환
-      const createdAt = timestampConvertString(createdPublicCourse.created_at);
+      const createdAt = dateConvertString(createdPublicCourse.created_at);
 
       const publicCourseCreateResponseDTO: PublicCourseCreateResponseDTO = {
         publicCourse: {
