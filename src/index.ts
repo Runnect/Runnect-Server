@@ -6,7 +6,7 @@ const app = express();
 
 app.use(express.json());
 
-app.use("/", router);
+app.use("/api", router);
 
 app.get("/", (req: Request, res: Response, next: NextFunction) => {
   res.send("~~~~~서버서버서버~~~~~");
