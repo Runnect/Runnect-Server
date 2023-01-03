@@ -1,5 +1,5 @@
 export interface PublicCourseCreateRequestDTO {
-  courseId: string;
+  courseId?: string;
   title: string;
   description: string;
 }

@@ -25,7 +25,6 @@ const createPublicCourse = async (publicCourseCreateRequestDTO: PublicCourseCrea
         },
       });
 
-      console.log(courseData);
       return publicCourseData;
     }
   } catch (error) {
