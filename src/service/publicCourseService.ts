@@ -9,7 +9,7 @@ const createPublicCourse = async (publicCourseCreateRequestDTO: PublicCourseCrea
   try {
     const publicCourseData = await prisma.publicCourse.create({
       data: {
-        course_id: +publicCourseCreateRequestDTO.courseId,
+        course_id: +(publicCourseCreateRequestDTO.courseId as string),
         title: publicCourseCreateRequestDTO.title,
         description: publicCourseCreateRequestDTO.description,
       },
