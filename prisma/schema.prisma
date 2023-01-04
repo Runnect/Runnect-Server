@@ -1,0 +1,85 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Course {
+  id               Int                  @id @default(autoincrement())
+  user_machine_id  String               @db.VarChar(100)
+  departure_region String               @db.VarChar(10)
+  departure_city   String               @db.VarChar(10)
+  departure_town   String               @db.VarChar(10)
+  departure_detail String               @db.VarChar(20)
+  distance         Float                @db.Real
+  created_at       DateTime             @default(now()) @db.Timestamp(6)
+  deleted_at       DateTime?            @db.Timestamp(6)
+  image            String               @db.VarChar(500)
+  departure_name   String               @db.VarChar(50)
+  private          Boolean              @default(true)
+  path             Unsupported("path")?
+  User             User                 @relation(fields: [user_machine_id], references: [machine_id], onDelete: Cascade, map: "course_user_machine_id_fk")
+  PublicCourse     PublicCourse?
+  Record           Record[]
+}
+
+model PublicCourse {
+  id          Int       @id @default(autoincrement())
+  course_id   Int       @unique
+  created_at  DateTime  @default(now()) @db.Timestamp(6)
+  deleted_at  DateTime? @db.Timestamp(6)
+  title       String    @db.VarChar(40)
+  description String
+  Course      Course    @relation(fields: [course_id], references: [id], onDelete: Cascade, map: "publiccourse_course_id_fk")
+  Record      Record[]
+  Scrap       Scrap[]
+}
+
+model Record {
+  id               Int           @id @default(autoincrement())
+  user_machine_id  String        @db.VarChar(100)
+  course_id        Int
+  public_course_id Int?
+  title            String        @db.VarChar(40)
+  created_at       DateTime      @default(now()) @db.Timestamp(6)
+  deleted_at       DateTime?     @db.Timestamp(6)
+  pace             DateTime      @db.Time(6)
+  time             DateTime      @db.Time(6)
+  Course           Course        @relation(fields: [course_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "record_course_id_fk")
+  PublicCourse     PublicCourse? @relation(fields: [public_course_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "record_publiccourse_id_fk")
+  User             User          @relation(fields: [user_machine_id], references: [machine_id], onDelete: Cascade, map: "record_user_machine_id_fk")
+}
+
+model Scrap {
+  id               Int          @id @default(autoincrement())
+  user_machine_id  String       @db.VarChar(100)
+  public_course_id Int
+  created_at       DateTime     @default(now()) @db.Timestamp(6)
+  scrapTF          Boolean      @default(true)
+  PublicCourse     PublicCourse @relation(fields: [public_course_id], references: [id], onDelete: Cascade, map: "scrap_publiccourse_id_fk")
+  User             User         @relation(fields: [user_machine_id], references: [machine_id], onDelete: Cascade, map: "scrap_user_machine_id_fk")
+}
+
+model User {
+  machine_id   String      @id @db.VarChar(100)
+  nickname     String      @unique @db.VarChar(14)
+  latest_stamp String      @default("CSPR0") @db.VarChar(10)
+  level        Int?        @default(0)
+  created_at   DateTime    @default(now()) @db.Timestamp(6)
+  modified_at  DateTime?   @db.Timestamp(6)
+  Course       Course[]
+  Record       Record[]
+  Scrap        Scrap[]
+  UserStamp    UserStamp[]
+}
+
+model UserStamp {
+  id              Int      @id @default(autoincrement())
+  stamp_id        String   @db.VarChar(2)
+  created_at      DateTime @default(now()) @db.Timestamp(6)
+  user_machine_id String   @db.VarChar(100)
+  User            User     @relation(fields: [user_machine_id], references: [machine_id], onDelete: Cascade, map: "userstamp_user_machine_id_fk")
+}

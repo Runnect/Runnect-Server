@@ -35,4 +35,11 @@ export default {
   //public Course
   NO_CONTENT: "제목과 설명이 없습니다.",
   UPLOAD_PUBLIC_COURSE: "코스 업로드 성공",
+
+  //record
+  UPLOAD_RECORD: "경로기록하기 성공",
+  INVALID_COURSEID: "유효하지 않은 코스 아이디",
+  NO_RECORD_TITLE: "경로 타이틀 없음",
+  NO_RECORD_TIME: "경로 뛴 시간 없음",
+  NO_RECORD_PACE: "경로 뛴 페이스 없음",
 };
