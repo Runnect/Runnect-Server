@@ -1,4 +1,3 @@
-import { CourseCreateDTO } from './../interface/course/CourseCreateDTO';
 import { validationResult } from 'express-validator';
 import { success, fail } from './../constant/response';
 import { Request, Response } from "express";
@@ -15,12 +14,14 @@ const getCourseByUser = async (req: Request, res: Response) => {
     const error = validationResult(req);
     if (!error.isEmpty()) return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.NO_USER));
 
-    const machineId = req.header("machineId");
+    const machineId = req.header("machineId") as string;
     try {
         const data = await courseService.getCourseByUser(machineId);
+        return res.status(sc.OK).send(success(sc.OK, rm.READ_COURSE_SUCCESS, data));
+    } catch (error) {
+        console.error(error);
+        res.status(sc.INTERNAL_SERVER_ERROR).send(fail(sc.INTERNAL_SERVER_ERROR, rm.INTERNAL_SERVER_ERROR));
     }
-
-
 };
 
 
