@@ -13,7 +13,8 @@
     "db:push": "npx prisma db push",
     "generate": "npx prisma generate",
     "prepare": "chmod ug+x .husky/* && husky install",
-    "greet": "hello husky!"
+    "greet": "hello husky!",
+    "test": "mocha ./test/"
   },
   "dependencies": {
     "@prisma/client": "^4.8.0",
@@ -37,11 +38,14 @@
     "@types/multer": "^1.4.7",
     "@types/multer-s3": "^3.0.0",
     "@types/node": "^18.11.17",
+    "chai": "^4.3.7",
     "commitizen": "^4.2.6",
     "cz-conventional-changelog": "3.3.0",
     "cz-emoji-conventional": "^1.0.1",
     "husky": "^8.0.0",
-    "nodemon": "^2.0.20"
+    "mocha": "^10.2.0",
+    "nodemon": "^2.0.20",
+    "supertest": "^6.3.3"
   },
   "config": {
     "commitizen": {
