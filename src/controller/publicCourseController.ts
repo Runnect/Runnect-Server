@@ -148,13 +148,28 @@ const recommendPublicCourse = async (req: Request, res: Response) => {
   const machineId: string = req.header("machineId") as string;
 
   try {
-
     const recommendedPublicCourse = await publicCourseService.recommendPublicCourse(machineId);
 
-    if(!recommendedPublicCourse){
-      return res.status(sc.OK).send(success(sc.OK,rm.READ_RECOMMENDED_COURSE_SUCCESS,recommendedPublicCourse));
-    }else{
-      const publicCourses : PublicCourse[]=
+    if (!recommendedPublicCourse) {
+      return res.status(sc.OK).send(success(sc.OK, rm.READ_RECOMMENDED_COURSE_SUCCESS, recommendedPublicCourse));
+    } else {
+      const publicCourses: PublicCourse[] = recommendedPublicCourse.map((rbc) => {
+        const pc: PublicCourse = {
+          id: rbc.id,
+          courseId: rbc.course_id,
+          title: rbc.title,
+          image: rbc.Course.image,
+          scarp: checkScrap(rbc.Scrap),
+          departure: {
+            region: rbc.Course.departure_region,
+            city: rbc.Course.departure_city,
+          },
+        };
+
+        return pc;
+      });
+
+      return res.status(sc.OK).send(success(sc.OK, rm.READ_RECOMMENDED_COURSE_SUCCESS, publicCourses));
     }
   } catch (error) {
     console.log(error);
