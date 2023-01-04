@@ -43,8 +43,28 @@ const getCourseByUser = async (machineId: string) => {
     }
 };
 
+const getPrivateCourseByUser = async (machineId: string) => {
+    try {
+        const result = await prisma.course.findMany({
+            where: {
+                AND: [ {user_machine_id: machineId}, {private: true} ],
+            },
+            orderBy: {
+                created_at: "desc",
+            },
+        });
+
+        
+
+    } catch (error) {
+        console.error(error);
+        throw error;
+    }
+};
+
 const courseService = {
     getCourseByUser,
+    getPrivateCourseByUser,
 };
 
 export default courseService;

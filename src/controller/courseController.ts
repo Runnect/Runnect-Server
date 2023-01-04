@@ -24,10 +24,26 @@ const getCourseByUser = async (req: Request, res: Response) => {
     }
 };
 
+/**
+ * @route  GET/course/private/user
+ * @desc 내가 그린 코스 조회 (업로드 미포함)
+ * @access 
+ */
+const getPrivateCourseByUser = async (req: Request, res: Response) => {
+    const error = validationResult(req);
+    if (!error.isEmpty()) return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.NO_USER));
+
+    const machineId = req.header("machineId") as string;
+    try {
+        const data = await courseService.getPrivateCourseByUser(machineId);
+    }
+
+};
 
 
 const courseController = {
     getCourseByUser,
+    getPrivateCourseByUser,
 };
 
 export default courseController;

@@ -12,4 +12,12 @@ router.get(
     courseController.getCourseByUser
 );
 
+router.get(
+    "/private/user",
+    [
+        header("machineId").notEmpty(),
+    ],
+    courseController.getPrivateCourseByUser
+);
+
 export default router;
