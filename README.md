@@ -17,6 +17,13 @@
 <hr>
 </br>
 
+# 📄 API(+ Non - API) Docs 및 구현 진척도
+
+[Runnect Server API(+ Non - API) Docs](https://meowing-orange-9b6.notion.site/Runnect-Server-API-Non-API-Docs-d22169bc1df84bf8871e59781d03be2b)
+</aside>
+<hr>
+</br>
+
 # 🗣️️ 컨벤션
 
 > 💡 **동료들과 말투를 통일하기 위해 컨벤션을 지정합니다.**
