@@ -42,4 +42,5 @@ export default {
   NO_RECORD_TITLE: "경로 타이틀 없음",
   NO_RECORD_TIME: "경로 뛴 시간 없음",
   NO_RECORD_PACE: "경로 뛴 페이스 없음",
+  NO_COURSE_ID: "코스아이디 없음",
 };

@@ -2,22 +2,15 @@ import { Request, Response } from "express";
 import { rm, sc } from "../constant";
 import { success, fail } from "../constant/response";
 import { validationResult } from "express-validator";
-import { timestampConvertString } from "../module/convert/convertTime";
+import {
+  timestampConvertString,
+  stringConvertTime,
+} from "../module/convert/convertTime";
 import { recordService } from "../service";
 import {
   recordRequestDTO,
   recordResponseDTO,
 } from "./../interface/DTO/recordDTO";
-
-const stringConvertTime = (string: string) => {
-  var time = new Date();
-  var [hours, minutes, seconds] = string.split(":");
-  time.setHours(+hours);
-  time.setMinutes(+minutes);
-  time.setSeconds(+seconds);
-
-  return time;
-};
 
 const createRecord = async (req: Request, res: Response) => {
   try {
@@ -27,16 +20,20 @@ const createRecord = async (req: Request, res: Response) => {
       let errorMsg;
       console.log(nonValue);
       switch (nonValue) {
+        case "courseId": {
+          errorMsg = error["errors"][0].msg;
+          break;
+        }
         case "title": {
-          errorMsg = rm.NO_RECORD_TITLE;
+          errorMsg = error["errors"][0].msg;
           break;
         }
         case "time": {
-          errorMsg = rm.NO_RECORD_TIME;
+          errorMsg = error["errors"][0].msg;
           break;
         }
         case "pace": {
-          errorMsg = rm.NO_RECORD_PACE;
+          errorMsg = error["errors"][0].msg;
           break;
         }
         default: {
@@ -47,6 +44,7 @@ const createRecord = async (req: Request, res: Response) => {
       return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, errorMsg));
     }
     const { courseId, publicCourseId, title, time, pace } = req.body;
+
     const recordRequestDTO: recordRequestDTO = {
       machineId: req.header("machineId") as string,
       courseId: courseId,
