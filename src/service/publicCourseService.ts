@@ -73,7 +73,7 @@ const getPublicCourseByUser = async (machineId: string) => {
   }
 };
 
-const getPublicCourseDetail = async () => {};
+const getPublicCourseDetail = async (machineId: string, publicCourseId: number) => {};
 
 const recommendPublicCourse = async () => {};
 
