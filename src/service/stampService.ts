@@ -4,9 +4,30 @@ const prisma = new PrismaClient();
 
 const createStampByUser = async (machineId: string, option: string) => {
     const getCounts = getCount(machineId, option);
-    
+
    
 
+};
+
+const stampIsFullChk = async (machineId: string, option: string) => {
+    const getStamp = await prisma.$queryRaw`SELECT stamp_id FROM UserStamp WHERE stamp_id LIKE 'c%' ORDER BY stamp_id desc LIMIT 1`;
+    if (!getStamp) {
+        return 0;
+    } else {
+        
+    }
+
+};
+
+const createCourseStamp = async (machineId: string) => {
+    const courseStampCount = (await prisma.course.findMany({
+        where: {
+            AND: [{ user_machine_id: machineId }, { deleted_at: null }],
+        },
+    })).length;
+    if (courseStampCount >= 10) {
+
+    }
 };
 
 const getCount = async(machineId: string, option: string) => {
