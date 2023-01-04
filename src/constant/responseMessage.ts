@@ -35,6 +35,7 @@ export default {
   //public Course
   NO_CONTENT: "제목과 설명이 없습니다.",
   UPLOAD_PUBLIC_COURSE: "코스 업로드 성공",
+  READ_PUBLIC_COURSE_BY_USER: "유저가 업로드한 코스 조회 성공",
 
   //record
   UPLOAD_RECORD: "경로기록하기 성공",

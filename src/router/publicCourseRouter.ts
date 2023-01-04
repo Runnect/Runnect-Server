@@ -7,9 +7,6 @@ const publicCourseRouter: Router = Router();
 publicCourseRouter.post(
   "/",
   [
-    header("machineId")
-      .notEmpty()
-      .withMessage("기기넘버가 없습니다."),
     body("courseId")
       .notEmpty()
       .withMessage("코스 아이디가 없습니다.")
@@ -24,8 +21,27 @@ publicCourseRouter.post(
   ],
   publicCourseController.createPublicCourse
 );
-publicCourseRouter.get("/", publicCourseController.recommendPublicCourse);
-publicCourseRouter.get("/user", publicCourseController.getPublicCourseByUser);
+
+publicCourseRouter.get(
+  "/",
+  [
+    header("machineId")
+      .notEmpty()
+      .withMessage("기기넘버가 없습니다."),
+  ],
+  publicCourseController.recommendPublicCourse
+);
+
+publicCourseRouter.get(
+  "/user",
+  [
+    header("machineId")
+      .notEmpty()
+      .withMessage("기기넘버가 없습니다."),
+  ],
+  publicCourseController.getPublicCourseByUser
+);
+
 publicCourseRouter.get("/detail/:publicCourseId", publicCourseController.getPublicCourseDetail);
 publicCourseRouter.get("search", publicCourseController.searchPublicCourse);
 
