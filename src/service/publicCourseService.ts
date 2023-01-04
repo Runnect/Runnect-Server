@@ -73,7 +73,35 @@ const getPublicCourseByUser = async (machineId: string) => {
   }
 };
 
-const getPublicCourseDetail = async (machineId: string, publicCourseId: number) => {};
+const getPublicCourseDetail = async (machineId: string, publicCourseId: number) => {
+  try {
+    const publicCourseData = await prisma.publicCourse.findUnique({
+      where: {
+        id: publicCourseId,
+      },
+      include: {
+        Course: {
+          include: {
+            User: true,
+          },
+        },
+        Scrap: {
+          where: {
+            AND: [{ user_machine_id: machineId }, { scrapTF: true }],
+          },
+        },
+      },
+    });
+
+    console.log(publicCourseData);
+
+    return publicCourseData;
+  } catch (error) {
+    //~ get은 에러분기처리를 할게없음... 어차피 데이터가 있냐없냐라서
+    console.log(error);
+    throw error;
+  }
+};
 
 const recommendPublicCourse = async () => {};
 

@@ -1,17 +1,12 @@
-import {
-  PublicCourse,
-  PublicCourseGetDTO,
-} from "./../interface/DTO/PublicCourseGetDTO";
+import { PublicCourse, PublicCourseGetDTO, PublicCourseDetailGetDTO } from "./../interface/DTO/PublicCourseGetDTO";
 import { Request, Response } from "express";
 import { publicCourseService } from "../service";
 import { rm, sc } from "../constant";
 import { success, fail } from "../constant/response";
-import {
-  PublicCourseCreateRequestDTO,
-  PublicCourseCreateResponseDTO,
-} from "../interface/DTO/PublicCourseCreateDTO";
+import { PublicCourseCreateRequestDTO, PublicCourseCreateResponseDTO } from "../interface/DTO/PublicCourseCreateDTO";
 import { validationResult } from "express-validator";
 import { dateConvertString } from "../module/convert/convertTime";
+import { checkScrap } from "../module/check/checkScrap";
 
 const createPublicCourse = async (req: Request, res: Response) => {
   const error = validationResult(req);
@@ -24,21 +19,12 @@ const createPublicCourse = async (req: Request, res: Response) => {
   const publicCourseCreateRequestDTO: PublicCourseCreateRequestDTO = req.body;
 
   try {
-    const createdPublicCourse = await publicCourseService.createPublicCourse(
-      publicCourseCreateRequestDTO
-    );
+    const createdPublicCourse = await publicCourseService.createPublicCourse(publicCourseCreateRequestDTO);
 
     if (!createdPublicCourse) {
-      return res
-        .status(sc.BAD_REQUEST)
-        .send(fail(sc.BAD_REQUEST, rm.BAD_REQUEST));
-    } else if (
-      typeof createdPublicCourse === "string" ||
-      createdPublicCourse instanceof String
-    ) {
-      return res
-        .status(sc.BAD_REQUEST)
-        .send(fail(sc.BAD_REQUEST, createdPublicCourse as string));
+      return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.BAD_REQUEST));
+    } else if (typeof createdPublicCourse === "string" || createdPublicCourse instanceof String) {
+      return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, createdPublicCourse as string));
     } else {
       //db에서 출력받은 timestamp를 string으로 변환
       const createdAt = dateConvertString(createdPublicCourse.created_at);
@@ -49,18 +35,12 @@ const createPublicCourse = async (req: Request, res: Response) => {
           id: createdPublicCourse.id,
         },
       };
-      return res
-        .status(sc.OK)
-        .send(
-          success(sc.OK, rm.UPLOAD_PUBLIC_COURSE, publicCourseCreateResponseDTO)
-        );
+      return res.status(sc.OK).send(success(sc.OK, rm.UPLOAD_PUBLIC_COURSE, publicCourseCreateResponseDTO));
     }
   } catch (error) {
     console.log(error);
     //서버내부오류
-    res
-      .status(sc.INTERNAL_SERVER_ERROR)
-      .send(fail(sc.INTERNAL_SERVER_ERROR, rm.INTERNAL_SERVER_ERROR));
+    res.status(sc.INTERNAL_SERVER_ERROR).send(fail(sc.INTERNAL_SERVER_ERROR, rm.INTERNAL_SERVER_ERROR));
   }
 };
 
@@ -74,32 +54,24 @@ const getPublicCourseByUser = async (req: Request, res: Response) => {
   const machineId: string = req.header("machineId") as string;
 
   try {
-    const publicCourseByUser = await publicCourseService.getPublicCourseByUser(
-      machineId
-    );
+    const publicCourseByUser = await publicCourseService.getPublicCourseByUser(machineId);
 
     if (!publicCourseByUser) {
-      return res
-        .status(sc.OK)
-        .send(
-          success(sc.OK, rm.READ_PUBLIC_COURSE_BY_USER, publicCourseByUser)
-        );
+      return res.status(sc.OK).send(success(sc.OK, rm.READ_PUBLIC_COURSE_BY_USER, publicCourseByUser));
     } else {
-      const publicCourses: PublicCourse[] = publicCourseByUser.map(
-        (pc: any) => {
-          let publicCourse: PublicCourse = {
-            id: pc.PublicCourse.id,
-            courseId: pc.id,
-            title: pc.PublicCourse.title,
-            image: pc.image,
-            departure: {
-              region: pc.departure_region,
-              city: pc.departure_city,
-            },
-          };
-          return publicCourse;
-        }
-      );
+      const publicCourses: PublicCourse[] = publicCourseByUser.map((pc: any) => {
+        let publicCourse: PublicCourse = {
+          id: pc.PublicCourse.id,
+          courseId: pc.id,
+          title: pc.PublicCourse.title,
+          image: pc.image,
+          departure: {
+            region: pc.departure_region,
+            city: pc.departure_city,
+          },
+        };
+        return publicCourse;
+      });
 
       const publicCourseGetDTO: PublicCourseGetDTO = {
         user: {
@@ -108,18 +80,12 @@ const getPublicCourseByUser = async (req: Request, res: Response) => {
         publicCourses: publicCourses,
       };
 
-      return res
-        .status(sc.OK)
-        .send(
-          success(sc.OK, rm.READ_PUBLIC_COURSE_BY_USER, publicCourseGetDTO)
-        );
+      return res.status(sc.OK).send(success(sc.OK, rm.READ_PUBLIC_COURSE_BY_USER, publicCourseGetDTO));
     }
   } catch (error) {
     console.log(error);
     //서버내부오류
-    res
-      .status(sc.INTERNAL_SERVER_ERROR)
-      .send(fail(sc.INTERNAL_SERVER_ERROR, rm.INTERNAL_SERVER_ERROR));
+    res.status(sc.INTERNAL_SERVER_ERROR).send(fail(sc.INTERNAL_SERVER_ERROR, rm.INTERNAL_SERVER_ERROR));
   }
 };
 
@@ -139,7 +105,31 @@ const getPublicCourseDetail = async (req: Request, res: Response) => {
     if (!publicCourseDetail) {
       res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.INVALID_PUBLIC_COURSE_ID));
     } else {
-      const publicCourseGetDTO: PublicCourseGetDTO = {};
+      const publicCourseDetailGetDTO: PublicCourseDetailGetDTO = {
+        user: {
+          nickname: publicCourseDetail.Course.User.nickname,
+          level: publicCourseDetail.Course.User.level as number,
+          image: publicCourseDetail.Course.User.latest_stamp,
+        },
+        publicCourse: {
+          id: publicCourseDetail.id,
+          courseId: publicCourseDetail.course_id,
+          scrap: checkScrap(publicCourseDetail.Scrap),
+          image: publicCourseDetail.Course.image,
+          title: publicCourseDetail.title,
+          description: publicCourseDetail.description,
+          distance: publicCourseDetail.Course.distance,
+          departure: {
+            region: publicCourseDetail.Course.departure_region,
+            city: publicCourseDetail.Course.departure_city,
+            town: publicCourseDetail.Course.departure_town,
+            detail: publicCourseDetail.Course.departure_detail,
+            name: publicCourseDetail.Course.departure_name,
+          },
+        },
+      };
+
+      return res.status(sc.OK).send(success(sc.OK, rm.READ_PUBLIC_COURSE_DETAIL_SUCCESS, publicCourseDetailGetDTO));
     }
   } catch (error) {
     console.log(error);
