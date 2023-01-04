@@ -20,6 +20,10 @@ const createRecord = async (req: Request, res: Response) => {
       let errorMsg;
       console.log(nonValue);
       switch (nonValue) {
+        case "machineid": {
+          errorMsg = error["errors"][0].msg;
+          break;
+        }
         case "courseId": {
           errorMsg = error["errors"][0].msg;
           break;
