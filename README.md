@@ -5,7 +5,9 @@
 </aside>
 <hr>
 </br>
-#  💽 DB ERD
+# 💽 DB ERD
+![image](https://user-images.githubusercontent.com/65851554/210541836-a70d8853-46e3-4103-81c1-258006343b7e.png)
+
 
 </aside>
 <hr>
