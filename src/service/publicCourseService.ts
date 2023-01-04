@@ -1,3 +1,4 @@
+import { log } from "console";
 import { PublicCourseCreateRequestDTO } from "./../interface/DTO/PublicCourseCreateDTO";
 import { PrismaClient } from "@prisma/client";
 import { PrismaClientKnownRequestError, PrismaClientValidationError } from "@prisma/client/runtime";
@@ -9,7 +10,7 @@ const createPublicCourse = async (publicCourseCreateRequestDTO: PublicCourseCrea
   try {
     const publicCourseData = await prisma.publicCourse.create({
       data: {
-        course_id: +publicCourseCreateRequestDTO.courseId,
+        course_id: +(publicCourseCreateRequestDTO.courseId as string),
         title: publicCourseCreateRequestDTO.title,
         description: publicCourseCreateRequestDTO.description,
       },
@@ -48,7 +49,29 @@ const createPublicCourse = async (publicCourseCreateRequestDTO: PublicCourseCrea
   }
 };
 
-const getPublicCourseByUser = async () => {};
+const getPublicCourseByUser = async (machineId: string) => {
+  try {
+    const courseData = await prisma.course.findMany({
+      where: {
+        AND: [{ user_machine_id: machineId }, { private: false }],
+      },
+      include: {
+        PublicCourse: true,
+      },
+      orderBy: {
+        created_at: "desc",
+      },
+    });
+
+    console.log(courseData);
+
+    return courseData;
+  } catch (error) {
+    //~ get은 에러분기처리를 할게없음... 어차피 데이터가 있냐없냐라서
+    console.log(error);
+    throw error;
+  }
+};
 
 const getPublicCourseDetail = async () => {};
 
