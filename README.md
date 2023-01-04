@@ -6,6 +6,28 @@
 <hr>
 </br>
 
+# 📁 Folder 구조
+
+```jsx
+📁 src
+|_ 📁 config
+|_ 📁 constant
+|_ 📁 controller
+|_ 📁 interface
+|_ 📁 middleware
+|_ 📁 module
+|_ 📁 prisma
+|_ 📁 router
+|_ 📁 service
+|_ index.ts
+```
+
+
+
+</aside>
+<hr>
+</br>
+
 # 💽 DB ERD
 
 
@@ -17,7 +39,7 @@
 <hr>
 </br>
 
-# 📄 API(+ Non - API) Docs 및 구현 진척도
+# 📄 API(+ Non - API) Docs & 역할 분담 & 구현 진척도
 
 [Runnect Server API(+ Non - API) Docs](https://meowing-orange-9b6.notion.site/Runnect-Server-API-Non-API-Docs-d22169bc1df84bf8871e59781d03be2b)
 </aside>
