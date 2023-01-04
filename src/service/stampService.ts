@@ -1,35 +1,23 @@
 import { PrismaClient } from "@prisma/client";
+import { create } from "domain";
 
 const prisma = new PrismaClient();
 
 // option --> c (코스 그리기), s (스크랩), u (업로드), r (달리기 및 기록)
 const createStampByUser = async (machineId: string, option: string) => {
     try {
-        const stampLevel = await stampIsFullChk(machineId, option); // 스탬프의 최고 레벨? : c1, c2 모았다 -> 2
-
-        if (stampLevel == 3) return; // 더 이상 모을 스탬프가 없기 때문에 바로 return
-        
         const getCounts: any = await getCount(machineId, option); // option에 해당하는 활동 갯수 가져옴 -> c: 코스 몇 번 그렸는지, s: 스크랩 몇 번 했는지, ...
         if (!getCounts) {
             return; // 에러 처리 해줘야 함. option에 해당하는 활동 아무것도 안 했다는 뜻이거나 option 잘못줬다는
         }
-        
-        if (stampLevel == 0) { // 어떠한 스탬프도 없는 상황
-            if (getCounts >= 1) {
-                await createStampToUser(machineId, option, 1); // 옵션이 c라면 -> c1 스탬프 만들겠다는 뜻
-            } else return;
-        } else if (stampLevel == 1) { // x1 까지 획득한 상황
-            if (getCounts >= 5) {
-                await createStampToUser(machineId, option, 2);
-            } else return;
-        } else if (stampLevel == 2) { // x2 까지 획득한 상황
-            if (getCounts >= 10) {
-                await createStampToUser(machineId, option, 3);
-            } else return;
+
+        const stampLevel = chkStampNumber(getCounts);
+        if (stampLevel == -1) {
+            return;
         } else {
-            return; // 에러처리
+            await createStampToUser(machineId, option, stampLevel);
+            await chkLevel(machineId);
         }
-        await chkLevel(machineId);
     } catch (error) {
         console.error(error);
         throw error;
@@ -43,21 +31,32 @@ const chkLevel = async (machineId: string) => {
                 user_machine_id: machineId,
             },
         })).length;
-        
-        const level = (stampNumber % 4) + 1;
-        if (level >= 1 && level <= 4) {
+
+        if ((stampNumber % 4 == 0) && (stampNumber <= 12)) {
             await prisma.user.update({
                 where: {
                     machine_id: machineId,
                 },
                 data: {
-                    level: level,
+                    level: (stampNumber / 4) + 1,
                 },
             });
         }
     } catch (error) {
         console.error(error);
         throw error;
+    }
+};
+
+const chkStampNumber = (getCounts: number) => {
+    if (getCounts == 10) {
+        return 3;
+    } else if (getCounts == 5) {
+        return 2;
+    } else if (getCounts == 1) {
+        return 1;
+    } else {
+        return -1;
     }
 };
 
@@ -83,26 +82,6 @@ const createStampToUser = async (machineId: string, option: string, stampLevel: 
     } catch (error) {
         console.error(error);
         throw error;
-    }
-};
-
-const stampIsFullChk = async (machineId: string, option: string) => { // 옵션에 해당하는 최신 스탬프를 가져옴
-    const getStamp: any = await prisma.userStamp.findFirst({
-        where: {
-            user_machine_id: machineId,
-            stamp_id: {
-                startsWith: option,
-            },
-        },
-        orderBy: {
-            stamp_id: "desc",
-        },
-    });
-    
-    if (!getStamp) {
-        return 0;
-    } else {
-        return +(getStamp[0]['stamp_id'] as string)[1]; // 숫자만 return, c2 -> 2
     }
 };
 
