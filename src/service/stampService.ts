@@ -29,8 +29,7 @@ const createStampByUser = async (machineId: string, option: string) => {
         } else {
             return; // 에러처리
         }
-
-
+        await chkLevel(machineId);
     } catch (error) {
         console.error(error);
         throw error;
@@ -39,13 +38,23 @@ const createStampByUser = async (machineId: string, option: string) => {
 
 const chkLevel = async (machineId: string) => {
     try {
-        const stampNumber = await prisma.userStamp.findMany({
+        const stampNumber = (await prisma.userStamp.findMany({
             where: {
                 user_machine_id: machineId,
             },
-        });
-
-
+        })).length;
+        
+        const level = (stampNumber % 4) + 1;
+        if (level >= 1 && level <= 4) {
+            await prisma.user.update({
+                where: {
+                    machine_id: machineId,
+                },
+                data: {
+                    level: level,
+                },
+            });
+        }
     } catch (error) {
         console.error(error);
         throw error;
