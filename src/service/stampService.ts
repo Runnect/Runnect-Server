@@ -2,31 +2,51 @@ import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
+// option --> c (코스 그리기), s (스크랩), u (업로드), r (달리기 및 기록)
 const createStampByUser = async (machineId: string, option: string) => {
-    const getCounts = getCount(machineId, option);
+    try {
+        const stampLevel = await stampIsFullChk(machineId, option); // 스탬프의 최고 레벨? : c1, c2 모았다 -> 2
 
-   
+        if (stampLevel == 3) return; // 더 이상 모을 스탬프가 없기 때문에 바로 return
+        
+        const getCounts: any = await getCount(machineId, option); // option에 해당하는 활동 갯수 가져옴 -> c: 코스 몇 번 그렸는지, s: 스크랩 몇 번 했는지, ...
+        if (!getCounts) {
+            return; // 에러 처리 해줘야 함. option에 해당하는 활동 아무것도 안 했다는 뜻이거나 option 잘못줬다는
+        }
+        
+        if (stampLevel == 0) { // 어떠한 스탬프도 없는 상황
+            if (getCounts >= 1) {
+                
+            } else return;
+        } else if (stampLevel == 1) { // x1 까지 획득한 상황
+            if (getCounts >= 5) {
+
+            } else return;
+        } else if (stampLevel == 2) { // x2 까지 획득한 상황
+            if (getCounts >= 10) {
+
+            } else return;
+        } else {
+            // 에러처리
+        }
+
+    } catch (error) {
+        console.error(error);
+        throw error;
+    }
+};
+
+const createStampToUser = async (machineId: string, option: string, stampLevel: number) => {
 
 };
 
 const stampIsFullChk = async (machineId: string, option: string) => {
-    const getStamp = await prisma.$queryRaw`SELECT stamp_id FROM UserStamp WHERE stamp_id LIKE 'c%' ORDER BY stamp_id desc LIMIT 1`;
+    const getStamp: any = await prisma.$queryRaw`SELECT stamp_id FROM "UserStamp" WHERE stamp_id LIKE '${option}%' AND user_machine_id = ${machineId} ORDER BY stamp_id desc LIMIT 1`;
+    
     if (!getStamp) {
         return 0;
     } else {
-        
-    }
-
-};
-
-const createCourseStamp = async (machineId: string) => {
-    const courseStampCount = (await prisma.course.findMany({
-        where: {
-            AND: [{ user_machine_id: machineId }, { deleted_at: null }],
-        },
-    })).length;
-    if (courseStampCount >= 10) {
-
+        return +(getStamp[0]['stamp_id'] as string)[1]; // 숫자만 return, c2 -> 2
     }
 };
 
