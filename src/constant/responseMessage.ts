@@ -36,4 +36,5 @@ export default {
   NO_CONTENT: "제목과 설명이 없습니다.",
   UPLOAD_PUBLIC_COURSE: "코스 업로드 성공",
   READ_PUBLIC_COURSE_BY_USER: "유저가 업로드한 코스 조회 성공",
+  INVALID_PUBLIC_COURSE_ID: "유효하지 않은 퍼블릭 코스 아이디 입니다.",
 };

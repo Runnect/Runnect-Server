@@ -101,6 +101,11 @@ const getPublicCourseDetail = async (req: Request, res: Response) => {
 
   try {
     const publicCourseDetail = await publicCourseService.getPublicCourseDetail(machineId, +publicCourseId); //퍼블릭 코스아이디 number로 타입변환
+    if (!publicCourseDetail) {
+      res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.INVALID_PUBLIC_COURSE_ID));
+    } else {
+      const publicCourseGetDTO: PublicCourseGetDTO = {};
+    }
   } catch (error) {
     console.log(error);
     //서버내부오류
