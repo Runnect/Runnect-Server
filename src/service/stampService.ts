@@ -8,7 +8,7 @@ const createStampByUser = async (machineId: string, option: string) => {
     try {
         const getCounts: any = await getCount(machineId, option); // option에 해당하는 활동 갯수 가져옴 -> c: 코스 몇 번 그렸는지, s: 스크랩 몇 번 했는지, ...
         if (!getCounts) {
-            return; // 에러 처리 해줘야 함. option에 해당하는 활동 아무것도 안 했다는 뜻이거나 option 잘못줬다는
+            return;
         }
 
         const stampLevel = chkStampNumber(getCounts);
@@ -63,7 +63,7 @@ const chkStampNumber = (getCounts: number) => {
 const createStampToUser = async (machineId: string, option: string, stampLevel: number) => { // 스탬프를 UserStamp에 추가 & User의 latest stamp 업데이트
     try {
         const stampId = option + stampLevel;
-        const latest_stamp = await prisma.userStamp.create({
+        await prisma.userStamp.create({
             data: {
                 stamp_id: stampId,
                 user_machine_id: machineId,
@@ -75,7 +75,7 @@ const createStampToUser = async (machineId: string, option: string, stampLevel: 
                 machine_id: machineId,
             },
             data: {
-                latest_stamp: latest_stamp.stamp_id,
+                latest_stamp: stampId,
             },
         });
 
