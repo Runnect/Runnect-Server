@@ -91,9 +91,9 @@ const getPublicCourseByUser = async (req: Request, res: Response) => {
 
 const getPublicCourseDetail = async (req: Request, res: Response) => {
   const error = validationResult(req);
-  //에러처리 1 : 필요한 정보(machineId가 안들어왔을때)
+  //에러처리 1 : 필요한 정보(machineId, publicCourseId가 안들어왔을때)
   if (!error.isEmpty()) {
-    const validationErrorMsg = error["errors"][0].msg; //일단 이렇게두고 나중에 errorformatter 차용해서 자세히적기
+    const validationErrorMsg = error["errors"][0].msg;
     return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, validationErrorMsg));
   }
 
@@ -138,7 +138,30 @@ const getPublicCourseDetail = async (req: Request, res: Response) => {
   }
 };
 
-const recommendPublicCourse = async (req: Request, res: Response) => {};
+const recommendPublicCourse = async (req: Request, res: Response) => {
+  const error = validationResult(req);
+  //에러처리 1 : 필요한 정보(machineId이 안들어왔을때)
+  if (!error.isEmpty()) {
+    const validationErrorMsg = error["errors"][0].msg;
+    return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, validationErrorMsg));
+  }
+  const machineId: string = req.header("machineId") as string;
+
+  try {
+
+    const recommendedPublicCourse = await publicCourseService.recommendPublicCourse(machineId);
+
+    if(!recommendedPublicCourse){
+      return res.status(sc.OK).send(success(sc.OK,rm.READ_RECOMMENDED_COURSE_SUCCESS,recommendedPublicCourse));
+    }else{
+      const publicCourses : PublicCourse[]=
+    }
+  } catch (error) {
+    console.log(error);
+    //서버내부오류
+    res.status(sc.INTERNAL_SERVER_ERROR).send(fail(sc.INTERNAL_SERVER_ERROR, rm.INTERNAL_SERVER_ERROR));
+  }
+};
 
 const searchPublicCourse = async (req: Request, res: Response) => {};
 
