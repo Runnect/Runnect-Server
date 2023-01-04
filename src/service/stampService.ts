@@ -39,8 +39,17 @@ const createStampByUser = async (machineId: string, option: string) => {
 
 const chkLevel = async (machineId: string) => {
     try {
+        const stampNumber = await prisma.userStamp.findMany({
+            where: {
+                user_machine_id: machineId,
+            },
+        });
 
-    } catch
+
+    } catch (error) {
+        console.error(error);
+        throw error;
+    }
 };
 
 const createStampToUser = async (machineId: string, option: string, stampLevel: number) => { // 스탬프를 UserStamp에 추가 & User의 latest stamp 업데이트
@@ -53,6 +62,14 @@ const createStampToUser = async (machineId: string, option: string, stampLevel: 
             },
         });
 
+        await prisma.user.update({ 
+            where: {
+                machine_id: machineId,
+            },
+            data: {
+                latest_stamp: latest_stamp.stamp_id,
+            },
+        });
 
     } catch (error) {
         console.error(error);
@@ -61,8 +78,6 @@ const createStampToUser = async (machineId: string, option: string, stampLevel: 
 };
 
 const stampIsFullChk = async (machineId: string, option: string) => { // 옵션에 해당하는 최신 스탬프를 가져옴
-    // const getStamp: any = await prisma.$queryRaw`SELECT stamp_id FROM "UserStamp" WHERE stamp_id LIKE '${option}%' AND user_machine_id = ${machineId} ORDER BY stamp_id desc LIMIT 1`;
-
     const getStamp: any = await prisma.userStamp.findFirst({
         where: {
             user_machine_id: machineId,
@@ -71,7 +86,7 @@ const stampIsFullChk = async (machineId: string, option: string) => { // 옵션�
             },
         },
         orderBy: {
-            created_at: "desc",
+            stamp_id: "desc",
         },
     });
     
