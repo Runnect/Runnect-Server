@@ -21,6 +21,10 @@ export default {
   DELETE_USER_FAIL: "유저 탈퇴 실패",
   NO_USER: "존재하지 않는 유저",
 
+  // 코스
+  READ_COURSE_SUCCESS: "코스 조회 성공",
+  READ_PRIVATE_COURSE_SUCCESS: "private 코스 조회 성공",
+
   // 토큰
   CREATE_TOKEN_SUCCESS: "토큰 재발급 성공",
   EXPIRED_TOKEN: "토큰이 만료되었습니다.",
