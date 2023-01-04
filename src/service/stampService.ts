@@ -87,28 +87,28 @@ const createStampToUser = async (machineId: string, option: string, stampLevel: 
 
 const getCount = async(machineId: string, option: string) => { // 옵션에 해당하는 활동 횟수 가져옴
     let dataCount;
-    if (option == 'course') { // 코스 그리기
+    if (option == 'c') { // 코스 그리기
         dataCount = (await prisma.course.findMany({
             where: {
                 AND: [{ user_machine_id: machineId }, { deleted_at: null }],
             },
         })).length;
 
-    } else if (option == 'scrap') { // 스크랩
+    } else if (option == 's') { // 스크랩
         dataCount = (await prisma.scrap.findMany({
             where: {
                 user_machine_id: machineId,
             },
         })).length;
 
-    } else if (option == 'upload') { // 업로드
+    } else if (option == 'u') { // 업로드
         dataCount = (await prisma.course.findMany({
             where: {
                 AND: [{ user_machine_id: machineId }, { deleted_at: null }, {private: false}],
             },
         })).length;
 
-    } else if (option == 'record') { // 달리기
+    } else if (option == 'r') { // 달리기
         dataCount = (await prisma.record.findMany({
             where: {
                 AND: [{ user_machine_id: machineId }, { deleted_at: null }],
