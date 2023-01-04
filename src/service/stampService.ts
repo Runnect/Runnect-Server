@@ -16,19 +16,20 @@ const createStampByUser = async (machineId: string, option: string) => {
         
         if (stampLevel == 0) { // 어떠한 스탬프도 없는 상황
             if (getCounts >= 1) {
-                
+                await createStampToUser(machineId, option, 1); // 옵션이 c라면 -> c1 스탬프 만들겠다는 뜻
             } else return;
         } else if (stampLevel == 1) { // x1 까지 획득한 상황
             if (getCounts >= 5) {
-
+                await createStampToUser(machineId, option, 2);
             } else return;
         } else if (stampLevel == 2) { // x2 까지 획득한 상황
             if (getCounts >= 10) {
-
+                await createStampToUser(machineId, option, 3);
             } else return;
         } else {
-            // 에러처리
+            return; // 에러처리
         }
+
 
     } catch (error) {
         console.error(error);
@@ -36,11 +37,28 @@ const createStampByUser = async (machineId: string, option: string) => {
     }
 };
 
-const createStampToUser = async (machineId: string, option: string, stampLevel: number) => {
+const chkLevel = async (machineId: string) => {
+    try {
 
+    } catch
 };
 
-const stampIsFullChk = async (machineId: string, option: string) => {
+const createStampToUser = async (machineId: string, option: string, stampLevel: number) => { // 스탬프를 UserStamp에 추가
+    try {
+        const stampId = option + stampLevel;
+        await prisma.userStamp.create({
+            data: {
+                stamp_id: stampId,
+                user_machine_id: machineId,
+            },
+        });
+    } catch (error) {
+        console.error(error);
+        throw error;
+    }
+};
+
+const stampIsFullChk = async (machineId: string, option: string) => { // 옵션에 해당하는 최신 스탬프를 가져옴
     const getStamp: any = await prisma.$queryRaw`SELECT stamp_id FROM "UserStamp" WHERE stamp_id LIKE '${option}%' AND user_machine_id = ${machineId} ORDER BY stamp_id desc LIMIT 1`;
     
     if (!getStamp) {
@@ -50,7 +68,7 @@ const stampIsFullChk = async (machineId: string, option: string) => {
     }
 };
 
-const getCount = async(machineId: string, option: string) => {
+const getCount = async(machineId: string, option: string) => { // 옵션에 해당하는 활동 횟수 가져옴
     let dataCount;
     if (option == 'course') { // 코스 그리기
         dataCount = (await prisma.course.findMany({
@@ -58,7 +76,6 @@ const getCount = async(machineId: string, option: string) => {
                 AND: [{ user_machine_id: machineId }, { deleted_at: null }],
             },
         })).length;
-
 
     } else if (option == 'scrap') { // 스크랩
         dataCount = (await prisma.scrap.findMany({
@@ -80,6 +97,7 @@ const getCount = async(machineId: string, option: string) => {
                 AND: [{ user_machine_id: machineId }, { deleted_at: null }],
             },
         })).length;
+
     } else {
         return null;
     }
