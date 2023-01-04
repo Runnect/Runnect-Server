@@ -7,19 +7,14 @@ const prisma = new PrismaClient();
 const createCourse = async (courseCreateDTO: CourseCreateDTO) => {
     
     const temp = '[(23.11, 12.11), (22.11, 14.11)]'; // 
-    // const data = await prisma.$queryRaw`INSERT INTO "Course" (user_machine_id, departure_region, departure_city, departure_town, departure_detail, distance, image, departure_name, path) VALUES(${courseCreateDTO.machineId}, ${courseCreateDTO.region}, ${courseCreateDTO.city}, ${courseCreateDTO.town}, ${courseCreateDTO.detail}, ${courseCreateDTO.distance}, ${courseCreateDTO.image}, ${courseCreateDTO.name}, ${courseCreateDTO.path}::path)`;
+    // await prisma.$queryRaw`INSERT INTO "Course" (user_machine_id, departure_region, departure_city, departure_town, departure_detail, distance, image, departure_name, path) VALUES(${courseCreateDTO.machineId}, ${courseCreateDTO.region}, ${courseCreateDTO.city}, ${courseCreateDTO.town}, ${courseCreateDTO.detail}, ${courseCreateDTO.distance}, ${courseCreateDTO.image}, ${courseCreateDTO.name}, ${courseCreateDTO.path}::path)`;
     await prisma.$queryRaw`INSERT INTO "Course" (user_machine_id, departure_region, departure_city, departure_town, departure_detail, distance, image, departure_name, path) VALUES(${courseCreateDTO.machineId}, ${courseCreateDTO.region}, ${courseCreateDTO.city}, ${courseCreateDTO.town}, ${courseCreateDTO.detail}, ${courseCreateDTO.distance}, ${courseCreateDTO.image}, ${courseCreateDTO.name}, ${temp}::path)`;
-    // insert는 반환값 없음 ㅜ
 
-    // const result = await prisma.course.findFirst({
-    //     orderBy:{
-    //         created_at: "desc"
-    //     }
-    // });
-
-    const result = await prisma.$queryRaw`SELECT path::text FROM "Course" ORDER BY created_at DESC`;
-
-    console.log(result[0]);
+    const result = await prisma.course.findFirst({
+        orderBy:{
+            created_at: "desc"
+        }
+    });
 
     const createdCourse = { "course" : { "id": result?.id, "createdAt": result?.created_at} };
     return createdCourse;
