@@ -23,6 +23,7 @@ export default {
 
   // 코스
   READ_COURSE_SUCCESS: "코스 조회 성공",
+  READ_PRIVATE_COURSE_SUCCESS: "private 코스 조회 성공",
 
   // 토큰
   CREATE_TOKEN_SUCCESS: "토큰 재발급 성공",

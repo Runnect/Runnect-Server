@@ -36,8 +36,11 @@ const getPrivateCourseByUser = async (req: Request, res: Response) => {
     const machineId = req.header("machineId") as string;
     try {
         const data = await courseService.getPrivateCourseByUser(machineId);
+        return res.status(sc.OK).send(success(sc.OK, rm.READ_PRIVATE_COURSE_SUCCESS, data));
+    } catch (error) {
+        console.error(error);
+        res.status(sc.INTERNAL_SERVER_ERROR).send(fail(sc.INTERNAL_SERVER_ERROR, rm.INTERNAL_SERVER_ERROR));
     }
-
 };
 
 
