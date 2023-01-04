@@ -134,7 +134,70 @@ const recommendPublicCourse = async (machineId: string) => {
   }
 };
 
-const searchPublicCourse = async () => {};
+const searchPublicCourse = async (machineId: string, keyword: string) => {
+  try {
+    const data = await prisma.publicCourse.findMany({
+      where: {
+        OR: [
+          {
+            title: {
+              contains: keyword,
+            },
+          },
+          {
+            Course: {
+              departure_region: { contains: keyword },
+            },
+          },
+          {
+            Course: {
+              departure_city: { contains: keyword },
+            },
+          },
+          {
+            Course: {
+              departure_city: { contains: keyword },
+            },
+          },
+          {
+            Course: {
+              departure_town: { contains: keyword },
+            },
+          },
+          {
+            Course: {
+              departure_detail: { contains: keyword },
+            },
+          },
+          {
+            Course: {
+              departure_name: { contains: keyword },
+            },
+          },
+        ],
+      },
+      include: {
+        Course: true,
+        Scrap: {
+          where: {
+            AND: [{ user_machine_id: machineId }, { scrapTF: true }],
+          },
+        },
+      },
+      orderBy: {
+        created_at: "desc",
+      },
+    });
+
+    console.log(data);
+
+    return data;
+  } catch (error) {
+    //~ get은 에러분기처리를 할게없음... 어차피 데이터가 있냐없냐라서
+    console.log(error);
+    throw error;
+  }
+};
 
 const publicCourseService = {
   createPublicCourse,

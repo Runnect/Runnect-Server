@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { body, header, param } from "express-validator";
+import { body, header, param, query } from "express-validator";
 import { publicCourseController } from "../controller";
 
 const publicCourseRouter: Router = Router();
@@ -56,6 +56,17 @@ publicCourseRouter.get(
   ],
   publicCourseController.getPublicCourseDetail
 );
-publicCourseRouter.get("search", publicCourseController.searchPublicCourse);
+publicCourseRouter.get(
+  "/search",
+  [
+    header("machineId")
+      .notEmpty()
+      .withMessage("기기넘버가 없습니다."),
+    query("keyword")
+      .notEmpty()
+      .withMessage("검색어가 없습니다."),
+  ],
+  publicCourseController.searchPublicCourse
+);
 
 export default publicCourseRouter;
