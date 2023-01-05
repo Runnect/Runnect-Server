@@ -15,8 +15,15 @@ const singUp = async (req: Request, res: Response) => {
     const nickname = req.body("nickname");
 
     try {
-        const data = await userService.signUp(machineId, nickname);
+        const createdUser = await userService.signUp(machineId, nickname);
 
+        if (!createdUser) {
+            return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.SIGNUP_FAIL));
+        } else if (createdUser == "success") {
+            return res.status(sc.OK).send(success(sc.OK, rm.SIGNIN_SUCCESS));
+        } else {
+            res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, createdUser as string));
+        }
     } catch (e) {
         console.error(e);
         return res.status(sc.INTERNAL_SERVER_ERROR).send(fail(sc.INTERNAL_SERVER_ERROR, rm.INTERNAL_SERVER_ERROR));
