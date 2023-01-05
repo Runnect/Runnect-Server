@@ -16,3 +16,26 @@ export interface PublicCourseGetDTO {
   };
   publicCourses: PublicCourse[];
 }
+
+export interface PublicCourseDetailGetDTO {
+  user: {
+    nickname: string;
+    level: number;
+    image: string;
+  };
+  publicCourse: {
+    id: number;
+    courseId: number;
+    scrap: boolean;
+    image: string;
+    title: string;
+    description: string;
+    distance: number;
+    departure: {
+      region: string;
+      city: string;
+      town: string;
+      name?: string;
+    };
+  };
+}

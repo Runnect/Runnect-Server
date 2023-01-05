@@ -21,6 +21,10 @@ export default {
   DELETE_USER_FAIL: "유저 탈퇴 실패",
   NO_USER: "존재하지 않는 유저",
 
+  // 코스
+  READ_COURSE_SUCCESS: "코스 조회 성공",
+  READ_PRIVATE_COURSE_SUCCESS: "private 코스 조회 성공",
+
   // 토큰
   CREATE_TOKEN_SUCCESS: "토큰 재발급 성공",
   EXPIRED_TOKEN: "토큰이 만료되었습니다.",
@@ -36,4 +40,18 @@ export default {
   NO_CONTENT: "제목과 설명이 없습니다.",
   UPLOAD_PUBLIC_COURSE: "코스 업로드 성공",
   READ_PUBLIC_COURSE_BY_USER: "유저가 업로드한 코스 조회 성공",
+  INVALID_PUBLIC_COURSE_ID: "유효하지 않은 퍼블릭 코스 아이디 입니다.",
+  READ_PUBLIC_COURSE_DETAIL_SUCCESS: "업로드 코스 상세 조회 성공",
+  READ_RECOMMENDED_COURSE_SUCCESS: "추천 코스 조회 성공",
+  READ_SEARCHED_COURSE_SUCCESS: "업로드된 코스 검색 성공",
+
+  //record
+  UPLOAD_RECORD: "경로기록하기 성공",
+  INVALID_COURSEID: "유효하지 않은 코스 아이디",
+  NO_RECORD_TITLE: "경로 타이틀 없음",
+  NO_RECORD_TIME: "경로 뛴 시간 없음",
+  NO_RECORD_PACE: "경로 뛴 페이스 없음",
+  NO_COURSE_ID: "코스아이디 없음",
+  NO_RECORD: "유저의 러닝 기록이 없음",
+  READ_RECORD_SUCCESS: "활동 기록 조회 성공",
 };
