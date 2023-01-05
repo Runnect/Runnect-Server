@@ -21,4 +21,13 @@ router.get(
     userController.getUser
 );
 
+router.patch(
+    "/",
+    [
+        header("machineId").notEmpty().withMessage("기기넘버가 없습니다."),
+        body("nickname").notEmpty().withMessage("닉네임이 없습니다."),
+    ],
+    userController.updateUserNickname
+);
+
 export default router;
