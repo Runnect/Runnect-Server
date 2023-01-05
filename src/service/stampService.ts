@@ -108,6 +108,17 @@ const getCount = async(machineId: string, option: string) => { // 옵션에 해�
             },
         })).length;
 
+        // dataCount = (await prisma.publicCourse.findMany({ // 퍼블릭 코스에서 가져올 때
+        //     where: {
+        //         deleted_at: null,
+        //         Course: {
+        //             User: {
+        //                 machine_id: machineId,
+        //             },
+        //         },
+        //     },
+        // })).length;
+
     } else if (option == 'r') { // 달리기
         dataCount = (await prisma.record.findMany({
             where: {
