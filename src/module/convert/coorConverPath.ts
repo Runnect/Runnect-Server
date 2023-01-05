@@ -3,7 +3,6 @@
 export const coorConverPath = (coor: any) => {
   const coorArray = coor["path"];
   const pathArray: string[] = coorArray.map((element: any) => {
-    console.log("element", element);
     return [element.lat * 1, element.long * 1]; //string을 number로 바꾸기 위해 *1
   });
   // pathArray는 [[23.333,45.444],[23.22,45.222]] (이중배열 모양)
