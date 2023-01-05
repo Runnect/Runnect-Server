@@ -44,4 +44,12 @@ export default {
   READ_PUBLIC_COURSE_DETAIL_SUCCESS: "업로드 코스 상세 조회 성공",
   READ_RECOMMENDED_COURSE_SUCCESS: "추천 코스 조회 성공",
   READ_SEARCHED_COURSE_SUCCESS: "업로드된 코스 검색 성공",
+
+  //record
+  UPLOAD_RECORD: "경로기록하기 성공",
+  INVALID_COURSEID: "유효하지 않은 코스 아이디",
+  NO_RECORD_TITLE: "경로 타이틀 없음",
+  NO_RECORD_TIME: "경로 뛴 시간 없음",
+  NO_RECORD_PACE: "경로 뛴 페이스 없음",
+  NO_COURSE_ID: "코스아이디 없음",
 };
