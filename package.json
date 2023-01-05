@@ -5,7 +5,6 @@
   "repository": "https://github.com/Runnect/Runnect_Server.git",
   "author": "YuSuhwa-ve <dhfhfkzjxms@sookmyung.ac.kr>",
   "license": "MIT",
-  "type": "commonjs",
   "scripts": {
     "dev": "nodemon",
     "build": "tsc && node dist",
