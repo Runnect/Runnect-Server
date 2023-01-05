@@ -35,7 +35,6 @@ export interface PublicCourseDetailGetDTO {
       region: string;
       city: string;
       town: string;
-      detail?: string;
       name?: string;
     };
   };
