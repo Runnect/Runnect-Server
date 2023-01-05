@@ -4,7 +4,6 @@ import { Request, Response } from "express";
 import { rm, sc } from '../constant';
 import { userService } from '../service';
 
-
 /**
  * @route  POST/user/
  * @desc 회원가입
@@ -35,10 +34,27 @@ const singUp = async (req: Request, res: Response) => {
     }
 };
 
+const getUser = async (req: Request, res: Response) => {
+    const error = validationResult(req);
+    if(!error.isEmpty()) {
+        const validationErrorMsg = error["errors"][0].msg;
+        return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, validationErrorMsg));
+    }
+
+    const machineId = req.header("machineId") as string;
+
+    try {
+        const data = await userService.getUser(machineId);
+    } catch (e) {
+        console.error(e);
+        return res.status(sc.INTERNAL_SERVER_ERROR).send(fail(sc.INTERNAL_SERVER_ERROR, rm.INTERNAL_SERVER_ERROR));
+    }
+};
 
 
 const userController = {
     singUp,
+    getUser,
 };
 
 export default userController;

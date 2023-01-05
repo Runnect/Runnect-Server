@@ -1,5 +1,6 @@
+import { UserGetDTO } from './../interface/DTO/UserGetDTO';
 import { PrismaClientKnownRequestError, PrismaClientValidationError } from '@prisma/client/runtime';
-import { Prisma, PrismaClient } from "@prisma/client";
+import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
@@ -26,8 +27,50 @@ const signUp = async (machineId: string, nickname: string) => {
     }
 };
 
+const getUser = async (machineId: string) => {
+    try {
+        const getUser: any = await prisma.user.findUnique({
+            where: {
+                machine_id: machineId,
+            },
+        });
+
+        if (!getUser) return null;
+        const levelPercent = await getLevelPercent(machineId);
+        const userGetDTO: UserGetDTO = {
+            user: {
+                machineId: getUser.machine_id,
+                nickname: getUser.nickname,
+                latestStamp: getUser.latest_stamp,
+                level: getUser.level,
+                levelPercent: levelPercent,
+            }
+        };
+        return userGetDTO;
+    } catch (error) {
+        console.error(error);
+        throw error;
+    }
+};
+
+const getLevelPercent = async (machineId: string) => {
+    try {
+        const userStamp = (await prisma.userStamp.findMany({
+            where: {
+                user_machine_id: machineId,
+            },
+        })).length;
+        const levelPercent = (userStamp % 4) * 25;
+        return levelPercent;
+    } catch (error) {
+        console.error(error);
+        throw error;
+    }
+};
+
 const userService = {
     signUp,
+    getUser,
 };
 
 export default userService;
