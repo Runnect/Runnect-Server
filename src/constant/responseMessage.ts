@@ -40,6 +40,10 @@ export default {
   NO_CONTENT: "제목과 설명이 없습니다.",
   UPLOAD_PUBLIC_COURSE: "코스 업로드 성공",
   READ_PUBLIC_COURSE_BY_USER: "유저가 업로드한 코스 조회 성공",
+  INVALID_PUBLIC_COURSE_ID: "유효하지 않은 퍼블릭 코스 아이디 입니다.",
+  READ_PUBLIC_COURSE_DETAIL_SUCCESS: "업로드 코스 상세 조회 성공",
+  READ_RECOMMENDED_COURSE_SUCCESS: "추천 코스 조회 성공",
+  READ_SEARCHED_COURSE_SUCCESS: "업로드된 코스 검색 성공",
 
   //record
   UPLOAD_RECORD: "경로기록하기 성공",
