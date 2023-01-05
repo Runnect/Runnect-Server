@@ -60,7 +60,9 @@ const getCourseDetail = async (req: Request, res: Response) => {
 
     try {
         const data = await courseService.getCourseDetail(machineId, +courseId);
-
+        if (!data) return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.NO_COURSE));
+        return res.status(sc.OK).send(success(sc.OK, rm.READ_COURSE_SUCCESS));
+        
     } catch (e) {
         console.error(e);
         res.status(sc.INTERNAL_SERVER_ERROR).send(fail(sc.INTERNAL_SERVER_ERROR, rm.INTERNAL_SERVER_ERROR));
