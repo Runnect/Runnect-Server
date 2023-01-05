@@ -89,7 +89,8 @@ const getPrivateCourseByUser = async (machineId: string) => {
 
 const getCourseDetail = async (machineId: string, courseId: number) => {
     try {
-        const result: any = await prisma.$queryRaw`SELECT * FROM Course WHERE id=${courseId} LIMIT 1`;
+        const result: any = await prisma.$queryRaw`SELECT id, created_at, path::text, distance::text, departure_region, departure_city, departure_town, departure_name FROM "Course" WHERE id=${courseId}`;
+        
         if (!result) return null;
 
         const courseDetailGetDTO: CourseDetailGetDTO = {
@@ -98,14 +99,14 @@ const getCourseDetail = async (machineId: string, courseId: number) => {
             },
             course: {
                 id: courseId,
-                createdAt: dateConvertString(result.created_at),
-                path: result.path,
-                distance: result.distance,
+                createdAt: dateConvertString(result[0]['created_at']),
+                path: result[0]['path'],
+                distance: result[0]['distance'] as number,
                 departure: {
-                    region: result.departure_region,
-                    city: result.departure_city,
-                    town: result.departure_town,
-                    name: result.departure_name
+                    region: result[0]['departure_region'],
+                    city: result[0]['departure_city'],
+                    town: result[0]['departure_town'],
+                    name: result[0]['departure_name']
                 },
             },
         };
