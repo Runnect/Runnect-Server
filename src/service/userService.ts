@@ -2,7 +2,7 @@ import { UpdatedUserGetDTO } from './../interface/DTO/UpdatedUserGetDTO';
 import { UserGetDTO } from './../interface/DTO/UserGetDTO';
 import { PrismaClientKnownRequestError, PrismaClientValidationError } from '@prisma/client/runtime';
 import { PrismaClient } from "@prisma/client";
-import { dateConvertString } from '../module/convert/convertTime';
+import { dateConvertString, stringConvertTime } from '../module/convert/convertTime';
 
 const prisma = new PrismaClient();
 
@@ -78,7 +78,7 @@ const updateUserNickname = async (machineId: string, nickname: string) => {
             },
             data: {
                 nickname: nickname,
-                modified_at: Date.now().toString(),
+                modified_at: new Date(),
             }
         });
         if (!updatedUser) return null;
