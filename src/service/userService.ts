@@ -1,6 +1,8 @@
+import { UpdatedUserGetDTO } from './../interface/DTO/UpdatedUserGetDTO';
 import { UserGetDTO } from './../interface/DTO/UserGetDTO';
 import { PrismaClientKnownRequestError, PrismaClientValidationError } from '@prisma/client/runtime';
 import { PrismaClient } from "@prisma/client";
+import { dateConvertString } from '../module/convert/convertTime';
 
 const prisma = new PrismaClient();
 
@@ -68,9 +70,41 @@ const getLevelPercent = async (machineId: string) => {
     }
 };
 
+const updateUserNickname = async (machineId: string, nickname: string) => {
+    try {
+        const updatedUser: any = await prisma.user.update({
+            where: {
+                machine_id: machineId,
+            },
+            data: {
+                nickname: nickname,
+                modified_at: Date.now().toString(),
+            }
+        });
+        if (!updatedUser) return null;
+        const levelPercent = await getLevelPercent(machineId);
+
+        const updatedUserGetDTO: UpdatedUserGetDTO = {
+            user: {
+                machineId: updatedUser.machine_id,
+                nickname: updatedUser.nickname,
+                latestStamp: updatedUser.latest_stamp,
+                level: updatedUser.level,
+                levelPercent: levelPercent,
+                modifiedAt: dateConvertString(updatedUser.modified_at),
+            }
+        };
+        return updatedUserGetDTO;
+    } catch (error) {
+        console.error(error);
+        throw error;
+    }
+};
+
 const userService = {
     signUp,
     getUser,
+    updateUserNickname,
 };
 
 export default userService;
