@@ -7,7 +7,6 @@ import { PublicCourseCreateRequestDTO, PublicCourseCreateResponseDTO } from "../
 import { validationResult } from "express-validator";
 import { dateConvertString } from "../module/convert/convertTime";
 import { checkScrap } from "../module/check/checkScrap";
-import { log } from "console";
 
 const createPublicCourse = async (req: Request, res: Response) => {
   const error = validationResult(req);
@@ -124,7 +123,6 @@ const getPublicCourseDetail = async (req: Request, res: Response) => {
             region: publicCourseDetail.Course.departure_region,
             city: publicCourseDetail.Course.departure_city,
             town: publicCourseDetail.Course.departure_town,
-            detail: publicCourseDetail.Course.departure_detail,
             name: publicCourseDetail.Course.departure_name,
           },
         },
