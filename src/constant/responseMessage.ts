@@ -48,4 +48,6 @@ export default {
   NO_RECORD_TIME: "경로 뛴 시간 없음",
   NO_RECORD_PACE: "경로 뛴 페이스 없음",
   NO_COURSE_ID: "코스아이디 없음",
+  NO_RECORD: "유저의 러닝 기록이 없음",
+  READ_RECORD_SUCCESS: "활동 기록 조회 성공",
 };
