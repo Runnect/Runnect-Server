@@ -4,6 +4,11 @@ import { Request, Response } from "express";
 import { rm, sc } from '../constant';
 import { userService } from '../service';
 
+
+/**
+ * @route  POST/user/
+ * @desc 회원가입
+ */
 const singUp = async (req: Request, res: Response) => {
     const error = validationResult(req);
     if (!error.isEmpty()) {
@@ -12,7 +17,7 @@ const singUp = async (req: Request, res: Response) => {
     }
 
     const machineId = req.header("machineId") as string;
-    const nickname = req.body("nickname");
+    const { nickname } = req.body;
 
     try {
         const createdUser = await userService.signUp(machineId, nickname);
@@ -20,7 +25,7 @@ const singUp = async (req: Request, res: Response) => {
         if (!createdUser) {
             return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.SIGNUP_FAIL));
         } else if (createdUser == "success") {
-            return res.status(sc.OK).send(success(sc.OK, rm.SIGNIN_SUCCESS));
+            return res.status(sc.OK).send(success(sc.OK, rm.SIGNUP_SUCCESS));
         } else {
             res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, createdUser as string));
         }
