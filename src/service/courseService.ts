@@ -1,3 +1,4 @@
+import { CourseDetailGetDTO } from './../interface/DTO/CourseDetailGetDTO';
 import { Course, CourseGetDTO } from './../interface/DTO/CourseGetDTO';
 import { PrivateCourse, PrivateCourseGetDTO } from './../interface/DTO/PrivateCourseGetDTO';
 import { dateConvertString } from './../module/convert/convertTime';
@@ -86,9 +87,40 @@ const getPrivateCourseByUser = async (machineId: string) => {
     }
 };
 
+const getCourseDetail = async (machineId: string, courseId: number) => {
+    try {
+        const result: any = await prisma.$queryRaw`SELECT * FROM Course WHERE id=${courseId} LIMIT 1`;
+        if (!result) return null;
+
+        const courseDetailGetDTO: CourseDetailGetDTO = {
+            user: {
+                machineId: machineId,
+            },
+            course: {
+                id: courseId,
+                createdAt: dateConvertString(result.created_at),
+                path: result.path,
+                distance: result.distance,
+                departure: {
+                    region: result.departure_region,
+                    city: result.departure_city,
+                    town: result.departure_town,
+                    name: result.departure_name
+                },
+            },
+        };
+        return courseDetailGetDTO;
+    } catch (error) {
+        console.error(error);
+        throw error;
+    }
+
+};
+
 const courseService = {
     getCourseByUser,
     getPrivateCourseByUser,
+    getCourseDetail,
 };
 
 export default courseService;

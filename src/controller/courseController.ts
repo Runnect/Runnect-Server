@@ -59,7 +59,7 @@ const getCourseDetail = async (req: Request, res: Response) => {
     const { courseId } = req.params;
 
     try {
-        const data = await courseService.getCourseDetail(machineId, courseId);
+        const data = await courseService.getCourseDetail(machineId, +courseId);
 
     } catch (e) {
         console.error(e);
