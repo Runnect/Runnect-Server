@@ -45,6 +45,8 @@ const getUser = async (req: Request, res: Response) => {
 
     try {
         const data = await userService.getUser(machineId);
+        if (!data) return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.READ_USER_FAIL));
+        return res.status(sc.OK).send(success(sc.OK, rm.READ_USER_SUCCESS, data));
     } catch (e) {
         console.error(e);
         return res.status(sc.INTERNAL_SERVER_ERROR).send(fail(sc.INTERNAL_SERVER_ERROR, rm.INTERNAL_SERVER_ERROR));
