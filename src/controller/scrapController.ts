@@ -71,8 +71,6 @@ const getScrapCourseByUSer = async (req: Request, res: Response) => {
       return res
         .status(sc.BAD_REQUEST)
         .send(fail(sc.BAD_REQUEST, rm.BAD_REQUEST));
-    } else if (getScrapCourse == "NoUser") {
-      return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.NO_USER));
     } else {
       const scrapsArray: scrap[] = getScrapCourse.map((pc: any) => {
         console.log(pc);

@@ -70,26 +70,19 @@ const deleteScrap = async (scrapDTO: scrapDTO) => {
 
 const getScrapCourseByUser = async (machineId: string) => {
   try {
-    const userData = await prisma.user.findUnique({
-      where: { machine_id: machineId },
-    });
-    if (!userData) {
-      return "NoUser";
-    } else {
-      const scrapCourseData = await prisma.scrap.findMany({
-        where: {
-          AND: [{ user_machine_id: machineId }, { scrapTF: true }],
-        },
-        include: {
-          PublicCourse: {
-            include: {
-              Course: true,
-            },
+    const scrapCourseData = await prisma.scrap.findMany({
+      where: {
+        AND: [{ user_machine_id: machineId }, { scrapTF: true }],
+      },
+      include: {
+        PublicCourse: {
+          include: {
+            Course: true,
           },
         },
-      });
-      return scrapCourseData;
-    }
+      },
+    });
+    return scrapCourseData;
   } catch (error) {
     console.log(error);
     throw error;
