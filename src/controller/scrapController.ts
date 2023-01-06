@@ -66,22 +66,25 @@ const getScrapCourseByUSer = async (req: Request, res: Response) => {
   }
   const machineId = req.header("machineId") as string;
   try {
-    const getScrapCourse = scrapService.getScrapCourseByUser(machineId);
+    const getScrapCourse = await scrapService.getScrapCourseByUser(machineId);
     if (!getScrapCourse) {
       return res
         .status(sc.BAD_REQUEST)
         .send(fail(sc.BAD_REQUEST, rm.BAD_REQUEST));
+    } else if (getScrapCourse == "NoUser") {
+      return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.NO_USER));
     } else {
-      const scrapsArray: scrap[] = (await getScrapCourse).map((pc: any) => {
+      const scrapsArray: scrap[] = getScrapCourse.map((pc: any) => {
+        console.log(pc);
         let scrap: scrap = {
           id: pc.id,
           publicCourseId: pc.public_course_id,
-          courseId: pc.Course.id,
-          title: pc.Course.title,
-          image: pc.Course.image,
+          courseId: pc.PublicCourse.Course.id,
+          title: pc.PublicCourse.title,
+          image: pc.PublicCourse.Course.image,
           departure: {
-            region: pc.Course.departure_region,
-            city: pc.Course.departure_city,
+            region: pc.PublicCourse.Course.departure_region,
+            city: pc.PublicCourse.Course.departure_city,
           },
         };
         return scrap;
