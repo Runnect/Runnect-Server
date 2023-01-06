@@ -53,10 +53,37 @@ const getUser = async (req: Request, res: Response) => {
     }
 };
 
+/**
+ * @route  PATCH/user/
+ * @desc 닉네임 변경
+ */
+const updateUserNickname = async (req: Request, res: Response) => {
+    const error = validationResult(req);
+    if (!error.isEmpty()) {
+        const validationErrorMsg = error["errors"][0].msg;
+        return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, validationErrorMsg));
+    }
+
+    const machineId = req.header("machineId") as string;
+    const { nickname } = req.body;
+
+    try {
+        const data = await userService.updateUserNickname(machineId, nickname);
+        if (!data) return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.UPDATE_USER_FAIL));
+        else if ((typeof data) == "string") {
+            return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, data as string));
+        }
+        return res.status(sc.OK).send(success(sc.OK, rm.UPDATE_USER_SUCCESS, data));
+    } catch (e) {
+        console.error(e);
+        return res.status(sc.INTERNAL_SERVER_ERROR).send(fail(sc.INTERNAL_SERVER_ERROR, rm.INTERNAL_SERVER_ERROR));
+    }
+};
 
 const userController = {
     singUp,
     getUser,
+    updateUserNickname,
 };
 
 export default userController;
