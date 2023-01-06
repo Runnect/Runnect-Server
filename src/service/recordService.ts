@@ -25,8 +25,39 @@ const createRecord = async (recordRequestDTO: recordRequestDTO) => {
   }
 };
 
-const recordService = {
-  createRecord,
+const getRecordByUser = async (machineId: string) => {
+  try {
+    const userData = await prisma.user.findUnique({
+      where: { machine_id: machineId },
+    });
+    if (!userData) {
+      return null;
+    } else {
+      const recordData = await prisma.record.findMany({
+        where: { user_machine_id: machineId },
+        include: {
+          Course: {
+            include: {
+              User: true,
+            },
+          },
+        },
+        orderBy: {
+          created_at: "desc", // 최신순이니까 desc
+        },
+      });
+      if (!recordData) {
+        return [];
+      } else {
+        return recordData;
+      }
+    }
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
 };
+
+const recordService = { createRecord, getRecordByUser };
 
 export default recordService;
