@@ -7,7 +7,6 @@ export interface PrivateCourse {
         region: string;
         city: string;
         town: string;
-        detail: string;
         name: string;
     };
 }
