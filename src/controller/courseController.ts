@@ -5,6 +5,7 @@ import { rm, sc } from '../constant';
 import { courseService } from '../service';
 import { requestConvertDeparture } from '../module/convert/requestConvertDeparture';
 import { CourseCreateDTO } from './../interface/course/CourseCreateDTO';
+import { coorConvertPath } from '../module/convert/coorConverPath';
 
 
 /**
@@ -22,7 +23,10 @@ const createCourse = async (req: Request, res: Response) => {
     const { location } = image;
 
     const departureObject = requestConvertDeparture(req.body.departureAddress, req.body.departureName);
-    const courseCreateDTO: CourseCreateDTO = {machineId: req.header("machineId") as string, path: req.body.path, distance: Number(req.body.distance), region: departureObject.region, city: departureObject.city, town: departureObject.town, detail: departureObject.detail, name: departureObject.name, image: location};
+    console.log(req.body.path);
+    console.log(typeof req.body.path);
+    console.log(coorConvertPath(Array(req.body.path)));
+    const courseCreateDTO: CourseCreateDTO = {machineId: req.header("machineId") as string, path: coorConvertPath(Array(req.body.path)), distance: Number(req.body.distance), region: departureObject.region, city: departureObject.city, town: departureObject.town, detail: departureObject.detail, name: departureObject.name, image: location};
 
     try {
         const data = await courseService.createCourse(courseCreateDTO);
