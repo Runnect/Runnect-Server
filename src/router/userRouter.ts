@@ -13,4 +13,12 @@ router.post(
     userController.singUp
 );
 
+router.get(
+    "/",
+    [
+        header("machineId").notEmpty().withMessage("기기넘버가 없습니다."),
+    ],
+    userController.getUser
+);
+
 export default router;
