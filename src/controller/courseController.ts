@@ -17,6 +17,7 @@ const getCourseByUser = async (req: Request, res: Response) => {
     const machineId = req.header("machineId") as string;
     try {
         const data = await courseService.getCourseByUser(machineId);
+        if (data == "NO_USER") return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.NO_USER));
         return res.status(sc.OK).send(success(sc.OK, rm.READ_COURSE_SUCCESS, data));
     } catch (error) {
         console.error(error);
@@ -36,6 +37,7 @@ const getPrivateCourseByUser = async (req: Request, res: Response) => {
     const machineId = req.header("machineId") as string;
     try {
         const data = await courseService.getPrivateCourseByUser(machineId);
+        if (data == "NO_USER") return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.NO_USER));
         return res.status(sc.OK).send(success(sc.OK, rm.READ_PRIVATE_COURSE_SUCCESS, data));
     } catch (error) {
         console.error(error);

@@ -9,6 +9,12 @@ const prisma = new PrismaClient();
 
 const getCourseByUser = async (machineId: string) => {
     try {
+        const findUser = await prisma.user.findUnique({
+            where: {
+                machine_id: machineId,
+            },
+        });
+        if (!findUser) return "NO_USER";
         const result = await prisma.course.findMany({
             where: {
                 user_machine_id: machineId,
@@ -48,6 +54,12 @@ const getCourseByUser = async (machineId: string) => {
 
 const getPrivateCourseByUser = async (machineId: string) => {
     try {
+        const findUser = await prisma.user.findUnique({
+            where: {
+                machine_id: machineId,
+            },
+        });
+        if (!findUser) return "NO_USER";
         const result = await prisma.course.findMany({
             where: {
                 AND: [ {user_machine_id: machineId}, {private: true} ],
