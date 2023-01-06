@@ -15,11 +15,13 @@ export default {
 
   // 유저
   READ_USER_SUCCESS: "유저 조회 성공",
+  READ_USER_FAIL: "유저 조회 실패",
   READ_ALL_USERS_SUCCESS: "모든 유저 조회 성공",
   UPDATE_USER_SUCCESS: "유저 수정 성공",
   DELETE_USER_SUCCESS: "유저 탈퇴 성공",
   DELETE_USER_FAIL: "유저 탈퇴 실패",
   NO_USER: "존재하지 않는 유저",
+  UPDATE_USER_FAIL: "유저 업데이트 실패",
 
   // 코스
   READ_COURSE_SUCCESS: "코스 조회 성공",
