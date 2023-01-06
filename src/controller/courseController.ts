@@ -23,10 +23,8 @@ const createCourse = async (req: Request, res: Response) => {
     const { location } = image;
 
     const departureObject = requestConvertDeparture(req.body.departureAddress, req.body.departureName);
-    console.log(req.body.path);
-    console.log(typeof req.body.path);
-    console.log(coorConvertPath(Array(req.body.path)));
-    const courseCreateDTO: CourseCreateDTO = {machineId: req.header("machineId") as string, path: coorConvertPath(Array(req.body.path)), distance: Number(req.body.distance), region: departureObject.region, city: departureObject.city, town: departureObject.town, detail: departureObject.detail, name: departureObject.name, image: location};
+    
+    const courseCreateDTO: CourseCreateDTO = {machineId: req.header("machineId") as string, path: coorConvertPath(req.body.path), distance: Number(req.body.distance), region: departureObject.region, city: departureObject.city, town: departureObject.town, detail: departureObject.detail, name: departureObject.name, image: location};
 
     try {
         const data = await courseService.createCourse(courseCreateDTO);
