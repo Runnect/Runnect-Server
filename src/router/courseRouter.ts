@@ -18,4 +18,21 @@ router.post(
     courseController.createCourse
 );
 
+router.get(
+    "/user",
+    [
+        header("machineId").notEmpty(),
+    ],
+    courseController.getCourseByUser
+);
+
+router.get(
+    "/private/user",
+    [
+        header("machineId").notEmpty(),
+    ],
+    courseController.getPrivateCourseByUser
+);
+
+
 export default router;
