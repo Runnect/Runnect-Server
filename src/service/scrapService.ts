@@ -10,17 +10,34 @@ const createScrap = async (scrapDTO: scrapDTO) => {
     if (!userData) {
       return "NoUser";
     } else {
-      const scrapData = await prisma.scrap.create({
-        data: {
+      const scrapId = await prisma.scrap.findMany({
+        where: {
           user_machine_id: scrapDTO.machineId,
           public_course_id: scrapDTO.publicCourseId,
-          scrapTF: scrapDTO.scrapTF,
+        },
+        select: {
+          id: true,
         },
       });
-      if (!scrapData) {
-        return null;
+      if (!(scrapId.length == 0)) {
+        const scrapAgain = await prisma.scrap.update({
+          where: { id: scrapId[0]["id"] },
+          data: { scrapTF: true },
+        });
+        return scrapAgain;
       } else {
-        return scrapData;
+        const scrapData = await prisma.scrap.create({
+          data: {
+            user_machine_id: scrapDTO.machineId,
+            public_course_id: scrapDTO.publicCourseId,
+            scrapTF: scrapDTO.scrapTF,
+          },
+        });
+        if (!scrapData) {
+          return null;
+        } else {
+          return scrapData;
+        }
       }
     }
   } catch (error) {
