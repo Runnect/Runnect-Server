@@ -10,7 +10,6 @@ import { CourseCreateDTO } from './../interface/course/CourseCreateDTO';
 /**
  * @route  POST/course
  * @desc 경로 그리기
- * @access 
  */
 const createCourse = async (req: Request, res: Response) => {
     const error = validationResult(req);
@@ -24,8 +23,6 @@ const createCourse = async (req: Request, res: Response) => {
 
     const departureObject = requestConvertDeparture(req.body.departureAddress, req.body.departureName);
     const courseCreateDTO: CourseCreateDTO = {machineId: req.header("machineId") as string, path: req.body.path, distance: Number(req.body.distance), region: departureObject.region, city: departureObject.city, town: departureObject.town, detail: departureObject.detail, name: departureObject.name, image: location};
-
-    // console.dir(courseCreateDTO);
 
     try {
         const data = await courseService.createCourse(courseCreateDTO);
