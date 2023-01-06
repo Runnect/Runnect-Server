@@ -70,6 +70,9 @@ const updateUserNickname = async (req: Request, res: Response) => {
     try {
         const data = await userService.updateUserNickname(machineId, nickname);
         if (!data) return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.UPDATE_USER_FAIL));
+        else if ((typeof data) == "string") {
+            return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, data as string));
+        }
         return res.status(sc.OK).send(success(sc.OK, rm.UPDATE_USER_SUCCESS, data));
     } catch (e) {
         console.error(e);

@@ -96,7 +96,15 @@ const updateUserNickname = async (machineId: string, nickname: string) => {
         };
         return updatedUserGetDTO;
     } catch (error) {
-        console.error(error);
+        if (error instanceof PrismaClientKnownRequestError) {
+            if (error.code == "P2025") {
+                return `존재하지 않는 유저입니다.`;
+            } else if (error.code == `P2002`) {
+                return `중복된 닉네임입니다.`;
+            }
+        } else if (error instanceof PrismaClientValidationError) {
+            return `${error.message}`;
+        }
         throw error;
     }
 };
