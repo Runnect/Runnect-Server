@@ -15,28 +15,8 @@ import { CourseCreateDTO } from './../interface/course/CourseCreateDTO';
 const createCourse = async (req: Request, res: Response) => {
     const error = validationResult(req);
     if (!error.isEmpty()) {
-        const nonValue = error['errors'][0]['param'];
-        let errorMsg;
-        console.log(nonValue);
-        switch (nonValue) {
-            case 'machineid': {
-                errorMsg = rm.NO_USER;
-                break;
-            }
-            case 'path': {
-                errorMsg = rm.NO_PATH;
-                break;
-            }
-            case 'distance': {
-                errorMsg = rm.NO_DISTANCE;
-                break;
-            }
-            default: {
-                errorMsg = rm.NO_DEPARTURE;
-                break;
-            }   
-        }
-        return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, errorMsg));
+        const validationErrorMsg = error["errors"][0].msg;
+        return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, validationErrorMsg));
     } 
 
     const image: Express.MulterS3.File = req.file as Express.MulterS3.File;
