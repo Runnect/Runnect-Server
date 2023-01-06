@@ -1,5 +1,6 @@
 import { PrismaClient } from "@prisma/client";
 import { scrapDTO } from "./../interface/DTO/scrapDTO";
+import { createStampByUser }  from './stampService';
 const prisma = new PrismaClient();
 
 const createScrap = async (scrapDTO: scrapDTO) => {
@@ -36,6 +37,7 @@ const createScrap = async (scrapDTO: scrapDTO) => {
         if (!scrapData) {
           return null;
         } else {
+          await createStampByUser(scrapDTO.machineId, "s");
           return scrapData;
         }
       }

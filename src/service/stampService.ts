@@ -1,16 +1,12 @@
 import { PrismaClient } from "@prisma/client";
-import { create } from "domain";
 
 const prisma = new PrismaClient();
 
 // option --> c (코스 그리기), s (스크랩), u (업로드), r (달리기 및 기록)
-const createStampByUser = async (machineId: string, option: string) => {
+export const createStampByUser = async (machineId: string, option: string) => {
     try {
-        const getCounts: any = await getCount(machineId, option); // option에 해당하는 활동 갯수 가져옴 -> c: 코스 몇 번 그렸는지, s: 스크랩 몇 번 했는지, ...
-        if (!getCounts) {
-            return;
-        }
-
+        const getCounts = await getCount(machineId, option); // option에 해당하는 활동 갯수 가져옴 -> c: 코스 몇 번 그렸는지, s: 스크랩 몇 번 했는지, ...
+        if (getCounts == 0) return;
         const stampLevel = chkStampNumber(getCounts);
         if (stampLevel == -1) {
             return;
@@ -48,12 +44,12 @@ const chkLevel = async (machineId: string) => {
     }
 };
 
-const chkStampNumber = (getCounts: number) => {
-    if (getCounts == 10) {
+const chkStampNumber = (count: number) => {
+    if (count == 10) {
         return 3;
-    } else if (getCounts == 5) {
+    } else if (count == 5) {
         return 2;
-    } else if (getCounts == 1) {
+    } else if (count == 1) {
         return 1;
     } else {
         return -1;
@@ -85,8 +81,8 @@ const createStampToUser = async (machineId: string, option: string, stampLevel: 
     }
 };
 
-const getCount = async(machineId: string, option: string) => { // 옵션에 해당하는 활동 횟수 가져옴
-    let dataCount;
+const getCount = async (machineId: string, option: string) => { // 옵션에 해당하는 활동 횟수 가져옴
+    let dataCount = 0;;
     if (option == 'c') { // 코스 그리기
         dataCount = (await prisma.course.findMany({
             where: {
@@ -127,9 +123,9 @@ const getCount = async(machineId: string, option: string) => { // 옵션에 해�
         })).length;
 
     } else {
-        return null;
+        return 0;
     }
-    return dataCount;
+    return +dataCount;
 };
 
 const stampService = {

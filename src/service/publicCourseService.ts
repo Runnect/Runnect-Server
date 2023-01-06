@@ -4,6 +4,7 @@ import { PublicCourseCreateRequestDTO } from "./../interface/DTO/PublicCourseCre
 import { PrismaClient } from "@prisma/client";
 import { PrismaClientKnownRequestError, PrismaClientValidationError } from "@prisma/client/runtime";
 import { ElasticInference } from "aws-sdk";
+import { createStampByUser }  from './stampService';
 
 const prisma = new PrismaClient();
 
@@ -26,6 +27,8 @@ const createPublicCourse = async (publicCourseCreateRequestDTO: PublicCourseCrea
           private: false,
         },
       });
+
+      await createStampByUser(courseData.user_machine_id, "u");
 
       return publicCourseData;
     }

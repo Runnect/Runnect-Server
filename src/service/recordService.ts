@@ -1,5 +1,6 @@
 import { PrismaClient } from "@prisma/client";
 import { recordRequestDTO } from "./../interface/DTO/recordDTO";
+import { createStampByUser }  from './stampService';
 const prisma = new PrismaClient();
 
 const createRecord = async (recordRequestDTO: recordRequestDTO) => {
@@ -17,6 +18,7 @@ const createRecord = async (recordRequestDTO: recordRequestDTO) => {
     if (!recordData) {
       return null;
     } else {
+      await createStampByUser(recordRequestDTO.machineId, "r");
       return recordData;
     }
   } catch (error) {
