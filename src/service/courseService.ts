@@ -3,6 +3,7 @@ import { Course, CourseGetDTO } from './../interface/DTO/CourseGetDTO';
 import { PrivateCourse, PrivateCourseGetDTO } from './../interface/DTO/PrivateCourseGetDTO';
 import { dateConvertString } from './../module/convert/convertTime';
 import { PrismaClient } from "@prisma/client";
+import { pathConvertCoor } from '../module/convert/pathConvertCoor';
 
 const prisma = new PrismaClient();
 
@@ -90,7 +91,7 @@ const getCourseDetail = async (machineId: string, courseId: number) => {
     try {
         const result: any = await prisma.$queryRaw`SELECT id, created_at, path::text, distance::text, departure_region, departure_city, departure_town, departure_name FROM "Course" WHERE id=${courseId}`;
         
-        if (!result) return null;
+        if (!result[0]) return null;
 
         const courseDetailGetDTO: CourseDetailGetDTO = {
             user: {
@@ -99,7 +100,7 @@ const getCourseDetail = async (machineId: string, courseId: number) => {
             course: {
                 id: courseId,
                 createdAt: dateConvertString(result[0]['created_at']),
-                path: result[0]['path'],
+                path: pathConvertCoor(result[0]['path']),
                 distance: result[0]['distance'] as number,
                 departure: {
                     region: result[0]['departure_region'],
