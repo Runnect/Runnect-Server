@@ -15,6 +15,9 @@ scrapRouter.post(
       .withMessage("코스 아이디가 없음")
       .isNumeric()
       .withMessage("유효하지 않은 코스 아이디"),
+    body("scrapTF")
+      .notEmpty()
+      .withMessage("스크랩 여부가 없음"),
   ],
   scrapController.createAndDeleteScrap
 );
