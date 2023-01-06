@@ -66,7 +66,6 @@ const getPrivateCourseByUser = async (machineId: string) => {
                     region: pc.departure_region,
                     city: pc.departure_city,
                     town: pc.departure_town,
-                    detail: pc.departure_detail,
                     name: pc.departure_name,
                 },
             };
