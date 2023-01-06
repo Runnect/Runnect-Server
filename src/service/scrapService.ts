@@ -4,35 +4,40 @@ const prisma = new PrismaClient();
 
 const createScrap = async (scrapDTO: scrapDTO) => {
   try {
-    const scrapId = await prisma.scrap.findFirst({
-      where: {
-        user_machine_id: scrapDTO.machineId,
-        public_course_id: scrapDTO.publicCourseId,
-      },
-      select: {
-        id: true,
-      },
+    const userData = await prisma.user.findUnique({
+      where: { machine_id: scrapDTO.machineId },
     });
-    console.log(scrapId);
-
-    if (scrapId) {
-      const scrapAgain = await prisma.scrap.update({
-        where: { id: scrapId["id"] },
-        data: { scrapTF: true },
-      });
-      return scrapAgain;
+    if (!userData) {
+      return "NoUser";
     } else {
-      const scrapData = await prisma.scrap.create({
-        data: {
+      const scrapId = await prisma.scrap.findMany({
+        where: {
           user_machine_id: scrapDTO.machineId,
           public_course_id: scrapDTO.publicCourseId,
-          scrapTF: scrapDTO.scrapTF,
+        },
+        select: {
+          id: true,
         },
       });
-      if (!scrapData) {
-        return null;
+      if (!(scrapId.length == 0)) {
+        const scrapAgain = await prisma.scrap.update({
+          where: { id: scrapId[0]["id"] },
+          data: { scrapTF: true },
+        });
+        return scrapAgain;
       } else {
-        return scrapData;
+        const scrapData = await prisma.scrap.create({
+          data: {
+            user_machine_id: scrapDTO.machineId,
+            public_course_id: scrapDTO.publicCourseId,
+            scrapTF: scrapDTO.scrapTF,
+          },
+        });
+        if (!scrapData) {
+          return null;
+        } else {
+          return scrapData;
+        }
       }
     }
   } catch (error) {
@@ -43,33 +48,47 @@ const createScrap = async (scrapDTO: scrapDTO) => {
 
 const deleteScrap = async (scrapDTO: scrapDTO) => {
   try {
-    const scrapId = await prisma.scrap.findFirst({
+    const scrapId = await prisma.scrap.findMany({
       where: {
-        AND: [
-          { user_machine_id: scrapDTO.machineId },
-          { public_course_id: scrapDTO.publicCourseId },
-        ],
+        user_machine_id: scrapDTO.machineId,
+        public_course_id: scrapDTO.publicCourseId,
       },
       select: {
         id: true,
       },
     });
-
-    if (!scrapId) {
-      return null;
-    } else {
-      const deleteScrap = await prisma.scrap.update({
-        where: { id: scrapId["id"] },
-        data: { scrapTF: false },
-      });
-      return deleteScrap;
-    }
+    const deleteScrap = await prisma.scrap.update({
+      where: { id: scrapId[0]["id"] },
+      data: { scrapTF: false },
+    });
+    return deleteScrap;
   } catch (error) {
     console.log(error);
     throw error;
   }
 };
 
-const scrapService = { createScrap, deleteScrap };
+const getScrapCourseByUser = async (machineId: string) => {
+  try {
+    const scrapCourseData = await prisma.scrap.findMany({
+      where: {
+        AND: [{ user_machine_id: machineId }, { scrapTF: true }],
+      },
+      include: {
+        PublicCourse: {
+          include: {
+            Course: true,
+          },
+        },
+      },
+    });
+    return scrapCourseData;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};
+
+const scrapService = { createScrap, deleteScrap, getScrapCourseByUser };
 
 export default scrapService;

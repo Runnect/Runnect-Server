@@ -61,4 +61,5 @@ export default {
   CREATE_SCRAP_SUCCESS: "코스 스크랩 성공",
   DELETE_SCRAP_SUCCESS: "코스 스크랩 취소 성공",
   INVALID_USER: "유효하지 않은 유저",
+  READ_SCRAP_COURSE_SUCCESS: "스크랩한 코스 조회 성공",
 };
