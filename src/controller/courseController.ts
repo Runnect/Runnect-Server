@@ -21,6 +21,9 @@ const createCourse = async (req: Request, res: Response) => {
 
     const image: Express.MulterS3.File = req.file as Express.MulterS3.File;
     const { location } = image;
+    console.log(req.body.path);
+    console.log(req.body.departureAddress);
+    console.log(req.body.departureName);
 
     const departureObject = requestConvertDeparture(req.body.departureAddress, req.body.departureName);
     

@@ -2,13 +2,13 @@ import { Router } from "express";
 import { courseController } from "../controller";
 import { multiformDataConvert, upload } from "../middleware";
 import { header, body, param } from "express-validator";
-import { upload } from "../middleware";
 
 const router: Router = Router();
 
 router.post(
     "/",
     upload.single('image'),
+    multiformDataConvert,
     [
         header("machineId").notEmpty().withMessage("기기넘버가 없습니다"),
         body("path").notEmpty().withMessage("경로가 없습니다."),
