@@ -43,7 +43,6 @@ const createCourse = async (req: Request, res: Response) => {
 /**
  * @route  GET/course/user
  * @desc 내가 그린 코스 조회 (업로드 포함)
- * @access
  */
 const getCourseByUser = async (req: Request, res: Response) => {
   const error = validationResult(req);
@@ -63,7 +62,6 @@ const getCourseByUser = async (req: Request, res: Response) => {
 /**
  * @route  GET/course/private/user
  * @desc 내가 그린 코스 조회 (업로드 미포함)
- * @access
  */
 const getPrivateCourseByUser = async (req: Request, res: Response) => {
   const error = validationResult(req);
@@ -83,7 +81,6 @@ const getPrivateCourseByUser = async (req: Request, res: Response) => {
 /**
  * @route  GET/course/detail/:courseId
  * @desc 내가 그린 코스 상세 페이지와 달리기 기능
- * @access
  */
 const getCourseDetail = async (req: Request, res: Response) => {
   const error = validationResult(req);
