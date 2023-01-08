@@ -5,7 +5,7 @@ import { CourseCreateDTO } from './../interface/course/CourseCreateDTO';
 import { dateConvertString } from './../module/convert/convertTime';
 import { PrismaClient } from "@prisma/client";
 import { pathConvertCoor } from '../module/convert/pathConvertCoor';
-
+import { createStampByUser }  from './stampService';
 
 const prisma = new PrismaClient();
 
@@ -19,6 +19,7 @@ const createCourse = async (courseCreateDTO: CourseCreateDTO) => {
                 created_at: "desc"
             }
         });
+        await createStampByUser(courseCreateDTO.machineId, "c");
         
         const createdCourse = { "course" : { "id": result?.id, "createdAt": result?.created_at} };
         return createdCourse;
