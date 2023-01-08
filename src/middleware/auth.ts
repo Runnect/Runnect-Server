@@ -2,10 +2,10 @@
 
 import { NextFunction, Request, Response } from "express";
 import { JwtPayload } from "jsonwebtoken";
-import { rm, sc } from "../constants";
-import { fail } from "../constants/response";
-import tokenType from "../constants/tokenType";
-import jwtHandler from "../modules/jwtHandler";
+import { rm, sc } from "../constant";
+import { fail } from "../constant/response";
+import tokenType from "../constant/tokenType";
+import jwtHandler from "../module/jwtHandler";
 
 export default async (req: Request, res: Response, next: NextFunction) => {
   //아마 ? 예약어는 ts 인터페이스 문법에서와 같이 authorization 속성이 있는 경우를 뜻하는듯
