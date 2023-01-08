@@ -20,6 +20,7 @@ const createCourse = async (req: Request, res: Response) => {
     } 
 
     const image: Express.MulterS3.File = req.file as Express.MulterS3.File;
+    if (!image) return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.NO_IMAGE));
     const { location } = image;
 
     const departureObject = requestConvertDeparture(req.body.departureAddress, req.body.departureName);
