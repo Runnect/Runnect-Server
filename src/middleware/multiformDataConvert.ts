@@ -13,8 +13,7 @@ const multiformDataConvert = (req: Request, res: Response, next: NextFunction) =
     for (var key in data) {
       req.body[key] = data[key]; //이때 값이 저장될때 string으로 저장됨. ex. distance : '2.2', ...
     }
-    console.log(req.body);
-    console.dir(req.body);
+
     next();
   } catch (error) {
     console.log(error);
