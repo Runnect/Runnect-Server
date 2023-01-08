@@ -9,10 +9,9 @@ const multiformDataConvert = (req: Request, res: Response, next: NextFunction) =
     // string 형식으로 전달된 json을 object 로 변환
 
     const data: object = JSON.parse(req.body.data);
-
     //req.body에 새로운 필드를 생성해 값을 객체 값을 넣어주기
     for (var key in data) {
-      req.body[key] = data[key];
+      req.body[key] = data[key]; //이때 값이 저장될때 string으로 저장됨. ex. distance : '2.2', ...
     }
     console.log(req.body);
     console.dir(req.body);
