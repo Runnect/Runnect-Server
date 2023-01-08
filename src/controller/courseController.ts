@@ -21,11 +21,9 @@ const createCourse = async (req: Request, res: Response) => {
 
     const image: Express.MulterS3.File = req.file as Express.MulterS3.File;
     const { location } = image;
-    console.log(req.body.path);
-    console.log(req.body.departureAddress);
-    console.log(req.body.departureName);
 
     const departureObject = requestConvertDeparture(req.body.departureAddress, req.body.departureName);
+    if (!departureObject) return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.DEPARTURE_VALIDATION_ERROR));
     
     const courseCreateDTO: CourseCreateDTO = {machineId: req.header("machineId") as string, path: coorConvertPath(req.body.path), distance: Number(req.body.distance), region: departureObject.region, city: departureObject.city, town: departureObject.town, detail: departureObject.detail, name: departureObject.name, image: location};
 

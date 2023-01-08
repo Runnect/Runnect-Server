@@ -31,11 +31,7 @@ export default {
   // 코스
   CREATE_COURSE_SUCCESS: "코스 생성 성공",
   CREATE_COURSE_FAIL: "코스 생성 실패",
-  NO_COURSE: "경로 정보 없음.",
-  NO_DISTANCE: "거리 정보 없음",
-  NO_DEPARTURE: "출발지 정보 없음",
-  NO_IMAGE: "이미지 정보 없음",
-  NO_PATH: "경로 정보 없음",
+  DEPARTURE_VALIDATION_ERROR: "출발지 정보가 유효하지 않습니다.",
 
   // 토큰
   CREATE_TOKEN_SUCCESS: "토큰 재발급 성공",
