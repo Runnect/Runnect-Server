@@ -1,5 +1,6 @@
 // { "path" : [{"lat" : "23.333", "long" : "45.444"},{"lat" : "23.22", "long" : "45.222"}]}의 형태로 req
 
+
 export const coorConvertPath = (coor: object[]) => {
   const pathArray: object[] = coor.map((element: any) => {
     return [element.lat * 1, element.long * 1]; //string을 number로 바꾸기 위해 *1

@@ -28,6 +28,12 @@ export default {
   READ_PRIVATE_COURSE_SUCCESS: "private 코스 조회 성공",
   NO_COURSE: "존재하지 않는 코스입니다.",
 
+  // 코스
+  CREATE_COURSE_SUCCESS: "코스 생성 성공",
+  CREATE_COURSE_FAIL: "코스 생성 실패",
+  DEPARTURE_VALIDATION_ERROR: "출발지 정보가 유효하지 않습니다.",
+  NO_IMAGE: "이미지가 없습니다.",
+
   // 토큰
   CREATE_TOKEN_SUCCESS: "토큰 재발급 성공",
   EXPIRED_TOKEN: "토큰이 만료되었습니다.",
