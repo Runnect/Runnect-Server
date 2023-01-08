@@ -1,5 +1,6 @@
 import { Router } from "express";
 import { courseController } from "../controller";
+import { multiformDataConvert, upload } from "../middleware";
 import { header, body, param } from "express-validator";
 import { upload } from "../middleware";
 
@@ -25,21 +26,23 @@ router.get(
     courseController.getCourseByUser
 );
 
-router.get(
-    "/private/user",
-    [
-        header("machineId").notEmpty(),
-    ],
-    courseController.getPrivateCourseByUser
-);
+router.get("/user", [header("machineId").notEmpty()], courseController.getCourseByUser);
+
+router.get("/private/user", [header("machineId").notEmpty()], courseController.getPrivateCourseByUser);
 
 router.get(
-    "/detail/:courseId",
-    [
-        header("machineId").notEmpty().withMessage("기기넘버가 없습니다."),
-        param("courseId").notEmpty().withMessage("코스 아이디가 없습니다.").isNumeric().withMessage("코스 아이디가 숫자가 아닙니다."),
-    ],
-    courseController.getCourseDetail
+  "/detail/:courseId",
+  [
+    header("machineId")
+      .notEmpty()
+      .withMessage("기기넘버가 없습니다."),
+    param("courseId")
+      .notEmpty()
+      .withMessage("코스 아이디가 없습니다.")
+      .isNumeric()
+      .withMessage("코스 아이디가 숫자가 아닙니다."),
+  ],
+  courseController.getCourseDetail
 );
 
 export default router;
