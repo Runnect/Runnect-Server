@@ -34,6 +34,7 @@ export default {
   DEPARTURE_VALIDATION_ERROR: "출발지 정보가 유효하지 않습니다.",
   NO_IMAGE: "이미지가 없습니다.",
 
+
   // 토큰
   CREATE_TOKEN_SUCCESS: "토큰 재발급 성공",
   EXPIRED_TOKEN: "토큰이 만료되었습니다.",
@@ -72,4 +73,5 @@ export default {
 
   //stamp
   READ_STAMP_BY_USER: "유저가 가진 스탬프 조회 성공",
+
 };

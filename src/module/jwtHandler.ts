@@ -3,6 +3,7 @@
 import jwt from "jsonwebtoken";
 import { tokenType } from "../constant";
 
+
 //* 받아온 userId를 담는 access token 생성
 const sign = (userId: number) => {
   const payload = {
@@ -19,7 +20,9 @@ const verify = (token: string) => {
 
   try {
     decoded = jwt.verify(token, process.env.JWT_SECRET as string);
-  } catch (error) {
+
+  } catch (error: any) {
+
     if (error.message === "jwt expired") {
       return tokenType.TOKEN_EXPIRED;
     } else if (error.message === "invalid token") {
