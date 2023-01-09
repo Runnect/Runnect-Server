@@ -1,6 +1,7 @@
 #기본 설정 파일emf
 .DS_Store 
 .vscode
+.husky/
 
 # Logs
 logs
