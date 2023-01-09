@@ -4,7 +4,7 @@ import { rm, sc } from "../constant/";
 
 //multipart form data로 온 json 데이터를 다시 object 형태로 변화하는 미들웨어
 const multiformDataConvert = (req: Request, res: Response, next: NextFunction) => {
-  //이따가 정하기if (!req.body.data) return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.))
+  if (!req.body.data) return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.NULL_VALUE));
   try {
     // string 형식으로 전달된 json을 object 로 변환
 

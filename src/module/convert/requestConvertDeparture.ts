@@ -1,5 +1,6 @@
 export const requestConvertDeparture = (departureAddress: string, departuerName: string) => {
     const departures = departureAddress.split(' ');
+    if (departures.length != 4) return null;
     const departureObject = {
         region: departures[0],
         city: departures[1],
