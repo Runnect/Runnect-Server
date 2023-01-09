@@ -1,5 +1,4 @@
 import { PrismaClient } from "@prisma/client";
-import { create } from "domain";
 
 const prisma = new PrismaClient();
 
@@ -10,13 +9,12 @@ const createStampByUser = async (machineId: string, option: string) => {
     if (!getCounts) {
       return;
     }
-
-    const stampLevel = chkStampNumber(getCounts);
+    const stampLevel = chkStampNumber(getCounts); //스탬프를 추가할지안할지, 한다면 어떤 스탬프인지
     if (stampLevel == -1) {
       return;
     } else {
-      await createStampToUser(machineId, option, stampLevel);
-      await chkLevel(machineId);
+      await createStampToUser(machineId, option, stampLevel); //스탬프 추가 및 유저의 이미지변경
+      await chkLevel(machineId); //추가된 스탬프를 포함한 유저의 스탬프 개수를 세서 유저의 레벨 업데이트
     }
   } catch (error) {
     console.error(error);

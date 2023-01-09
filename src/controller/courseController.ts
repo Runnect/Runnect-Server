@@ -1,44 +1,53 @@
 import { validationResult } from "express-validator";
 import { success, fail } from "./../constant/response";
 import { Request, Response } from "express";
-import { rm, sc } from '../constant';
-import { courseService } from '../service';
-import { requestConvertDeparture } from '../module/convert/requestConvertDeparture';
-import { CourseCreateDTO } from './../interface/course/CourseCreateDTO';
-import { coorConvertPath } from '../module/convert/coorConverPath';
-
+import { rm, sc } from "../constant";
+import { courseService } from "../service";
+import { requestConvertDeparture } from "../module/convert/requestConvertDeparture";
+import { CourseCreateDTO } from "../interface/DTO/course/CourseCreateDTO";
+import { coorConvertPath } from "../module/convert/coorConverPath";
 
 /**
  * @route  POST/course
  * @desc 경로 그리기
  */
 const createCourse = async (req: Request, res: Response) => {
-    const error = validationResult(req);
-    if (!error.isEmpty()) {
-        const validationErrorMsg = error["errors"][0].msg;
-        return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, validationErrorMsg));
-    } 
+  const error = validationResult(req);
+  if (!error.isEmpty()) {
+    const validationErrorMsg = error["errors"][0].msg;
+    return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, validationErrorMsg));
+  }
 
-    const image: Express.MulterS3.File = req.file as Express.MulterS3.File;
-    if (!image) return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.NO_IMAGE));
-    const { location } = image;
+  const image: Express.MulterS3.File = req.file as Express.MulterS3.File;
+  if (!image) return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.NO_IMAGE));
+  const { location } = image;
 
-    const departureObject = requestConvertDeparture(req.body.departureAddress, req.body.departureName);
-    if (!departureObject) return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.DEPARTURE_VALIDATION_ERROR));
-    
-    const courseCreateDTO: CourseCreateDTO = {machineId: req.header("machineId") as string, path: coorConvertPath(req.body.path), distance: Number(req.body.distance), region: departureObject.region, city: departureObject.city, town: departureObject.town, detail: departureObject.detail, name: departureObject.name, image: location};
+  const departureObject = requestConvertDeparture(req.body.departureAddress, req.body.departureName);
+  if (!departureObject) return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.DEPARTURE_VALIDATION_ERROR));
 
-    try {
-        const data = await courseService.createCourse(courseCreateDTO);
+  const courseCreateDTO: CourseCreateDTO = {
+    machineId: req.header("machineId") as string,
+    path: coorConvertPath(req.body.path),
+    distance: Number(req.body.distance),
+    region: departureObject.region,
+    city: departureObject.city,
+    town: departureObject.town,
+    detail: departureObject.detail,
+    name: departureObject.name,
+    image: location,
+  };
 
-        if (!data) {
-            return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.CREATE_COURSE_FAIL));
-        }
-        return res.status(sc.OK).send(success(sc.OK, rm.CREATE_COURSE_SUCCESS, data));
-    } catch (e) {
-        console.error(e);
-        return res.status(sc.INTERNAL_SERVER_ERROR).send(fail(sc.INTERNAL_SERVER_ERROR, rm.INTERNAL_SERVER_ERROR));
+  try {
+    const data = await courseService.createCourse(courseCreateDTO);
+
+    if (!data) {
+      return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.CREATE_COURSE_FAIL));
     }
+    return res.status(sc.OK).send(success(sc.OK, rm.CREATE_COURSE_SUCCESS, data));
+  } catch (e) {
+    console.error(e);
+    return res.status(sc.INTERNAL_SERVER_ERROR).send(fail(sc.INTERNAL_SERVER_ERROR, rm.INTERNAL_SERVER_ERROR));
+  }
 };
 
 /**
@@ -104,10 +113,10 @@ const getCourseDetail = async (req: Request, res: Response) => {
 };
 
 const courseController = {
-    createCourse,
-    getCourseByUser,
-    getPrivateCourseByUser,
-    getCourseDetail,
+  createCourse,
+  getCourseByUser,
+  getPrivateCourseByUser,
+  getCourseDetail,
 };
 
 export default courseController;

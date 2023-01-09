@@ -1,9 +1,9 @@
-import { PublicCourse, PublicCourseGetDTO, PublicCourseDetailGetDTO } from "./../interface/DTO/PublicCourseGetDTO";
+import { PublicCourse, PublicCourseGetDTO, PublicCourseDetailGetDTO } from "../interface/DTO/publicCourse/PublicCourseGetDTO";
 import { Request, Response } from "express";
 import { publicCourseService } from "../service";
 import { rm, sc } from "../constant";
 import { success, fail } from "../constant/response";
-import { PublicCourseCreateRequestDTO, PublicCourseCreateResponseDTO } from "../interface/DTO/PublicCourseCreateDTO";
+import { PublicCourseCreateRequestDTO, PublicCourseCreateResponseDTO } from "../interface/DTO/publicCourse/PublicCourseCreateDTO";
 import { validationResult } from "express-validator";
 import { dateConvertString } from "../module/convert/convertTime";
 import { checkScrap } from "../module/check/checkScrap";
@@ -35,7 +35,7 @@ const createPublicCourse = async (req: Request, res: Response) => {
           id: createdPublicCourse.id,
         },
       };
-      return res.status(sc.OK).send(success(sc.OK, rm.UPLOAD_PUBLIC_COURSE, publicCourseCreateResponseDTO));
+      return res.status(sc.OK).send(success(sc.CREATED, rm.UPLOAD_PUBLIC_COURSE, publicCourseCreateResponseDTO));
     }
   } catch (error) {
     console.log(error);
@@ -168,7 +168,7 @@ const recommendPublicCourse = async (req: Request, res: Response) => {
         return pc;
       });
 
-      return res.status(sc.OK).send(success(sc.OK, rm.READ_RECOMMENDED_COURSE_SUCCESS, publicCourses));
+      return res.status(sc.OK).send(success(sc.OK, rm.READ_RECOMMENDED_COURSE_SUCCESS, { publicCourses }));
     }
   } catch (error) {
     console.log(error);
@@ -209,7 +209,7 @@ const searchPublicCourse = async (req: Request, res: Response) => {
         return pc;
       });
 
-      return res.status(sc.OK).send(success(sc.OK, rm.READ_SEARCHED_COURSE_SUCCESS, publicCourses));
+      return res.status(sc.OK).send(success(sc.OK, rm.READ_SEARCHED_COURSE_SUCCESS, { publicCourses }));
     }
   } catch (error) {
     console.log(error);
