@@ -123,7 +123,7 @@ const getPublicCourseDetail = async (req: Request, res: Response) => {
             region: publicCourseDetail.Course.departure_region,
             city: publicCourseDetail.Course.departure_city,
             town: publicCourseDetail.Course.departure_town,
-            name: publicCourseDetail.Course.departure_name,
+            name: publicCourseDetail.Course.departure_name!,
           },
         },
       };
