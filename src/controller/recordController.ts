@@ -1,53 +1,17 @@
+import { create } from "domain";
 import { Request, Response } from "express";
 import { rm, sc } from "../constant";
 import { success, fail } from "../constant/response";
 import { validationResult } from "express-validator";
-import {
-  timestampConvertString,
-  stringConvertTime,
-  dateConvertString,
-} from "../module/convert/convertTime";
+import { timestampConvertString, stringConvertTime, dateConvertString } from "../module/convert/convertTime";
 import { recordService } from "../service";
-import {
-  recordRequestDTO,
-  recordResponseDTO,
-  getRecordByUserResponseDTO,
-  records,
-} from "./../interface/DTO/recordDTO";
+import { recordRequestDTO, recordResponseDTO, getRecordByUserResponseDTO, records } from "../interface/DTO/record/recordDTO";
 
 const createRecord = async (req: Request, res: Response) => {
   try {
     const error = validationResult(req);
     if (!error.isEmpty()) {
-      const nonValue = error["errors"][0]["param"];
-      let errorMsg;
-      console.log(nonValue);
-      switch (nonValue) {
-        case "machineid": {
-          errorMsg = error["errors"][0].msg;
-          break;
-        }
-        case "courseId": {
-          errorMsg = error["errors"][0].msg;
-          break;
-        }
-        case "title": {
-          errorMsg = error["errors"][0].msg;
-          break;
-        }
-        case "time": {
-          errorMsg = error["errors"][0].msg;
-          break;
-        }
-        case "pace": {
-          errorMsg = error["errors"][0].msg;
-          break;
-        }
-        default: {
-          errorMsg = rm.NULL_VALUE;
-          break;
-        }
-      }
+      const errorMsg = error["errors"][0].msg;
       return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, errorMsg));
     }
     const { courseId, publicCourseId, title, time, pace } = req.body;
@@ -62,9 +26,9 @@ const createRecord = async (req: Request, res: Response) => {
     };
     const record = await recordService.createRecord(recordRequestDTO);
     if (!record) {
-      return res
-        .status(sc.BAD_REQUEST)
-        .send(fail(sc.BAD_REQUEST, rm.INVALID_COURSEID));
+      return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.BAD_REQUEST));
+    } else if (typeof record === "string" || record instanceof String) {
+      return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, record as string));
     } else {
       const createdAt = timestampConvertString(record.created_at);
       const recordResponseDTO: recordResponseDTO = {
@@ -73,15 +37,11 @@ const createRecord = async (req: Request, res: Response) => {
           createdAt: createdAt,
         },
       };
-      return res
-        .status(sc.OK)
-        .send(success(sc.OK, rm.UPLOAD_RECORD, recordResponseDTO));
+      return res.status(sc.OK).send(success(sc.CREATED, rm.UPLOAD_RECORD, recordResponseDTO));
     }
   } catch (error) {
     console.log(error);
-    return res
-      .status(sc.INTERNAL_SERVER_ERROR)
-      .send(fail(sc.INTERNAL_SERVER_ERROR, rm.INTERNAL_SERVER_ERROR));
+    return res.status(sc.INTERNAL_SERVER_ERROR).send(fail(sc.INTERNAL_SERVER_ERROR, rm.INTERNAL_SERVER_ERROR));
   }
 };
 
@@ -89,9 +49,7 @@ const getRecordByUser = async (req: Request, res: Response) => {
   const error = validationResult(req);
   if (!error.isEmpty()) {
     const validationErrorMsg = error["errors"][0].msg;
-    return res
-      .status(sc.BAD_REQUEST)
-      .send(fail(sc.BAD_REQUEST, validationErrorMsg));
+    return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, validationErrorMsg));
   }
   const machineId = req.header("machineId") as string;
   try {
@@ -122,17 +80,11 @@ const getRecordByUser = async (req: Request, res: Response) => {
         user: { machineId: machineId },
         records: recordsArray,
       };
-      return res
-        .status(sc.OK)
-        .send(
-          success(sc.OK, rm.READ_RECORD_SUCCESS, getRecordByUserResponseDTO)
-        );
+      return res.status(sc.OK).send(success(sc.OK, rm.READ_RECORD_SUCCESS, getRecordByUserResponseDTO));
     }
   } catch (error) {
     console.log(error);
-    return res
-      .status(sc.INTERNAL_SERVER_ERROR)
-      .send(fail(sc.INTERNAL_SERVER_ERROR, rm.INTERNAL_SERVER_ERROR));
+    return res.status(sc.INTERNAL_SERVER_ERROR).send(fail(sc.INTERNAL_SERVER_ERROR, rm.INTERNAL_SERVER_ERROR));
   }
 };
 

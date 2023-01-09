@@ -1,162 +1,174 @@
-import { CourseDetailGetDTO } from './../interface/DTO/CourseDetailGetDTO';
-import { Course, CourseGetDTO } from './../interface/DTO/CourseGetDTO';
-import { PrivateCourse, PrivateCourseGetDTO } from './../interface/DTO/PrivateCourseGetDTO';
-import { CourseCreateDTO } from './../interface/course/CourseCreateDTO';
-import { dateConvertString } from './../module/convert/convertTime';
+import { CourseDetailGetDTO } from "../interface/DTO/course/CourseDetailGetDTO";
+import { Course, CourseGetDTO } from "../interface/DTO/course/CourseGetDTO";
+import { PrivateCourse, PrivateCourseGetDTO } from "../interface/DTO/course/PrivateCourseGetDTO";
+import { CourseCreateDTO } from "../interface/DTO/course/CourseCreateDTO";
+import { dateConvertString } from "./../module/convert/convertTime";
 import { PrismaClient } from "@prisma/client";
-import { pathConvertCoor } from '../module/convert/pathConvertCoor';
-import { createStampByUser }  from './stampService';
+import { pathConvertCoor } from "../module/convert/pathConvertCoor";
+import { stampService } from "../service";
 
 const prisma = new PrismaClient();
 
 //* 코스 그리기
 const createCourse = async (courseCreateDTO: CourseCreateDTO) => {
-    try {
-        const k = await prisma.$queryRaw`INSERT INTO "Course" (user_machine_id, departure_region, departure_city, departure_town, departure_detail, distance, image, departure_name, path) VALUES(${courseCreateDTO.machineId}, ${courseCreateDTO.region}, ${courseCreateDTO.city}, ${courseCreateDTO.town}, ${courseCreateDTO.detail}, ${courseCreateDTO.distance}, ${courseCreateDTO.image}, ${courseCreateDTO.name}, ${courseCreateDTO.path}::path)`;
+  try {
+    if (courseCreateDTO.detail || courseCreateDTO.name) {
+      //출발지 디테일과 건물이름 둘다 존재시
+      const k = await prisma.$queryRaw`INSERT INTO "Course" (user_machine_id, departure_region, departure_city, departure_town, departure_detail, distance, image, departure_name, path) VALUES(${courseCreateDTO.machineId}, ${courseCreateDTO.region}, ${courseCreateDTO.city}, ${courseCreateDTO.town}, ${courseCreateDTO.detail}, ${courseCreateDTO.distance}, ${courseCreateDTO.image}, ${courseCreateDTO.name}, ${courseCreateDTO.path}::path)`;
+    } else if (courseCreateDTO.detail) {
+      //출발지 디테일은 존재안하고 건물이름만 존재시
+      const k = await prisma.$queryRaw`INSERT INTO "Course" (user_machine_id, departure_region, departure_city, departure_town, departure_detail, distance, image, path) VALUES(${courseCreateDTO.machineId}, ${courseCreateDTO.region}, ${courseCreateDTO.city}, ${courseCreateDTO.town}, ${courseCreateDTO.detail}, ${courseCreateDTO.distance}, ${courseCreateDTO.image}, ${courseCreateDTO.path}::path)`;
+    } else if (courseCreateDTO.name) {
+      //출발지 디테일은 존재하고 건물이름만 존재안할때
+      const k = await prisma.$queryRaw`INSERT INTO "Course" (user_machine_id, departure_region, departure_city, departure_town, distance, image, departure_name, path) VALUES(${courseCreateDTO.machineId}, ${courseCreateDTO.region}, ${courseCreateDTO.city}, ${courseCreateDTO.town},  ${courseCreateDTO.distance}, ${courseCreateDTO.image}, ${courseCreateDTO.name}, ${courseCreateDTO.path}::path)`;
+    } else {
+      //출발지 디테일과 건물이름 둘다 존재안할때
+      const k = await prisma.$queryRaw`INSERT INTO "Course" (user_machine_id, departure_region, departure_city, departure_town,  distance, image,  path) VALUES(${courseCreateDTO.machineId}, ${courseCreateDTO.region}, ${courseCreateDTO.city}, ${courseCreateDTO.town},  ${courseCreateDTO.distance}, ${courseCreateDTO.image}, ${courseCreateDTO.path}::path)`;
+    }
 
-        const result = await prisma.course.findFirst({
-            orderBy:{
-                created_at: "desc"
-            }
-        });
-        await createStampByUser(courseCreateDTO.machineId, "c");
-        
-        const createdCourse = { "course" : { "id": result?.id, "createdAt": result?.created_at} };
-        return createdCourse;
-    } catch (error) {
-        console.error(error);
-        throw error;
-    } 
+    const result = await prisma.course.findFirst({
+      orderBy: {
+        created_at: "desc",
+      },
+    });
+
+    await stampService.createStampByUser(courseCreateDTO.machineId, "c");
+
+    const createdCourse = { course: { id: result?.id, createdAt: result?.created_at } };
+    return createdCourse;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
 };
 
 const getCourseByUser = async (machineId: string) => {
-    try {
-        const findUser = await prisma.user.findUnique({
-            where: {
-                machine_id: machineId,
-            },
-        });
-        if (!findUser) return "NO_USER";
-        const result = await prisma.course.findMany({
-            where: {
-                user_machine_id: machineId,
-            },
-            orderBy: {
-                created_at: "desc",
-            },
-        });
-        console.log(result);
+  try {
+    const findUser = await prisma.user.findUnique({
+      where: {
+        machine_id: machineId,
+      },
+    });
+    if (!findUser) return "NO_USER";
+    const result = await prisma.course.findMany({
+      where: {
+        user_machine_id: machineId,
+      },
+      orderBy: {
+        created_at: "desc",
+      },
+    });
+    console.log(result);
 
-        if (!result) return null;
-        const courses: Course[] = result.map((pc: any) => {
-            let course: Course = {
-                id: pc.id,
-                image: pc.image,
-                createdAt: dateConvertString(pc.created_at),
-                departure: {
-                    region: pc.departure_region,
-                    city: pc.departure_city,
-                },
-            };
-            return course;
-        });
+    if (!result) return null;
+    const courses: Course[] = result.map((pc: any) => {
+      let course: Course = {
+        id: pc.id,
+        image: pc.image,
+        createdAt: dateConvertString(pc.created_at),
+        departure: {
+          region: pc.departure_region,
+          city: pc.departure_city,
+        },
+      };
+      return course;
+    });
 
-        const courseGetDTO: CourseGetDTO = {
-            user: {
-                machineId: machineId,
-            },
-            courses: courses,
-        };
-        return courseGetDTO;
-    } catch (error) {
-        console.error(error);
-        throw error;
-    }
+    const courseGetDTO: CourseGetDTO = {
+      user: {
+        machineId: machineId,
+      },
+      courses: courses,
+    };
+    return courseGetDTO;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
 };
 
 const getPrivateCourseByUser = async (machineId: string) => {
-    try {
-        const findUser = await prisma.user.findUnique({
-            where: {
-                machine_id: machineId,
-            },
-        });
-        if (!findUser) return "NO_USER";
-        const result = await prisma.course.findMany({
-            where: {
-                AND: [ {user_machine_id: machineId}, {private: true} ],
-            },
-            orderBy: {
-                created_at: "desc",
-            },
-        });
+  try {
+    const findUser = await prisma.user.findUnique({
+      where: {
+        machine_id: machineId,
+      },
+    });
+    if (!findUser) return "NO_USER";
+    const result = await prisma.course.findMany({
+      where: {
+        AND: [{ user_machine_id: machineId }, { private: true }],
+      },
+      orderBy: {
+        created_at: "desc",
+      },
+    });
 
-        if (!result) return null;
-        const privateCourses: PrivateCourse[] = result.map((pc: any) => {
-            let privateCourse: PrivateCourse = {
-                id: pc.id,
-                image: pc.image,
-                createdAt: dateConvertString(pc.created_at),
-                distance: pc.distance,
-                departure: {
-                    region: pc.departure_region,
-                    city: pc.departure_city,
-                    town: pc.departure_town,
-                    name: pc.departure_name,
-                },
-            };
-            return privateCourse;
-        });
+    if (!result) return null;
+    const privateCourses: PrivateCourse[] = result.map((pc: any) => {
+      let privateCourse: PrivateCourse = {
+        id: pc.id,
+        image: pc.image,
+        createdAt: dateConvertString(pc.created_at),
+        distance: pc.distance,
+        departure: {
+          region: pc.departure_region,
+          city: pc.departure_city,
+          town: pc.departure_town,
+          name: pc.departure_name,
+        },
+      };
+      return privateCourse;
+    });
 
-        const privateCourseGetDTO: PrivateCourseGetDTO = {
-            user: {
-                machineId: machineId,
-            },
-            privateCourses: privateCourses,
-        };
-        return privateCourseGetDTO;
-    } catch (error) {
-        console.error(error);
-        throw error;
-    }
+    const privateCourseGetDTO: PrivateCourseGetDTO = {
+      user: {
+        machineId: machineId,
+      },
+      privateCourses: privateCourses,
+    };
+    return privateCourseGetDTO;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
 };
 
 const getCourseDetail = async (machineId: string, courseId: number) => {
-    try {
-        const result: any = await prisma.$queryRaw`SELECT id, created_at, path::text, distance::text, departure_region, departure_city, departure_town, departure_name FROM "Course" WHERE id=${courseId}`;
-        
-        if (!result[0]) return null;
+  try {
+    const result: any = await prisma.$queryRaw`SELECT id, created_at, path::text, distance::text, departure_region, departure_city, departure_town, departure_name FROM "Course" WHERE id=${courseId}`;
 
-        const courseDetailGetDTO: CourseDetailGetDTO = {
-            user: {
-                machineId: machineId,
-            },
-            course: {
-                id: courseId,
-                createdAt: dateConvertString(result[0]['created_at']),
-                path: pathConvertCoor(result[0]['path']),
-                distance: result[0]['distance'] as number,
-                departure: {
-                    region: result[0]['departure_region'],
-                    city: result[0]['departure_city'],
-                    town: result[0]['departure_town'],
-                    name: result[0]['departure_name']
-                },
-            },
-        };
-        return courseDetailGetDTO;
-    } catch (error) {
-        console.error(error);
-        throw error;
-    }
+    if (!result[0]) return null;
 
+    const courseDetailGetDTO: CourseDetailGetDTO = {
+      user: {
+        machineId: machineId,
+      },
+      course: {
+        id: courseId,
+        createdAt: dateConvertString(result[0]["created_at"]),
+        path: pathConvertCoor(result[0]["path"]),
+        distance: result[0]["distance"] as number,
+        departure: {
+          region: result[0]["departure_region"],
+          city: result[0]["departure_city"],
+          town: result[0]["departure_town"],
+          name: result[0]["departure_name"],
+        },
+      },
+    };
+    return courseDetailGetDTO;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
 };
 
 const courseService = {
-    createCourse,
-    getCourseByUser,
-    getPrivateCourseByUser,
-    getCourseDetail,
+  createCourse,
+  getCourseByUser,
+  getPrivateCourseByUser,
+  getCourseDetail,
 };
 
 export default courseService;

@@ -3,7 +3,7 @@ import { rm, sc } from "../constant";
 import { success, fail } from "../constant/response";
 import { validationResult } from "express-validator";
 import { scrapService } from "../service";
-import { scrapDTO, getScrapResponseDTO, scrap } from "./../interface/DTO/scrapDTO";
+import { scrapDTO, getScrapResponseDTO, scrap } from "../interface/DTO/scrap/scrapDTO";
 
 const createAndDeleteScrap = async (req: Request, res: Response) => {
   const error = validationResult(req);
@@ -25,6 +25,8 @@ const createAndDeleteScrap = async (req: Request, res: Response) => {
       const createScrap = await scrapService.createScrap(scrapDTO);
       if (!createScrap) {
         return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.BAD_REQUEST));
+      } else if (typeof createScrap === "string" || createScrap instanceof String) {
+        return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, createScrap as string));
       } else {
         return res.status(sc.OK).send(success(sc.OK, rm.CREATE_SCRAP_SUCCESS));
       }

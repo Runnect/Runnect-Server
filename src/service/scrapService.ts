@@ -1,6 +1,7 @@
 import { PrismaClient } from "@prisma/client";
-import { scrapDTO } from "./../interface/DTO/scrapDTO";
+import { scrapDTO } from "../interface/DTO/scrap/scrapDTO";
 import { stampService } from "../service";
+import { PrismaClientKnownRequestError, PrismaClientValidationError } from "@prisma/client/runtime";
 
 const prisma = new PrismaClient();
 
@@ -28,7 +29,6 @@ const createScrap = async (scrapDTO: scrapDTO) => {
         data: {
           user_machine_id: scrapDTO.machineId,
           public_course_id: scrapDTO.publicCourseId,
-          scrapTF: scrapDTO.scrapTF,
         },
       });
       if (!addScrap) {
@@ -39,7 +39,18 @@ const createScrap = async (scrapDTO: scrapDTO) => {
       }
     }
   } catch (error) {
-    console.log(error);
+    //~ error 분기 처리 : db의 제약조건등을 위반시 생기는 에러
+    if (error instanceof PrismaClientKnownRequestError) {
+      if (error.code === "P2003") {
+        //~ fk 외래키제약조건실패
+        //없는 코스또는 없는 유저
+        return `${error.meta?.field_name}의 아이디가 유효하지 않습니다.`;
+      }
+    }
+    //~ error 분기 처리 : db 칼럼의 데이터 타입을 지키지 않을때, null이 될수 없는 필드가 누락되었을때
+    else if (error instanceof PrismaClientValidationError) {
+      return `${error.message}`;
+    }
     throw error;
   }
 };

@@ -9,7 +9,6 @@ const createStampByUser = async (machineId: string, option: string) => {
     if (!getCounts) {
       return;
     }
-
     const stampLevel = chkStampNumber(getCounts); //스탬프를 추가할지안할지, 한다면 어떤 스탬프인지
     if (stampLevel == -1) {
       return;

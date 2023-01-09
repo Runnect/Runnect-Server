@@ -1,4 +1,4 @@
-import { StampDTO, StampGetDTO } from "./../interface/DTO/StampGetDTO";
+import { StampDTO, StampGetDTO } from "../interface/DTO/stamp/StampGetDTO";
 import { Request, Response } from "express";
 import { rm, sc } from "../constant";
 import { success, fail } from "../constant/response";
