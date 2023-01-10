@@ -1,11 +1,20 @@
-export const requestConvertDeparture = (departureAddress: string, departuerName: string) => {
-    const departures = departureAddress.split(' ');
-    const departureObject = {
-        region: departures[0],
-        city: departures[1],
-        town: departures[2],
-        detail: departures[3],
-        name: departuerName
+export const requestConvertDeparture = (departureAddress: string, departureName: string) => {
+  const departures = departureAddress.split(" ");
+
+  if (departures.length == 4) {
+    return {
+      region: departures[0],
+      city: departures[1],
+      town: departures[2],
+      detail: departures[3],
+      name: departureName,
     };
-    return departureObject;
+  } else if (departures.length == 3) {
+    return {
+      region: departures[0],
+      city: departures[1],
+      town: departures[2],
+      name: departureName,
+    };
+  } else return null;
 };

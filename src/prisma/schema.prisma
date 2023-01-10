@@ -8,27 +8,27 @@ datasource db {
 }
 
 model Course {
-  id               Int                  @id @default(autoincrement())
-  user_machine_id  String               @db.VarChar(100)
-  departure_region String               @db.VarChar(10)
-  departure_city   String               @db.VarChar(10)
-  departure_town   String               @db.VarChar(10)
-  departure_detail String               @db.VarChar(20)
-  distance         Float                @db.Real
-  created_at       DateTime             @default(now()) @db.Timestamp(6)
-  deleted_at       DateTime?            @db.Timestamp(6)
-  image            String               @db.VarChar(500)
-  departure_name   String               @db.VarChar(50)
-  private          Boolean              @default(true)
-  path             Unsupported("path")?
-  User             User                 @relation(fields: [user_machine_id], references: [machine_id], onDelete: Cascade, map: "course_user_machine_id_fk")
-  PublicCourse     PublicCourse[]
+  id               Int                 @id @unique @default(autoincrement())
+  user_machine_id  String              @db.VarChar(100)
+  departure_region String              @db.VarChar(10)
+  departure_city   String              @db.VarChar(10)
+  departure_town   String              @db.VarChar(10)
+  departure_detail String?             @db.VarChar(20)
+  distance         Float               @db.Real
+  created_at       DateTime            @default(now()) @db.Timestamp(6)
+  deleted_at       DateTime?           @db.Timestamp(6)
+  image            String              @db.VarChar(500)
+  departure_name   String?             @db.VarChar(50)
+  private          Boolean             @default(true)
+  path             Unsupported("path")
+  User             User                @relation(fields: [user_machine_id], references: [machine_id], onDelete: Cascade, map: "course_user_machine_id_fk")
+  PublicCourse     PublicCourse?
   Record           Record[]
 }
 
 model PublicCourse {
   id          Int       @id @default(autoincrement())
-  course_id   Int
+  course_id   Int       @unique
   created_at  DateTime  @default(now()) @db.Timestamp(6)
   deleted_at  DateTime? @db.Timestamp(6)
   title       String    @db.VarChar(40)
@@ -61,13 +61,15 @@ model Scrap {
   scrapTF          Boolean      @default(true)
   PublicCourse     PublicCourse @relation(fields: [public_course_id], references: [id], onDelete: Cascade, map: "scrap_publiccourse_id_fk")
   User             User         @relation(fields: [user_machine_id], references: [machine_id], onDelete: Cascade, map: "scrap_user_machine_id_fk")
+
+  @@unique([user_machine_id, public_course_id], map: "scrap_is_unique")
 }
 
 model User {
   machine_id   String      @id @db.VarChar(100)
   nickname     String      @unique @db.VarChar(14)
   latest_stamp String      @default("CSPR0") @db.VarChar(10)
-  level        Int?        @default(0)
+  level        Int?        @default(1)
   created_at   DateTime    @default(now()) @db.Timestamp(6)
   modified_at  DateTime?   @db.Timestamp(6)
   Course       Course[]

@@ -1,9 +1,9 @@
-import { PublicCourse, PublicCourseGetDTO, PublicCourseDetailGetDTO } from "./../interface/DTO/PublicCourseGetDTO";
+import { PublicCourse, PublicCourseGetDTO, PublicCourseDetailGetDTO } from "../interface/DTO/publicCourse/PublicCourseGetDTO";
 import { Request, Response } from "express";
 import { publicCourseService } from "../service";
 import { rm, sc } from "../constant";
 import { success, fail } from "../constant/response";
-import { PublicCourseCreateRequestDTO, PublicCourseCreateResponseDTO } from "../interface/DTO/PublicCourseCreateDTO";
+import { PublicCourseCreateRequestDTO, PublicCourseCreateResponseDTO } from "../interface/DTO/publicCourse/PublicCourseCreateDTO";
 import { validationResult } from "express-validator";
 import { dateConvertString } from "../module/convert/convertTime";
 import { checkScrap } from "../module/check/checkScrap";
@@ -35,7 +35,7 @@ const createPublicCourse = async (req: Request, res: Response) => {
           id: createdPublicCourse.id,
         },
       };
-      return res.status(sc.OK).send(success(sc.OK, rm.UPLOAD_PUBLIC_COURSE, publicCourseCreateResponseDTO));
+      return res.status(sc.OK).send(success(sc.CREATED, rm.UPLOAD_PUBLIC_COURSE, publicCourseCreateResponseDTO));
     }
   } catch (error) {
     console.log(error);
@@ -56,7 +56,7 @@ const getPublicCourseByUser = async (req: Request, res: Response) => {
   try {
     const publicCourseByUser = await publicCourseService.getPublicCourseByUser(machineId);
 
-    if (!publicCourseByUser) {
+    if (!publicCourseByUser || publicCourseByUser.length == 0) {
       return res.status(sc.OK).send(success(sc.OK, rm.READ_PUBLIC_COURSE_BY_USER, publicCourseByUser));
     } else {
       const publicCourses: PublicCourse[] = publicCourseByUser.map((pc: any) => {
@@ -123,7 +123,7 @@ const getPublicCourseDetail = async (req: Request, res: Response) => {
             region: publicCourseDetail.Course.departure_region,
             city: publicCourseDetail.Course.departure_city,
             town: publicCourseDetail.Course.departure_town,
-            name: publicCourseDetail.Course.departure_name,
+            name: publicCourseDetail.Course.departure_name!,
           },
         },
       };
@@ -149,7 +149,7 @@ const recommendPublicCourse = async (req: Request, res: Response) => {
   try {
     const recommendedPublicCourse = await publicCourseService.recommendPublicCourse(machineId);
 
-    if (!recommendedPublicCourse) {
+    if (!recommendedPublicCourse || recommendedPublicCourse.length == 0) {
       return res.status(sc.OK).send(success(sc.OK, rm.READ_RECOMMENDED_COURSE_SUCCESS, recommendedPublicCourse));
     } else {
       const publicCourses: PublicCourse[] = recommendedPublicCourse.map((rbc) => {
@@ -168,7 +168,7 @@ const recommendPublicCourse = async (req: Request, res: Response) => {
         return pc;
       });
 
-      return res.status(sc.OK).send(success(sc.OK, rm.READ_RECOMMENDED_COURSE_SUCCESS, publicCourses));
+      return res.status(sc.OK).send(success(sc.OK, rm.READ_RECOMMENDED_COURSE_SUCCESS, { publicCourses }));
     }
   } catch (error) {
     console.log(error);
@@ -190,7 +190,7 @@ const searchPublicCourse = async (req: Request, res: Response) => {
   try {
     const searchedPublicCourse = await publicCourseService.searchPublicCourse(machineId, keyword as string);
 
-    if (!searchedPublicCourse) {
+    if (!searchedPublicCourse || searchedPublicCourse.length == 0) {
       return res.status(sc.OK).send(success(sc.OK, rm.READ_SEARCHED_COURSE_SUCCESS, searchedPublicCourse));
     } else {
       const publicCourses: PublicCourse[] = searchedPublicCourse.map((spc) => {
@@ -209,7 +209,7 @@ const searchPublicCourse = async (req: Request, res: Response) => {
         return pc;
       });
 
-      return res.status(sc.OK).send(success(sc.OK, rm.READ_SEARCHED_COURSE_SUCCESS, publicCourses));
+      return res.status(sc.OK).send(success(sc.OK, rm.READ_SEARCHED_COURSE_SUCCESS, { publicCourses }));
     }
   } catch (error) {
     console.log(error);

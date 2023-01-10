@@ -28,4 +28,14 @@ recordRouter.post(
   recordController.createRecord
 );
 
+recordRouter.get(
+  "/user",
+  [
+    header("machineId")
+      .notEmpty()
+      .withMessage("기기넘버가 없음"),
+  ],
+  recordController.getRecordByUser
+);
+
 export default recordRouter;
