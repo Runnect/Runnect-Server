@@ -141,7 +141,7 @@ const getPrivateCourseByUser = (machineId) => __awaiter(void 0, void 0, void 0, 
 });
 const getCourseDetail = (machineId, courseId) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const result = yield prisma.$queryRaw `SELECT id, created_at, path::text, distance::text, departure_region, departure_city, departure_town, departure_name FROM "Course" WHERE id=${courseId}`;
+        const result = yield prisma.$queryRaw `SELECT id, created_at, path::text, distance::text, departure_region, departure_city, departure_town, departure_name, image FROM "Course" WHERE id=${courseId}`;
         if (!result[0])
             return null;
         const courseDetailGetDTO = {
@@ -153,6 +153,7 @@ const getCourseDetail = (machineId, courseId) => __awaiter(void 0, void 0, void 
                 createdAt: (0, convertTime_1.dateConvertString)(result[0]["created_at"]),
                 path: (0, pathConvertCoor_1.pathConvertCoor)(result[0]["path"]),
                 distance: result[0]["distance"],
+                image: result[0]["image"],
                 departure: {
                     region: result[0]["departure_region"],
                     city: result[0]["departure_city"],
