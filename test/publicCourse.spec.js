@@ -1,8 +1,5 @@
-/*const app = require("../src/index.ts");
-const request = require("supertest");
-const { expect } = require("chai");
-const dotenv = require("dotenv");
-*/
+// 아 아래의 테스트 파일은 실행은 되나 패스는 되지 않은 파일임. 그래도 형식을 참고해서 테스트 파일을 작성하면 된다.
+
 import app from "../src/index";
 import request from "supertest";
 import expect from "chai";
