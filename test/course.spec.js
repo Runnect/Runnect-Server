@@ -4,6 +4,37 @@ import expect from "chai";
 import dotenv from "dotenv";
 dotenv.config();
 
+//* getCourseByUser
+describe("GET ~/api/course/user", () => {
+    it("코스 조회 성공", (done) => {
+      request(app)
+        .get("/api/course/user") //url
+        .set("Content-Type", "application/json") //req.headers
+        .set("machineId", process.env.MACHINE_ID)
+        .expect(200) //예측상태코드
+        .expect("Content-Type", /json/)
+        .then((res) => {
+          done();
+        })
+        .catch((err) => {
+          console.error("######에러 >>", err);
+          done(err);
+        });
+    });
+    it("필요한값이 없을때", (done) => {
+      request(app)
+        .get("/api/course/user") //url
+        .set("Content-Type", "application/json") //req.headers
+        .expect(400)
+        .then((res) => {
+          done();
+        })
+        .catch((err) => {
+          console.error("######에러 >>", err);
+          done(err);
+        });
+    });
+  });
 
 //* getPrivateCourseByUser
 describe("GET ~/api/course/private/user", () => {
