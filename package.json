@@ -5,7 +5,6 @@
   "repository": "https://github.com/Runnect/Runnect_Server.git",
   "author": "YuSuhwa-ve <dhfhfkzjxms@sookmyung.ac.kr>",
   "license": "MIT",
-  "type": "commonjs",
   "scripts": {
     "dev": "nodemon",
     "build": "tsc && node dist",
@@ -13,7 +12,8 @@
     "db:push": "npx prisma db push",
     "generate": "npx prisma generate",
     "prepare": "chmod ug+x .husky/* && husky install",
-    "greet": "hello husky!"
+    "greet": "hello husky!",
+    "test": "mocha ./test/ -r ts-node/register"
   },
   "dependencies": {
     "@prisma/client": "^4.8.0",
@@ -31,17 +31,25 @@
   },
   "devDependencies": {
     "@types/bcryptjs": "^2.4.2",
+    "@types/chai": "^4.3.4",
     "@types/express": "^4.17.15",
     "@types/express-validator": "^3.0.0",
     "@types/jsonwebtoken": "^8.5.9",
+    "@types/mocha": "^10.0.1",
     "@types/multer": "^1.4.7",
     "@types/multer-s3": "^3.0.0",
     "@types/node": "^18.11.17",
+    "@types/supertest": "^2.0.12",
+    "chai": "^4.3.7",
     "commitizen": "^4.2.6",
     "cz-conventional-changelog": "3.3.0",
     "cz-emoji-conventional": "^1.0.1",
     "husky": "^8.0.0",
-    "nodemon": "^2.0.20"
+    "mocha": "^10.2.0",
+    "nodemon": "^2.0.20",
+    "supertest": "^6.3.3",
+    "ts-node": "^10.9.1",
+    "typescript": "^4.9.4"
   },
   "config": {
     "commitizen": {

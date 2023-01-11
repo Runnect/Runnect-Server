@@ -1,0 +1,1 @@
+{"version":3,"file":"stampRouter.js","sourceRoot":"","sources":["../../src/router/stampRouter.ts"],"names":[],"mappings":";;AAAA,qCAAiC;AACjC,yDAA2C;AAC3C,8CAAgD;AAEhD,MAAM,WAAW,GAAW,IAAA,gBAAM,GAAE,CAAC;AAErC,WAAW,CAAC,GAAG,CACb,OAAO,EACP;IACE,IAAA,0BAAM,EAAC,WAAW,CAAC;SAChB,QAAQ,EAAE;SACV,WAAW,CAAC,aAAa,CAAC;CAC9B,EAED,4BAAe,CAAC,cAAc,CAC/B,CAAC;AAEF,kBAAe,WAAW,CAAC"}

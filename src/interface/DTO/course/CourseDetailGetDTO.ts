@@ -7,6 +7,7 @@ export interface CourseDetailGetDTO {
         "createdAt": string;
         "path": object; // 나중에 바꿀 예정
         "distance": number;
+        "image": string;
         "departure": {
             "region": string;
             "city": string;
