@@ -2,10 +2,14 @@ import app from "../src/index";
 import request from "supertest";
 import expect from "chai";
 import dotenv from "dotenv";
-import image from "./test_img/test_image.jpg";
+const fs = require('fs');
+
 dotenv.config();
 
-const data = `{"path":[{"lat":"33.33", "long":"33.33"},{"lat":"33.33", "long":"33.33"}], "distance" :"33.3","departureAddress":"서울 종로구 익선동 12", "departureName": "익선동빌딩"}`;
+
+const d = {distance :"33.3",departureAddress:"서울 종로구 익선동 12", departureName: "익선동빌딩"};
+const data = String(d);
+const path = [{"lat":"33.33", "long":"33.33"},{"lat":"33.33", "long":"33.33"}];
 
 //* createCourse
 describe("POST ~/api/course", () => {
@@ -14,8 +18,11 @@ describe("POST ~/api/course", () => {
         .post("/api/course") //url
         .field("Content-Type", "multipart/form-data") //req.headers
         .field("machineId", process.env.MACHINE_ID)
-        .field("data", './test_img/test_image.jpg')
-        .attach("image", image) 
+        .field("distance", "33.3")
+        .field("departureAddress", "서울 종로구 익선동 12")
+        .field("departureName", "익선선빌딩")
+        .field("path", path)
+        .attach('image', fs.readFileSync('./test/test_img/test_image.jpg'))
         .expect(200) //예측상태코드
         .expect("Content-Type", /json/)
         .then((res) => {
