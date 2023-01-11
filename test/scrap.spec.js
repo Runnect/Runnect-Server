@@ -47,7 +47,7 @@ describe("POST ~/api/scrap", () => {
   });
   it("필요한값이 없을때", (done) => {
     request(app)
-      .post("/api/record") //url
+      .post("/api/scrap") //url
       .set("Content-Type", "application/json") //req.headers
       .expect(400)
       .then((res) => {
@@ -78,7 +78,7 @@ describe("GET ~/api/scrap/user", () => {
   });
   it("필요한값이 없을때", (done) => {
     request(app)
-      .get("/api/record/user") //url
+      .get("/api/scrap/user") //url
       .set("Content-Type", "application/json") //req.headers
       .expect(400)
       .then((res) => {
