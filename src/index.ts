@@ -17,3 +17,5 @@ app.listen(config.port, () => {
      ${config.port}번 포트에서 듣고 있는 중~~*
     ********************************************`);
 });
+
+export default app;
