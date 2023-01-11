@@ -148,7 +148,7 @@ const getCourseDetail = async (machineId: string, courseId: number) => {
         id: courseId,
         createdAt: dateConvertString(result[0]["created_at"]),
         path: pathConvertCoor(result[0]["path"]),
-        distance: result[0]["distance"] as number,
+        distance: Number(result[0]["distance"]),
         image: result[0]["image"],
         departure: {
           region: result[0]["departure_region"],
