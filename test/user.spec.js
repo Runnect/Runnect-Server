@@ -39,3 +39,35 @@ describe("POST ~/api/user", () => {
         });
     });
   });
+
+//* getUser
+describe("GET ~/api/user", () => {
+    it("유저 조회 성공", (done) => {
+      request(app)
+        .get("/api/user") //url
+        .set("Content-Type", "application/json") //req.headers
+        .set("machineId", process.env.MACHINE_ID)
+        .expect(200) //예측상태코드
+        .expect("Content-Type", /json/)
+        .then((res) => {
+          done();
+        })
+        .catch((err) => {
+          console.error("######에러 >>", err);
+          done(err);
+        });
+    });
+    it("필요한값이 없을때", (done) => {
+      request(app)
+        .get("/api/user") //url
+        .set("Content-Type", "application/json") //req.headers
+        .expect(400)
+        .then((res) => {
+          done();
+        })
+        .catch((err) => {
+          console.error("######에러 >>", err);
+          done(err);
+        });
+    });
+  });
