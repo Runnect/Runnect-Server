@@ -24,6 +24,8 @@ then
   # local_ref : refs/heads/main : branch
   # local_sha : commit num
   echo "현재 푸쉬하는 브랜치는 $local_ref 내부입니다."
+  echo >yarn run test
+
 
     if [ "$remote_ref" == "$FORBIDDEN_REF_MAIN" ] || [ "$remote_ref" == "$FORBIDDEN_REF_DEV" ]
     then
