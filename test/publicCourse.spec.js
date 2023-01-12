@@ -18,7 +18,7 @@ describe("POST ~/api/public-course", () => {
         title: "mocha test1",
         description: "mocha test1",
       })
-      .expect(200) //예측상태코드
+      .expect(201) //예측상태코드
       .expect("Content-Type", /json/)
       .then((res) => {
         done();

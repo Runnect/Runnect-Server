@@ -35,7 +35,7 @@ const createPublicCourse = async (req: Request, res: Response) => {
           id: createdPublicCourse.id,
         },
       };
-      return res.status(sc.OK).send(success(sc.CREATED, rm.UPLOAD_PUBLIC_COURSE, publicCourseCreateResponseDTO));
+      return res.status(sc.CREATED).send(success(sc.CREATED, rm.UPLOAD_PUBLIC_COURSE, publicCourseCreateResponseDTO));
     }
   } catch (error) {
     console.log(error);
