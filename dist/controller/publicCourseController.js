@@ -157,7 +157,7 @@ const recommendPublicCourse = (req, res) => __awaiter(void 0, void 0, void 0, fu
                     courseId: rbc.course_id,
                     title: rbc.title,
                     image: rbc.Course.image,
-                    scarp: (0, checkScrap_1.checkScrap)(rbc.Scrap),
+                    scrap: (0, checkScrap_1.checkScrap)(rbc.Scrap),
                     departure: {
                         region: rbc.Course.departure_region,
                         city: rbc.Course.departure_city,
@@ -195,7 +195,7 @@ const searchPublicCourse = (req, res) => __awaiter(void 0, void 0, void 0, funct
                     courseId: spc.course_id,
                     title: spc.title,
                     image: spc.Course.image,
-                    scarp: (0, checkScrap_1.checkScrap)(spc.Scrap),
+                    scrap: (0, checkScrap_1.checkScrap)(spc.Scrap),
                     departure: {
                         region: spc.Course.departure_region,
                         city: spc.Course.departure_city,
