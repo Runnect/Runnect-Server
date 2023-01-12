@@ -3,7 +3,7 @@ export interface PublicCourse {
   courseId: number;
   title: string;
   image: string;
-  scarp?: boolean;
+  scrap?: boolean;
   departure: {
     region: string;
     city: string;
