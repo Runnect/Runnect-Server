@@ -64,7 +64,6 @@ const getCourseByUser = (machineId) => __awaiter(void 0, void 0, void 0, functio
                 created_at: "desc",
             },
         });
-        console.log(result);
         if (!result)
             return null;
         const courses = result.map((pc) => {

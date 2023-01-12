@@ -40,7 +40,7 @@ const createPublicCourse = (req, res) => __awaiter(void 0, void 0, void 0, funct
                     id: createdPublicCourse.id,
                 },
             };
-            return res.status(constant_1.sc.OK).send((0, response_1.success)(constant_1.sc.CREATED, constant_1.rm.UPLOAD_PUBLIC_COURSE, publicCourseCreateResponseDTO));
+            return res.status(constant_1.sc.CREATED).send((0, response_1.success)(constant_1.sc.CREATED, constant_1.rm.UPLOAD_PUBLIC_COURSE, publicCourseCreateResponseDTO));
         }
     }
     catch (error) {
