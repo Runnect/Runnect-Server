@@ -35,7 +35,7 @@ const createPublicCourse = async (req: Request, res: Response) => {
           id: createdPublicCourse.id,
         },
       };
-      return res.status(sc.OK).send(success(sc.CREATED, rm.UPLOAD_PUBLIC_COURSE, publicCourseCreateResponseDTO));
+      return res.status(sc.CREATED).send(success(sc.CREATED, rm.UPLOAD_PUBLIC_COURSE, publicCourseCreateResponseDTO));
     }
   } catch (error) {
     console.log(error);
@@ -158,7 +158,7 @@ const recommendPublicCourse = async (req: Request, res: Response) => {
           courseId: rbc.course_id,
           title: rbc.title,
           image: rbc.Course.image,
-          scarp: checkScrap(rbc.Scrap),
+          scrap: checkScrap(rbc.Scrap),
           departure: {
             region: rbc.Course.departure_region,
             city: rbc.Course.departure_city,
@@ -199,7 +199,7 @@ const searchPublicCourse = async (req: Request, res: Response) => {
           courseId: spc.course_id,
           title: spc.title,
           image: spc.Course.image,
-          scarp: checkScrap(spc.Scrap),
+          scrap: checkScrap(spc.Scrap),
           departure: {
             region: spc.Course.departure_region,
             city: spc.Course.departure_city,

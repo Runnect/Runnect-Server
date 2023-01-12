@@ -153,7 +153,6 @@ const getStampByUser = (machineId) => __awaiter(void 0, void 0, void 0, function
                 stamp_id: "asc",
             },
         });
-        console.log(stampData);
         return stampData;
     }
     catch (error) {

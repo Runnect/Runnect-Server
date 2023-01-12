@@ -58,7 +58,6 @@ const getCourseByUser = async (machineId: string) => {
         created_at: "desc",
       },
     });
-    console.log(result);
 
     if (!result) return null;
     const courses: Course[] = result.map((pc: any) => {
