@@ -151,7 +151,6 @@ const getStampByUser = async (machineId: string) => {
         stamp_id: "asc",
       },
     });
-    console.log(stampData);
     return stampData;
   } catch (error) {
     console.log(error);
