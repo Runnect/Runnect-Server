@@ -1,5 +1,4 @@
 import { Course } from "../interface/DTO/course/CourseGetDTO";
-import { log } from "console";
 import { PublicCourseCreateRequestDTO } from "../interface/DTO/publicCourse/PublicCourseCreateDTO";
 import { PrismaClient } from "@prisma/client";
 import { PrismaClientKnownRequestError, PrismaClientValidationError } from "@prisma/client/runtime";
@@ -67,8 +66,6 @@ const getPublicCourseByUser = async (machineId: string) => {
       },
     });
 
-    console.log(courseData);
-
     return courseData;
   } catch (error) {
     //~ get은 에러분기처리를 할게없음... 어차피 데이터가 있냐없냐라서
@@ -96,8 +93,6 @@ const getPublicCourseDetail = async (machineId: string, publicCourseId: number) 
         },
       },
     });
-
-    console.log(publicCourseData);
 
     return publicCourseData;
   } catch (error) {
@@ -127,7 +122,6 @@ const recommendPublicCourse = async (machineId: string) => {
         },
       },
     });
-    console.log(data);
 
     return data;
   } catch (error) {
@@ -191,8 +185,6 @@ const searchPublicCourse = async (machineId: string, keyword: string) => {
         created_at: "desc",
       },
     });
-
-    console.log(data);
 
     return data;
   } catch (error) {
