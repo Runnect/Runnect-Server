@@ -4,16 +4,28 @@ import expect from "chai";
 import dotenv from "dotenv";
 dotenv.config();
 
+const randomMachineId = Math.random()
+  .toString(36)
+  .substring(2, 11);
+
+const randomNickname1 = Math.random()
+  .toString(36)
+  .substring(2, 11);
+
+const randomNickname2 = Math.random()
+  .toString(36)
+  .substring(2, 11);
+
 //* signUp
 describe("POST ~/api/user", () => {
   it("회원 가입 성공", (done) => {
     request(app)
       .post("/api/user") //url
       .set("Content-Type", "application/json") //req.headers
-      .set("machineId", "sususususuhwabori")
+      .set("machineId", randomMachineId)
       .send({
         //request.body
-        nickname: "ILoveBori",
+        nickname: randomNickname1,
       })
       .expect(200) //예측상태코드
       .expect("Content-Type", /json/)
@@ -81,7 +93,7 @@ describe("PATCH ~/api/user", () => {
       .set("machineId", process.env.MACHINE_ID)
       .send({
         //request.body
-        nickname: "수화hahahak",
+        nickname: randomNickname2,
       })
       .expect(200) //예측상태코드
       .expect("Content-Type", /json/)
