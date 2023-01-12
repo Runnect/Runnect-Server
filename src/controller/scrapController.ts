@@ -34,6 +34,8 @@ const createAndDeleteScrap = async (req: Request, res: Response) => {
       const deleteScrap = await scrapService.deleteScrap(scrapDTO);
       if (!deleteScrap) {
         return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.BAD_REQUEST));
+      } else if (deleteScrap["count"]==0) {
+        return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.NO_PUBLIC_COURSE_ID));
       } else {
         return res.status(sc.OK).send(success(sc.OK, rm.DELETE_SCRAP_SUCCESS));
       }
