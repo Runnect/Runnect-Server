@@ -44,6 +44,9 @@ const createAndDeleteScrap = (req, res) => __awaiter(void 0, void 0, void 0, fun
             if (!deleteScrap) {
                 return res.status(constant_1.sc.BAD_REQUEST).send((0, response_1.fail)(constant_1.sc.BAD_REQUEST, constant_1.rm.BAD_REQUEST));
             }
+            else if (deleteScrap["count"] == 0) {
+                return res.status(constant_1.sc.BAD_REQUEST).send((0, response_1.fail)(constant_1.sc.BAD_REQUEST, constant_1.rm.NO_PUBLIC_COURSE_ID));
+            }
             else {
                 return res.status(constant_1.sc.OK).send((0, response_1.success)(constant_1.sc.OK, constant_1.rm.DELETE_SCRAP_SUCCESS));
             }
@@ -68,7 +71,6 @@ const getScrapCourseByUSer = (req, res) => __awaiter(void 0, void 0, void 0, fun
         }
         else {
             const scrapsArray = getScrapCourse.map((pc) => {
-                console.log(pc);
                 let scrap = {
                     id: pc.id,
                     publicCourseId: pc.public_course_id,

@@ -71,7 +71,6 @@ const getPublicCourseByUser = (machineId) => __awaiter(void 0, void 0, void 0, f
                 created_at: "desc",
             },
         });
-        console.log(courseData);
         return courseData;
     }
     catch (error) {
@@ -99,7 +98,6 @@ const getPublicCourseDetail = (machineId, publicCourseId) => __awaiter(void 0, v
                 },
             },
         });
-        console.log(publicCourseData);
         return publicCourseData;
     }
     catch (error) {
@@ -128,7 +126,6 @@ const recommendPublicCourse = (machineId) => __awaiter(void 0, void 0, void 0, f
                 },
             },
         });
-        console.log(data);
         return data;
     }
     catch (error) {
@@ -191,7 +188,6 @@ const searchPublicCourse = (machineId, keyword) => __awaiter(void 0, void 0, voi
                 created_at: "desc",
             },
         });
-        console.log(data);
         return data;
     }
     catch (error) {
