@@ -12,8 +12,7 @@
     "db:push": "npx prisma db push",
     "generate": "npx prisma generate",
     "prepare": "chmod ug+x .husky/* && husky install",
-    "greet": "hello husky!",
-    "test": "mocha -r ts-node/register ./test/"
+    "test": "mocha ./test/ -r ts-node/register"
   },
   "dependencies": {
     "@prisma/client": "^4.8.0",
