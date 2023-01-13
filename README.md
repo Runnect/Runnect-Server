@@ -146,9 +146,9 @@
 
 |담당자|담당 내용|구현 진척도|
 |:---|:---|:---|
-|유수화|EC2, publicCourse, stamp 관련 api|100%|
-|전선희|RDS, course, user 관련 api|100%|
-|박수린|S3, record, scrap 관련 api|100%|
+|유수화|EC2, publicCourse & stamp 관련 api|100%|
+|전선희|RDS, course & user 관련 api|100%|
+|박수린|S3, record & scrap 관련 api|100%|
 
 </aside>
 <hr>
