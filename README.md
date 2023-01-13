@@ -1,7 +1,99 @@
-# Runnect_Server
+# 🏃‍♀️ Runnect_Server
 
 [32st SOPT APPJAM] Server team repository of Runnect
+### 점과 점으로, 코스와 코스로 연결되는 너와 나의 러닝 경험
+![표지](https://user-images.githubusercontent.com/88873302/212262655-0f14bae8-79d9-4aff-b52a-993694727a6a.jpg)
+</br>
+![A333](https://user-images.githubusercontent.com/88873302/212286726-608ec06a-5631-4aaf-ae7f-bf711a4ef234.jpg)
 
+</aside>
+<hr>
+</br>
+
+# ☝ 서비스 핵심 기능
+### 1. 코스 그리기
+> 코스 그리기로 달리기 전 목표를 설정하고 실시간 트래킹으로 코스르 따라 잘 달리고 있는지 확인합니다.
+### 2. 코스 발견
+> 코스 발견을 통해 나에게 맞는 코스를 추천 받거나 다른 유저가 공유한 코스를 검색하고 스크랩합니다. 코스를 직접 업로드할 수 도 있습니다.
+### 3. 코스 보관함
+> 코스 보관함에서 내가 그린 코스와 스크랩 코스를 관리합니다.
+### 4. 마이페이지
+> 마이페이지에서 프로필과 활동 기록, 업로드한 코스를 확인하고 목표 보상으로 동기를 강화합니다.
+
+</aside>
+<hr>
+</br>
+
+# 🔨 Dependencies Module ( package.json )
+```json
+{
+  "name": "Runnect_Server",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/Runnect/Runnect_Server.git",
+  "author": "YuSuhwa-ve <dhfhfkzjxms@sookmyung.ac.kr>",
+  "license": "MIT",
+  "scripts": {
+    "dev": "nodemon",
+    "build": "tsc && node dist",
+    "db:pull": "npx prisma db pull",
+    "db:push": "npx prisma db push",
+    "generate": "npx prisma generate",
+    "prepare": "chmod ug+x .husky/* && husky install",
+    "greet": "hello husky!",
+    "test": "mocha ./test/ -r ts-node/register"
+  },
+  "dependencies": {
+    "@prisma/client": "^4.8.0",
+    "aws-sdk": "^2.1281.0",
+    "bcryptjs": "^2.4.3",
+    "dayjs": "^1.11.7",
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2",
+    "express-validator": "^6.14.2",
+    "jsonwebtoken": "^9.0.0",
+    "multer": "^1.4.5-lts.1",
+    "multer-s3": "^3.0.1",
+    "prisma": "^4.8.0"
+  },
+  "devDependencies": {
+    "@types/bcryptjs": "^2.4.2",
+    "@types/chai": "^4.3.4",
+    "@types/express": "^4.17.15",
+    "@types/express-validator": "^3.0.0",
+    "@types/jsonwebtoken": "^8.5.9",
+    "@types/mocha": "^10.0.1",
+    "@types/multer": "^1.4.7",
+    "@types/multer-s3": "^3.0.0",
+    "@types/node": "^18.11.17",
+    "@types/supertest": "^2.0.12",
+    "chai": "^4.3.7",
+    "commitizen": "^4.2.6",
+    "cz-conventional-changelog": "3.3.0",
+    "cz-emoji-conventional": "^1.0.1",
+    "husky": "^8.0.0",
+    "mocha": "^10.2.0",
+    "nodemon": "^2.0.20",
+    "supertest": "^6.3.3",
+    "ts-node": "^10.9.1",
+    "typescript": "^4.9.4"
+  },
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-emoji-conventional"
+    }
+  }
+}
+
+```
+
+</aside>
+<hr>
+</br>
+
+# 🏠 server architecture
+
+![서버아키텍쳐](https://user-images.githubusercontent.com/88873302/212261508-c8a41c73-fb9a-4694-8c65-24cee545f311.jpg)
 </aside>
 <hr>
 </br>
@@ -20,6 +112,8 @@
 |_ 📁 router
 |_ 📁 service
 |_ index.ts
+
+📁 test
 ```
 
 
@@ -39,9 +133,23 @@
 <hr>
 </br>
 
-# 📄 API(+ Non - API) Docs & 역할 분담 & 구현 진척도
+# 📄 API(+ Non - API) Docs
 
 [Runnect Server API(+ Non - API) Docs](https://meowing-orange-9b6.notion.site/Runnect-Server-API-Non-API-Docs-d22169bc1df84bf8871e59781d03be2b)
+![image](https://user-images.githubusercontent.com/88873302/212285411-c1f1aae2-78c7-4a92-bd7b-907a9c31ac03.png)
+</aside>
+<hr>
+</br>
+
+
+# 🙆‍♀️ 역할분담 & 구현 진척도
+
+|담당자|담당 내용|구현 진척도|
+|:---|:---|:---|
+|유수화|EC2, publicCourse & stamp 관련 api|100%|
+|전선희|RDS, course & user 관련 api|100%|
+|박수린|S3, record & scrap 관련 api|100%|
+
 </aside>
 <hr>
 </br>
