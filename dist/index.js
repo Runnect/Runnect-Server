@@ -17,4 +17,5 @@ app.listen(config_1.default.port, () => {
      ${config_1.default.port}번 포트에서 듣고 있는 중~~*
     ********************************************`);
 });
+exports.default = app;
 //# sourceMappingURL=index.js.map

@@ -13,7 +13,7 @@
     "generate": "npx prisma generate",
     "prepare": "chmod ug+x .husky/* && husky install",
     "greet": "hello husky!",
-    "test": "mocha ./test/ -r ts-node/register"
+    "test": "mocha -r ts-node/register ./test/"
   },
   "dependencies": {
     "@prisma/client": "^4.8.0",

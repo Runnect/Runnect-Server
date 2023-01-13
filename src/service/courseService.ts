@@ -58,7 +58,6 @@ const getCourseByUser = async (machineId: string) => {
         created_at: "desc",
       },
     });
-    console.log(result);
 
     if (!result) return null;
     const courses: Course[] = result.map((pc: any) => {
@@ -148,7 +147,7 @@ const getCourseDetail = async (machineId: string, courseId: number) => {
         id: courseId,
         createdAt: dateConvertString(result[0]["created_at"]),
         path: pathConvertCoor(result[0]["path"]),
-        distance: result[0]["distance"] as number,
+        distance: Number(result[0]["distance"]),
         image: result[0]["image"],
         departure: {
           region: result[0]["departure_region"],

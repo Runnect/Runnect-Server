@@ -64,7 +64,6 @@ const getCourseByUser = (machineId) => __awaiter(void 0, void 0, void 0, functio
                 created_at: "desc",
             },
         });
-        console.log(result);
         if (!result)
             return null;
         const courses = result.map((pc) => {
@@ -152,7 +151,7 @@ const getCourseDetail = (machineId, courseId) => __awaiter(void 0, void 0, void 
                 id: courseId,
                 createdAt: (0, convertTime_1.dateConvertString)(result[0]["created_at"]),
                 path: (0, pathConvertCoor_1.pathConvertCoor)(result[0]["path"]),
-                distance: result[0]["distance"],
+                distance: Number(result[0]["distance"]),
                 image: result[0]["image"],
                 departure: {
                     region: result[0]["departure_region"],
