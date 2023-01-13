@@ -49,11 +49,11 @@ const getUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         return res.status(constant_1.sc.BAD_REQUEST).send((0, response_1.fail)(constant_1.sc.BAD_REQUEST, validationErrorMsg));
     }
     const machineId = req.header("machineId");
+    console.log(machineId);
     try {
         const data = yield service_1.userService.getUser(machineId);
         if (!data)
             return res.status(constant_1.sc.BAD_REQUEST).send((0, response_1.fail)(constant_1.sc.BAD_REQUEST, constant_1.rm.READ_USER_FAIL));
-        console.log(data);
         return res.status(constant_1.sc.OK).send((0, response_1.success)(constant_1.sc.OK, constant_1.rm.READ_USER_SUCCESS, data));
     }
     catch (e) {

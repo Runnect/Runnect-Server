@@ -2,7 +2,7 @@
 
 import app from "../src/index";
 import request from "supertest";
-import expect from "chai";
+import { expect } from "chai";
 import dotenv from "dotenv";
 dotenv.config();
 
