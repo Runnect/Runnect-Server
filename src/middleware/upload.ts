@@ -9,6 +9,7 @@ import s3 from "../config/s3Config";
 
 //? 미들웨어로 사용할 multer 모듈
 const upload = multer({
+  limits: { fieldSize: 25 * 1024 * 1024 },
   //? 실질적인 storage 는 multerS3 이용해 aws s3 로 설정
   storage: multerS3({
     s3: s3, //s3 객체를 가져와라
