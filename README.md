@@ -4,7 +4,9 @@
 ### 점과 점으로, 코스와 코스로 연결되는 너와 나의 러닝 경험
 
 ![Runnect_Poster](https://insopt-bucket-rin.s3.ap-northeast-2.amazonaws.com/1673507809074_KakaoTalk_20230109_163650590.png)
+</br>
 ![Runnect_Poster2](https://insopt-bucket-rin.s3.ap-northeast-2.amazonaws.com/1673592062916_%EC%A0%84%EC%B2%B4%20%ED%99%94%EB%A9%B4%20%EB%AA%A9%EC%97%85.png)
+</br>
 ![Runnect_Flow](https://insopt-bucket-rin.s3.ap-northeast-2.amazonaws.com/1673592071939_%EC%9B%8C%ED%81%AC%ED%94%8C%EB%A1%9C%EC%9A%B0.png)
 
 </aside>
@@ -94,6 +96,7 @@
 </br>
 
 # 🏠 server architecture
+
 ![Server_architecture](https://insopt-bucket-rin.s3.ap-northeast-2.amazonaws.com/1673592079456_Slide%2016_9%20-%201.png)
 </aside>
 <hr>
