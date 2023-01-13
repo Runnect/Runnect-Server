@@ -133,9 +133,22 @@
 <hr>
 </br>
 
-# 📄 API(+ Non - API) Docs & 역할 분담 & 구현 진척도
+# 📄 API(+ Non - API) Docs
 
 [Runnect Server API(+ Non - API) Docs](https://meowing-orange-9b6.notion.site/Runnect-Server-API-Non-API-Docs-d22169bc1df84bf8871e59781d03be2b)
+</aside>
+<hr>
+</br>
+
+
+# 역할분담 & 구현 진척도
+
+|담당자|담당 내용|구현 진척도|
+|:---|:---|:---|
+|유수화|EC2, publicCourse, stamp 관련 api|100%|
+|전선희|RDS, course, user 관련 api|100%|
+|박수린|S3, record, scrap 관련 api|100%|
+
 </aside>
 <hr>
 </br>
