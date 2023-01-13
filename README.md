@@ -2,6 +2,7 @@
 
 [32st SOPT APPJAM] Server team repository of Runnect
 ### 점과 점으로, 코스와 코스로 연결되는 너와 나의 러닝 경험
+![표지](https://user-images.githubusercontent.com/88873302/212260766-f8f1444c-c490-414b-8335-55af6c9f1869.jpg)
 
 ![표지](https://user-images.githubusercontent.com/88873302/212262655-0f14bae8-79d9-4aff-b52a-993694727a6a.jpg)
 </br>
