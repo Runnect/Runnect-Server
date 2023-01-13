@@ -47,7 +47,6 @@
     "@prisma/client": "^4.8.0",
     "aws-sdk": "^2.1281.0",
     "bcryptjs": "^2.4.3",
-    "cz-emoji": "^1.3.2-canary.2",
     "dayjs": "^1.11.7",
     "dotenv": "^16.0.3",
     "express": "^4.18.2",
@@ -113,6 +112,8 @@
 |_ 📁 router
 |_ 📁 service
 |_ index.ts
+
+📁 test
 ```
 
 
