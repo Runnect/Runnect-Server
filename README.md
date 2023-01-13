@@ -1,7 +1,100 @@
 # Runnect_Server
 
 [32st SOPT APPJAM] Server team repository of Runnect
+### 점과 점으로, 코스와 코스로 연결되는 너와 나의 러닝 경험
 
+![Runnect_Poster](https://insopt-bucket-rin.s3.ap-northeast-2.amazonaws.com/1673507809074_KakaoTalk_20230109_163650590.png)
+![Runnect_Poster2](https://insopt-bucket-rin.s3.ap-northeast-2.amazonaws.com/1673592062916_%EC%A0%84%EC%B2%B4%20%ED%99%94%EB%A9%B4%20%EB%AA%A9%EC%97%85.png)
+![Runnect_Flow](https://insopt-bucket-rin.s3.ap-northeast-2.amazonaws.com/1673592071939_%EC%9B%8C%ED%81%AC%ED%94%8C%EB%A1%9C%EC%9A%B0.png)
+
+</aside>
+<hr>
+</br>
+
+# ☝ 서비스 핵심 기능
+### 1. 코스 그리기
+> 코스 그리기로 달리기 전 목표를 설정하고 실시간 트래킹으로 코스르 따라 잘 달리고 있는지 확인합니다.
+### 2. 코스 발견
+> 코스 발견을 통해 나에게 맞는 코스를 추천 받거나 다른 유저가 공유한 코스를 검색하고 스크랩합니다. 코스를 직접 업로드할 수 도 있습니다.
+### 3. 코스 보관함
+> 코스 보관함에서 내가 그린 코스와 스크랩 코스를 관리합니다.
+### 4. 마이페이지
+> 마이페이지에서 프로필과 활동 기록, 업로드한 코스를 확인하고 목표 보상으로 동기를 강화합니다.
+
+</aside>
+<hr>
+</br>
+
+# 🔨 Dependencies Module ( package.json )
+```json
+{
+  "name": "Runnect_Server",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/Runnect/Runnect_Server.git",
+  "author": "YuSuhwa-ve <dhfhfkzjxms@sookmyung.ac.kr>",
+  "license": "MIT",
+  "scripts": {
+    "dev": "nodemon",
+    "build": "tsc && node dist",
+    "db:pull": "npx prisma db pull",
+    "db:push": "npx prisma db push",
+    "generate": "npx prisma generate",
+    "prepare": "chmod ug+x .husky/* && husky install",
+    "greet": "hello husky!",
+    "test": "mocha ./test/ -r ts-node/register"
+  },
+  "dependencies": {
+    "@prisma/client": "^4.8.0",
+    "aws-sdk": "^2.1281.0",
+    "bcryptjs": "^2.4.3",
+    "cz-emoji": "^1.3.2-canary.2",
+    "dayjs": "^1.11.7",
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2",
+    "express-validator": "^6.14.2",
+    "jsonwebtoken": "^9.0.0",
+    "multer": "^1.4.5-lts.1",
+    "multer-s3": "^3.0.1",
+    "prisma": "^4.8.0"
+  },
+  "devDependencies": {
+    "@types/bcryptjs": "^2.4.2",
+    "@types/chai": "^4.3.4",
+    "@types/express": "^4.17.15",
+    "@types/express-validator": "^3.0.0",
+    "@types/jsonwebtoken": "^8.5.9",
+    "@types/mocha": "^10.0.1",
+    "@types/multer": "^1.4.7",
+    "@types/multer-s3": "^3.0.0",
+    "@types/node": "^18.11.17",
+    "@types/supertest": "^2.0.12",
+    "chai": "^4.3.7",
+    "commitizen": "^4.2.6",
+    "cz-conventional-changelog": "3.3.0",
+    "cz-emoji-conventional": "^1.0.1",
+    "husky": "^8.0.0",
+    "mocha": "^10.2.0",
+    "nodemon": "^2.0.20",
+    "supertest": "^6.3.3",
+    "ts-node": "^10.9.1",
+    "typescript": "^4.9.4"
+  },
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-emoji-conventional"
+    }
+  }
+}
+
+```
+
+</aside>
+<hr>
+</br>
+
+# 🏠 server architecture
+![Server_architecture](https://insopt-bucket-rin.s3.ap-northeast-2.amazonaws.com/1673592079456_Slide%2016_9%20-%201.png)
 </aside>
 <hr>
 </br>
