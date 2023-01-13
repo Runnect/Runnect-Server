@@ -4,7 +4,7 @@
 ### 점과 점으로, 코스와 코스로 연결되는 너와 나의 러닝 경험
 ![표지](https://user-images.githubusercontent.com/88873302/212262655-0f14bae8-79d9-4aff-b52a-993694727a6a.jpg)
 </br>
-![워크플로우](https://user-images.githubusercontent.com/88873302/212261821-7a7d8506-ea26-4426-bf3c-1b032acd4758.png)
+![A333](https://user-images.githubusercontent.com/88873302/212286726-608ec06a-5631-4aaf-ae7f-bf711a4ef234.jpg)
 
 </aside>
 <hr>
