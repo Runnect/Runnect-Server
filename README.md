@@ -3,11 +3,11 @@
 [32st SOPT APPJAM] Server team repository of Runnect
 ### 점과 점으로, 코스와 코스로 연결되는 너와 나의 러닝 경험
 
-![Runnect_Poster](https://insopt-bucket-rin.s3.ap-northeast-2.amazonaws.com/1673593927637_%ED%91%9C%EC%A7%80.jpg)
+![표지](https://user-images.githubusercontent.com/88873302/212262655-0f14bae8-79d9-4aff-b52a-993694727a6a.jpg)
 </br>
-![Runnect_Poster2](https://insopt-bucket-rin.s3.ap-northeast-2.amazonaws.com/1673593920901_%EC%A0%84%EC%B2%B4%20%ED%99%94%EB%A9%B4%20%EB%AA%A9%EC%97%85.jpg)
+![전체 화면 목업](https://user-images.githubusercontent.com/88873302/212262583-44adbbe7-22f7-4072-8bc4-080ae4975733.jpg)
 </br>
-![Runnect_Flow](https://insopt-bucket-rin.s3.ap-northeast-2.amazonaws.com/1673592071939_%EC%9B%8C%ED%81%AC%ED%94%8C%EB%A1%9C%EC%9A%B0.png)
+![워크플로우](https://user-images.githubusercontent.com/88873302/212261821-7a7d8506-ea26-4426-bf3c-1b032acd4758.png)
 
 </aside>
 <hr>
@@ -97,7 +97,7 @@
 
 # 🏠 server architecture
 
-![Server_architecture](https://insopt-bucket-rin.s3.ap-northeast-2.amazonaws.com/1673592079456_Slide%2016_9%20-%201.png)
+![서버아키텍쳐](https://user-images.githubusercontent.com/88873302/212261508-c8a41c73-fb9a-4694-8c65-24cee545f311.jpg)
 </aside>
 <hr>
 </br>
