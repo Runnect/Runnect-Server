@@ -18,6 +18,7 @@ describe("POST ~/api/scrap", () => {
       .expect(200) //예측상태코드
       .expect("Content-Type", /json/)
       .then((res) => {
+        expect(res.body.message).to.equal("코스 스크랩 성공");
         done();
       })
       .catch((err) => {
@@ -33,11 +34,13 @@ describe("POST ~/api/scrap", () => {
       .send({
         //request.body
         publicCourseId: 34,
-        scrapTF: true,
+        scrapTF: false,
       })
       .expect(200) //예측상태코드
       .expect("Content-Type", /json/)
       .then((res) => {
+        expect(res.body.message).to.equal("코스 스크랩 취소 성공");
+
         done();
       })
       .catch((err) => {
