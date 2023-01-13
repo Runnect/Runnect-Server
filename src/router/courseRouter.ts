@@ -11,11 +11,19 @@ router.post(
   "/",
 
   (req: Request, res: Response, next: NextFunction) => {
+    console.log("~~~~~~~~~~~~~~~~~~~~~~~~~~~s3 multer 업로드전 req 시작~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
     console.log(req);
+    console.log("~~~~~~~~~~~~~~~~~~~~~~~~~~~s3 multer 업로드전 req 끝~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
     next();
   },
 
   upload.single("image"),
+  (req: Request, res: Response, next: NextFunction) => {
+    console.log("~~~~~~~~~~~~~~~~~~~~~~~~~~~s3 multer 업로드후 req 시작~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+    console.log(req.body);
+    console.log("~~~~~~~~~~~~~~~~~~~~~~~~~~~s3 multer 업로드후 req 끝~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+    next();
+  },
   multiformDataConvert,
   [
     header("machineId").notEmpty().withMessage("기기넘버가 없습니다"),
