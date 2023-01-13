@@ -1,4 +1,4 @@
-# Runnect_Server
+# 🏃‍♀️ Runnect_Server
 
 [32st SOPT APPJAM] Server team repository of Runnect
 ### 점과 점으로, 코스와 코스로 연결되는 너와 나의 러닝 경험
