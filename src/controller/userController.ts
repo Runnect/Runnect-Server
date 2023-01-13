@@ -43,8 +43,6 @@ const getUser = async (req: Request, res: Response) => {
 
   const machineId = req.header("machineId") as string;
 
-  console.log(machineId);
-
   try {
     const data = await userService.getUser(machineId);
     if (!data) return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.READ_USER_FAIL));
