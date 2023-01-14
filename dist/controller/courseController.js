@@ -25,6 +25,7 @@ const createCourse = (req, res) => __awaiter(void 0, void 0, void 0, function* (
         const validationErrorMsg = error["errors"][0].msg;
         return res.status(constant_1.sc.BAD_REQUEST).send((0, response_1.fail)(constant_1.sc.BAD_REQUEST, validationErrorMsg));
     }
+    console.log(req.body);
     const image = req.file;
     if (!image)
         return res.status(constant_1.sc.BAD_REQUEST).send((0, response_1.fail)(constant_1.sc.BAD_REQUEST, constant_1.rm.NO_IMAGE));
