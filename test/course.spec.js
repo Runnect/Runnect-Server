@@ -131,6 +131,7 @@ describe("GET ~/api/course/detail/:courseId", () => {
         done(err);
       });
   });
+
   it("필요한값이 없을때", (done) => {
     request(app)
       .get("/api/course/detail/25") //url
