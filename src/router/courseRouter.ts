@@ -10,11 +10,6 @@ const router: Router = Router();
 router.post(
   "/",
 
-  (req: Request, res: Response, next: NextFunction) => {
-    console.log(req);
-    next();
-  },
-
   upload.single("image"),
   multiformDataConvert,
   [
