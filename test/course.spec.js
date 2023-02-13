@@ -118,7 +118,7 @@ describe("GET ~/api/course/private/user", () => {
 describe("GET ~/api/course/detail/:courseId", () => {
   it("코스 조회 성공", (done) => {
     request(app)
-      .get("/api/course/detail/25") //url
+      .get(`/api/course/detail/${process.env.COURSE_ID}`) //url
       .set("Content-Type", "application/json") //req.headers
       .set("machineId", process.env.MACHINE_ID)
       .expect(200) //예측상태코드

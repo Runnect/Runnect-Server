@@ -12,8 +12,7 @@ describe("POST ~/api/record", () => {
       .set("machineId", process.env.MACHINE_ID)
       .send({
         //request.body
-        courseId: 10,
-        publicCourseId: 34,
+        courseId: process.env.COURSE_ID,
         title: "mocha test1",
         time: "21:07:14",
         pace: "00:06:40",
