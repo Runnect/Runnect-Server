@@ -155,7 +155,7 @@ describe("GET ~/api/public-course", () => {
 describe(`GET ~/api/public-course/search?keyword=${process.env.SEARCH_KEYWORD}`, () => {
   it("업로드된 코스 검색 성공", (done) => {
     request(app)
-      .get(`/api/public-course/search?keyword=${process.env.SEARCH_KEYWORD}`) //url
+      .get(encodeURI(`/api/public-course/search?keyword=${process.env.SEARCH_KEYWORD}`)) //url
       .set("Content-Type", "application/json") //req.headers
       .set("machineId", process.env.MACHINE_ID)
       .expect(200) //예측상태코드
@@ -173,7 +173,7 @@ describe(`GET ~/api/public-course/search?keyword=${process.env.SEARCH_KEYWORD}`,
 
   it("필요한값이 없을때", (done) => {
     request(app)
-      .get(`/api/public-course/search?keyword=${process.env.SEARCH_KEYWORD}`) //url
+      .get(encodeURI(`/api/public-course/search?keyword=${process.env.SEARCH_KEYWORD}`)) //url
       .set("Content-Type", "application/json") //req.headers
       .expect(400)
       .then((res) => {
