@@ -30,7 +30,7 @@ module.exports = () => {
                                 id: profile.id,
                                 provider: 'google',
                                 email: profile?.email[0].value,
-                                nickname:
+                                nickname: null, // nickname 처리 논의 필요
                             }
                         });
                         done(null, newUser);
