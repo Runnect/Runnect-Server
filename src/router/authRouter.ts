@@ -1,5 +1,6 @@
 import { Router } from "express";
 import { body } from "express-validator";
+import { authController } from "../controller";
 
 const authRouter: Router = Router();
 

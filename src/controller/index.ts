@@ -4,3 +4,4 @@ export { default as recordController } from "./recordController";
 export { default as userController } from "./userController";
 export { default as scrapController } from "./scrapController";
 export { default as stampController } from "./stampController";
+export { default as authController } from "./authController";
