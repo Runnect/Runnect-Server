@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import { validationResult } from 'express-validator';
 import { success, fail } from "./../constant/response";
 import { rm, sc } from "../constant";
+import social from "../module/social";
 
 const getSocialLoginInfo = async (req: Request, res: Response) => {
     const error = validationResult(req);
@@ -16,7 +17,8 @@ const getSocialLoginInfo = async (req: Request, res: Response) => {
     try {
         switch(provider) {
             case "GOOGLE":
-                socialUser = await 
+                socialUser = await social.google(token);
+                break;
 
         }
 
