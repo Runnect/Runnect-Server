@@ -10,24 +10,7 @@ const google = async (idToken: string) => {
         });
         const payload = ticket.getPayload();
 
-        const userid = payload['sub'];
-        const email = payload.getEmail();
-
-        return email; //* return 값 정하기
-
-        // const verify = async () => {
-        //     const ticket = await client.verifyIdToken({
-        //         idToken: idToken,
-        //         audience: process.env.GOOGLE_CLIENT_ID,
-        //     });
-        //     const payload = ticket.getPayload();
-
-        //     const userid = payload['sub'];
-        //     const email = payload.getEmail();
-
-        //     return email; //* return 값 정하기
-        // };
-        // verify().catch(console.error);
+        return { socialId: payload['sub'] as string, email: payload['email'] as string, provider: "GOOGLE" };
 
     } catch (error) {
         console.log(error);

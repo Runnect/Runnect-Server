@@ -23,6 +23,9 @@ export default {
   NO_USER: "존재하지 않는 유저",
   UPDATE_USER_FAIL: "유저 업데이트 실패",
 
+  // 소셜로그인
+  READ_SOCIAL_FAIL: "소셜로그인 회원 정보 조회 실패",
+
   // 코스
   READ_COURSE_SUCCESS: "코스 조회 성공",
   READ_PRIVATE_COURSE_SUCCESS: "private 코스 조회 성공",
