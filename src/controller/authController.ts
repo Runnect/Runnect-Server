@@ -13,7 +13,7 @@ const getSocialLoginInfo = async (req: Request, res: Response) => {
         return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, validationErrorMsg));
     }
 
-    const { token, provider, idKey } = req.body;
+    const { token, provider } = req.body;
 
     let socialUser: SocialCreateRequestDTO | null | undefined = null;
 
