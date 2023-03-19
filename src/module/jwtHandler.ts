@@ -14,6 +14,12 @@ const sign = (userId: number) => {
   return accessToken;
 };
 
+//* refreshToken 발급
+const createRefreshToken = () => {
+  const refreshToken = jwt.sign({}, process.env.JWT_SECRET as string, { expiresIn: "14d" });
+  return refreshToken;
+};
+
 //* token 검사!
 const verify = (token: string) => {
   let decoded: string | jwt.JwtPayload;

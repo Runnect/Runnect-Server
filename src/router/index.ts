@@ -5,6 +5,7 @@ import recordRouter from "./recordRouter";
 import userRouter from "./userRouter";
 import scrapRouter from "./scrapRouter";
 import stampRouter from "./stampRouter";
+import authRouter from "./authRouter";
 
 const router: Router = Router();
 
@@ -14,5 +15,6 @@ router.use("/record", recordRouter);
 router.use("/user", userRouter);
 router.use("/scrap", scrapRouter);
 router.use("/stamp", stampRouter);
+router.use("/auth", authRouter);
 
 export default router;
