@@ -1,6 +1,6 @@
 export interface CourseDetailGetDTO {
   user: {
-    userId: number;
+    id: number;
   };
   course: {
     id: number;

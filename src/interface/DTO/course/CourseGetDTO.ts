@@ -10,7 +10,7 @@ export interface Course {
 
 export interface CourseGetDTO {
   user: {
-    userId: number;
+    id: number;
   };
   courses: Course[];
 }
