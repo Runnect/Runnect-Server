@@ -44,6 +44,23 @@ const createUser = async (socialCreateRequestDTO: SocialCreateRequestDTO, refres
     }
 };
 
+const updateRefreshToken = async (userId: number, refreshToken: string) => {
+    try {
+        const updatedUser = await prisma.user.update({
+            where: {
+                id: userId,
+            },
+            data: {
+                refreshToken: refreshToken,
+            },
+        });
+        return updatedUser;
+    } catch (error) {
+        console.log(error);
+        throw error;
+    }
+};
+
 const authService = {
     getUserByEmail,
     createUser,

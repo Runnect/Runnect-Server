@@ -35,6 +35,7 @@ const getSocialLoginInfo = async (req: Request, res: Response) => {
 
         if (existingUser) {
             // 기존 유저라면
+            
         }
         
         const newUser = await authService.createUser(socialUser, refreshToken as string);
