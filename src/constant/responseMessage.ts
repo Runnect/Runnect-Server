@@ -8,8 +8,8 @@ export default {
   // 회원가입 및 로그인
   SIGNUP_SUCCESS: "회원 가입 성공",
   SIGNUP_FAIL: "회원 가입 실패",
-  SIGNIN_SUCCESS: "로그인 성공",
-  SIGNIN_FAIL: "로그인 실패",
+  LOGIN_SUCCESS: "로그인 성공",
+  LOGIN_FAIL: "로그인 실패",
   ALREADY_NICKNAME: "이미 사용중인 닉네임입니다.",
   INVALID_PASSWORD: "잘못된 비밀번호입니다.",
 
@@ -36,7 +36,6 @@ export default {
   CREATE_COURSE_FAIL: "코스 생성 실패",
   DEPARTURE_VALIDATION_ERROR: "출발지 정보가 유효하지 않습니다.",
   NO_IMAGE: "이미지가 없습니다.",
-
 
   // 토큰
   CREATE_TOKEN_SUCCESS: "토큰 재발급 성공",
@@ -77,5 +76,4 @@ export default {
 
   //stamp
   READ_STAMP_BY_USER: "유저가 가진 스탬프 조회 성공",
-
 };

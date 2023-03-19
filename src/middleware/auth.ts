@@ -18,7 +18,9 @@ export default async (req: Request, res: Response, next: NextFunction) => {
   try {
     const decoded = jwtHandler.verify(token); //? jwtHandler에서 만들어둔 verify로 토큰 검사
 
-    //? 토큰 에러 분기 처리
+    //? 토큰 에러 분기 처리 -> 이때 Refresh Token 재발급
+    //? 1. accessToken 만료 + refreshToken 존재 : refreshToken으로 accessToken 새로 생성
+    //? 2. accessToken 만료 + refreshToken 만료 : Login 다시하세요!
     if (decoded === tokenType.TOKEN_EXPIRED) return res.status(sc.UNAUTHORIZED).send(fail(sc.UNAUTHORIZED, rm.EXPIRED_TOKEN));
     if (decoded === tokenType.TOKEN_INVALID) return res.status(sc.UNAUTHORIZED).send(fail(sc.UNAUTHORIZED, rm.INVALID_TOKEN));
 
