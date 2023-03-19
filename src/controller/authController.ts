@@ -5,6 +5,7 @@ import { rm, sc } from "../constant";
 import social from "../module/social";
 import { SocialCreateRequestDTO } from "../interface/DTO/auth/SocialCreateDTO";
 import { authService } from "../service";
+import jwtHandler from "../module/jwtHandler";
 
 const getSocialLoginInfo = async (req: Request, res: Response) => {
     const error = validationResult(req);
@@ -30,12 +31,13 @@ const getSocialLoginInfo = async (req: Request, res: Response) => {
         }
 
         const existingUser = await authService.getUserByEmail(socialUser);
+        const refreshToken = jwtHandler.createRefreshToken();
 
         if (existingUser) {
             // 기존 유저라면
         }
         
-        const newUser = await authService.createUser(socialUser);
+        const newUser = await authService.createUser(socialUser, refreshToken as string);
         
 
     } catch (error) {
