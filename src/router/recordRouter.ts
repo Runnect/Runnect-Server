@@ -7,9 +7,11 @@ const recordRouter: Router = Router();
 recordRouter.post(
   "/",
   [
-    header("machineId")
+    body("userId")
       .notEmpty()
-      .withMessage("기기넘버가 없음"),
+      .withMessage("유저 아이디가 없습니다.")
+      .isNumeric()
+      .withMessage("유저아이디가 숫자가 아닙니다."),
     body("courseId")
       .notEmpty()
       .withMessage("코스 아이디가 없음")
@@ -31,9 +33,11 @@ recordRouter.post(
 recordRouter.get(
   "/user",
   [
-    header("machineId")
+    body("userId")
       .notEmpty()
-      .withMessage("기기넘버가 없음"),
+      .withMessage("유저 아이디가 없습니다.")
+      .isNumeric()
+      .withMessage("유저아이디가 숫자가 아닙니다."),
   ],
   recordController.getRecordByUser
 );

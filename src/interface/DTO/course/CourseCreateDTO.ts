@@ -1,5 +1,5 @@
 export interface CourseCreateDTO {
-  machineId: string;
+  userId: number;
   path: string;
   distance: number;
   region: string;
