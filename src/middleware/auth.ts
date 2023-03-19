@@ -10,7 +10,11 @@ import { userService } from "../service";
 
 export default async (req: Request, res: Response, next: NextFunction) => {
   //헤더에 저장된 accessToken과 refreshToken 받아오기
-  const { accessToken, refreshToken } = req.headers;
+  const accessToken = req.headers.accesstoken;
+  const refreshToken = req.headers.refreshtoken;
+
+  console.log(`엑세스 : ${accessToken}`);
+  console.log(`엑세스 : ${refreshToken}`);
 
   //토큰들이 없는지 확인
   if (!accessToken || !refreshToken) return res.status(sc.UNAUTHORIZED).send(fail(sc.UNAUTHORIZED, rm.EMPTY_TOKEN));

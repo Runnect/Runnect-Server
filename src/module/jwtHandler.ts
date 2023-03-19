@@ -10,6 +10,7 @@ const sign = (userId: number) => {
   };
   //sign 메소드는 첫인자 payload, 두번째 secretkey 세번째 option : 토큰의 유통기한
   const accessToken = jwt.sign(payload, process.env.JWT_SECRET as string, { expiresIn: "2h" });
+
   return accessToken;
 };
 
