@@ -1,3 +1,4 @@
+import { SocialExistingUserResponseDTO } from './../interface/DTO/auth/SocialUserGetDTO';
 import { Request, Response } from "express";
 import { validationResult } from 'express-validator';
 import { success, fail } from "./../constant/response";
@@ -35,10 +36,21 @@ const getSocialLoginInfo = async (req: Request, res: Response) => {
 
         if (existingUser) {
             // 기존 유저라면
-            
+            const updatedUser = await authService.updateRefreshToken(existingUser.id, refreshToken);
+            if (!updatedUser) return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.READ_USER_FAIL));
+            const accessToken = jwtHandler.sign(updatedUser.id);
+
+            const existingUserResponseDTO: SocialExistingUserResponseDTO = {
+                type: "Login",
+                email: updatedUser.email,
+                accessToken: accessToken,
+                refreshToken: refreshToken,
+            };
+            return res.status(sc.OK).send(success(sc.OK, rm.SIGNIN_SUCCESS, existingUserResponseDTO));
         }
         
         const newUser = await authService.createUser(socialUser, refreshToken as string);
+        
         
 
     } catch (error) {

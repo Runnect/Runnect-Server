@@ -64,6 +64,7 @@ const updateRefreshToken = async (userId: number, refreshToken: string) => {
 const authService = {
     getUserByEmail,
     createUser,
+    updateRefreshToken,
 };
 
 export default authService;
