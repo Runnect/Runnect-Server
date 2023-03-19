@@ -75,6 +75,7 @@ model User {
   social_id    String
   email        String
   provider     String
+  refreshToken String?
   Course       Course[]
   Record       Record[]
   Scrap        Scrap[]

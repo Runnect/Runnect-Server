@@ -44,4 +44,5 @@ const verify = (token: string) => {
 export default {
   sign,
   verify,
+  createRefreshToken
 };

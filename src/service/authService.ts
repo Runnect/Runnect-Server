@@ -19,7 +19,7 @@ const getUserByEmail = async (socialCreateRequestDTO: SocialCreateRequestDTO) =>
     }
 };
 
-const createUser = async (socialCreateRequestDTO: SocialCreateRequestDTO) => {
+const createUser = async (socialCreateRequestDTO: SocialCreateRequestDTO, refreshToken: string) => {
     try {
         const newUser = await prisma.user.create({
             data: {
@@ -27,6 +27,7 @@ const createUser = async (socialCreateRequestDTO: SocialCreateRequestDTO) => {
                 social_id: socialCreateRequestDTO.socialId,
                 email: socialCreateRequestDTO.email,
                 provider: socialCreateRequestDTO.provider,
+                refreshToken: refreshToken,
             },
         });
         return newUser;
