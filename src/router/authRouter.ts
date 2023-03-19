@@ -5,16 +5,16 @@ import { authController } from "../controller";
 const authRouter: Router = Router();
 
 authRouter.post(
-    "/",
-    [
-        body("token")
-            .notEmpty()
-            .withMessage("토큰이 없습니다."),
-        body("provider")
-            .notEmpty()
-            .withMessage("provider 정보가 없습니다.")
-    ],
-    authController.getSocialLoginInfo //* controller단 함수 이름 임시로 지었어용
+  "/",
+  [
+    body("token")
+      .notEmpty()
+      .withMessage("토큰이 없습니다."),
+    body("provider")
+      .notEmpty()
+      .withMessage("provider 정보가 없습니다."),
+  ],
+  authController.getSocialLoginInfo
 );
 
 export default authRouter;
