@@ -9,6 +9,23 @@ import { dateConvertString, stringConvertTime } from "../module/convert/convertT
 
 const prisma = new PrismaClient();
 
+const getUserById = async (userId: number) => {
+  try {
+    const getUser: any = await prisma.user.findUnique({
+      where: {
+        id: userId,
+      },
+    });
+
+    if (!getUser) return null;
+
+    return getUser;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};
+
 const getUserByEmail = async (socialCreateRequestDTO: SocialCreateRequestDTO) => {
   try {
     const userByEmail = await prisma.user.findFirst({
@@ -155,6 +172,7 @@ const updateUserNickname = async (machineId: string, nickname: string) => {
 };
 
 const userService = {
+  getUserById,
   getUserByEmail,
   createUser,
   signUp,

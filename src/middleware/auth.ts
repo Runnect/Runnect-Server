@@ -6,30 +6,41 @@ import { rm, sc } from "../constant";
 import { fail } from "../constant/response";
 import tokenType from "../constant/tokenType";
 import jwtHandler from "../module/jwtHandler";
+import { userService } from "../service";
 
 export default async (req: Request, res: Response, next: NextFunction) => {
-  //아마 ? 예약어는 ts 인터페이스 문법에서와 같이 authorization 속성이 있는 경우를 뜻하는듯
-  const token = req.headers.authorization?.split(" ").reverse()[0]; //? Bearer ~~ 에서 토큰만 파싱
-  //왜 split :배어러 토큰을 토큰 배어러로 순서를 바꾸기 위해
+  //헤더에 저장된 accessToken과 refreshToken 받아오기
+  const { accessToken, refreshToken } = req.headers;
 
-  //토큰이 없으면 인증된 사람이 아니다
-  if (!token) return res.status(sc.UNAUTHORIZED).send(fail(sc.UNAUTHORIZED, rm.EMPTY_TOKEN));
+  //토큰들이 없는지 확인
+  if (!accessToken || !refreshToken) return res.status(sc.UNAUTHORIZED).send(fail(sc.UNAUTHORIZED, rm.EMPTY_TOKEN));
 
+  //일단 토큰이 존재는함
   try {
-    const decoded = jwtHandler.verify(token); //? jwtHandler에서 만들어둔 verify로 토큰 검사
+    const decodedAccessToken = jwtHandler.verify(accessToken as string); //? jwtHandler에서 만들어둔 verify로 토큰 검사
 
-    //? 토큰 에러 분기 처리 -> 이때 Refresh Token 재발급
-    //? 1. accessToken 만료 + refreshToken 존재 : refreshToken으로 accessToken 새로 생성
-    //? 2. accessToken 만료 + refreshToken 만료 : Login 다시하세요!
-    if (decoded === tokenType.TOKEN_EXPIRED) return res.status(sc.UNAUTHORIZED).send(fail(sc.UNAUTHORIZED, rm.EXPIRED_TOKEN));
-    if (decoded === tokenType.TOKEN_INVALID) return res.status(sc.UNAUTHORIZED).send(fail(sc.UNAUTHORIZED, rm.INVALID_TOKEN));
+    //? 토큰 에러 분기 처리(auth)
+    //? 1. accessToken 정상 -> 이 회원이 우리회원이 맞는지 검사(auth)
+    //? 2. accessToken 만료 또는 이상 -> 재로그인 또는 토큰 재발급
+
+    //? 토큰 에러 분기 처리(reissueToken)
+    //? 1. accessToken 이상 -> 재로그인
+    //? 2.1 accessToken(정상또는 만료) +refreshToken (이상 또는 만료) -> 재로그인
+    //? 2.2 accessToken(정상또는 만료) +refreshToken 정상 -> 토큰 재발급
+
+    if (decodedAccessToken === tokenType.TOKEN_EXPIRED) return res.status(sc.UNAUTHORIZED).send(fail(sc.UNAUTHORIZED, rm.EXPIRED_TOKEN));
+    if (decodedAccessToken === tokenType.TOKEN_INVALID) return res.status(sc.UNAUTHORIZED).send(fail(sc.UNAUTHORIZED, rm.INVALID_TOKEN));
 
     //? decode한 후 담겨있는 userId를 꺼내옴
-    const userId: number = (decoded as JwtPayload).userId;
+    const userId: number = (decodedAccessToken as JwtPayload).userId;
     if (!userId) return res.status(sc.UNAUTHORIZED).send(fail(sc.UNAUTHORIZED, rm.INVALID_TOKEN));
 
+    //? 얻어낸 userId가 우리 회원인지 검사
+    const existingUser = await userService.getUserById(userId);
+    if (!existingUser) return res.status(sc.UNAUTHORIZED).send(fail(sc.UNAUTHORIZED, rm.NO_USER));
+
     //? 얻어낸 userId 를 Request Body 내 userId 필드에 담고, 다음 미들웨어로 넘김( next() )
-    req.body.userId = userId;
+    req.body.userId = existingUser.id;
     //req.body의 필드를 지금 하나 생성하는 것
 
     next();
