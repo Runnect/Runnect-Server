@@ -1,4 +1,4 @@
-import { SocialExistingUserResponseDTO } from './../interface/DTO/auth/SocialUserGetDTO';
+import { SocialExistingUserResponseDTO, SocialNewUserResponseDTO } from './../interface/DTO/auth/SocialUserGetDTO';
 import { Request, Response } from "express";
 import { validationResult } from 'express-validator';
 import { success, fail } from "./../constant/response";
@@ -34,8 +34,8 @@ const getSocialLoginInfo = async (req: Request, res: Response) => {
         const existingUser = await authService.getUserByEmail(socialUser);
         const refreshToken = jwtHandler.createRefreshToken();
 
+        // 기존 유저
         if (existingUser) {
-            // 기존 유저라면
             const updatedUser = await authService.updateRefreshToken(existingUser.id, refreshToken);
             if (!updatedUser) return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.READ_USER_FAIL));
             const accessToken = jwtHandler.sign(updatedUser.id);
@@ -49,9 +49,24 @@ const getSocialLoginInfo = async (req: Request, res: Response) => {
             return res.status(sc.OK).send(success(sc.OK, rm.SIGNIN_SUCCESS, existingUserResponseDTO));
         }
         
+        // 새로운 유저
         const newUser = await authService.createUser(socialUser, refreshToken as string);
-        
-        
+
+        if (!newUser) {
+            return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.READ_USER_FAIL));
+        } else if (typeof newUser === "string" || newUser instanceof String) {
+            return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, newUser as string));
+        } else {
+            const accessToken = jwtHandler.sign(newUser.id);
+            const newUserResponseDTO: SocialNewUserResponseDTO = {
+                type: "Signup",
+                email: newUser.email,
+                nickname: newUser.nickname,
+                accessToken: accessToken,
+                refreshToken: refreshToken,
+            };
+            return res.status(sc.OK).send(success(sc.OK, rm.SIGNUP_SUCCESS, newUserResponseDTO));
+        }
 
     } catch (error) {
         console.log(error);

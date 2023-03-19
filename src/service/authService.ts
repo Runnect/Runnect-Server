@@ -1,5 +1,5 @@
 import { SocialCreateRequestDTO } from './../interface/DTO/auth/SocialCreateDTO';
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient, User } from '@prisma/client';
 import { randomInitialNickname } from '../module/randomInitialNickname';
 import { PrismaClientKnownRequestError, PrismaClientValidationError } from "@prisma/client/runtime";
 
@@ -30,6 +30,7 @@ const createUser = async (socialCreateRequestDTO: SocialCreateRequestDTO, refres
                 refreshToken: refreshToken,
             },
         });
+        if (!newUser) return null;
         return newUser;
     } catch (error) {
         if (error instanceof PrismaClientKnownRequestError) {
