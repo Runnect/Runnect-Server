@@ -80,6 +80,7 @@ const createUser = async (socialCreateRequestDTO: SocialCreateRequestDTO, refres
   }
 };
 
+/*
 const signUp = async (machineId: string, nickname: string) => {
   try {
     const createdUser = await prisma.user.create({
@@ -102,20 +103,20 @@ const signUp = async (machineId: string, nickname: string) => {
     throw error;
   }
 };
-
-const getUser = async (machineId: string) => {
+*/
+const getUser = async (userId: number) => {
   try {
     const getUser: any = await prisma.user.findUnique({
       where: {
-        machine_id: machineId,
+        id: userId,
       },
     });
 
     if (!getUser) return null;
-    const levelPercent = await getLevelPercent(machineId);
+    const levelPercent = await getLevelPercent(userId);
     const userGetDTO: UserGetDTO = {
       user: {
-        machineId: getUser.machine_id,
+        id: getUser.id,
         nickname: getUser.nickname,
         latestStamp: getUser.latest_stamp,
         level: getUser.level,
@@ -129,12 +130,12 @@ const getUser = async (machineId: string) => {
   }
 };
 
-const getLevelPercent = async (machineId: string) => {
+const getLevelPercent = async (userId: number) => {
   try {
     const userStamp = (
       await prisma.userStamp.findMany({
         where: {
-          user_machine_id: machineId,
+          user_id: userId,
         },
       })
     ).length;
@@ -146,11 +147,11 @@ const getLevelPercent = async (machineId: string) => {
   }
 };
 
-const updateUserNickname = async (machineId: string, nickname: string) => {
+const updateUserNickname = async (userId: number, nickname: string) => {
   try {
     const updatedUser: any = await prisma.user.update({
       where: {
-        machine_id: machineId,
+        id: userId,
       },
       data: {
         nickname: nickname,
@@ -158,11 +159,11 @@ const updateUserNickname = async (machineId: string, nickname: string) => {
       },
     });
     if (!updatedUser) return null;
-    const levelPercent = await getLevelPercent(machineId);
+    const levelPercent = await getLevelPercent(userId);
 
     const updatedUserGetDTO: UpdatedUserGetDTO = {
       user: {
-        machineId: updatedUser.machine_id,
+        id: updatedUser.id,
         nickname: updatedUser.nickname,
         latestStamp: updatedUser.latest_stamp,
         level: updatedUser.level,
@@ -190,7 +191,7 @@ const userService = {
   getUserByEmail,
   getUserByRefreshToken,
   createUser,
-  signUp,
+  //signUp,
   getUser,
   updateUserNickname,
 };
