@@ -25,10 +25,10 @@ authRouter.get(
     //원래 auth 미들웨어에서 토큰들의 유무를 검사하나, 재발급시는 auth 미들웨어를 사용하지 않기에 express validator를 사용해 값의 유무 검사
     header("refreshToken")
       .notEmpty()
-      .withMessage(rm.EMPTY_TOKEN),
+      .withMessage(`refresh ${rm.EMPTY_TOKEN}`),
     header("accessToken")
       .notEmpty()
-      .withMessage(rm.EMPTY_TOKEN),
+      .withMessage(`access ${rm.EMPTY_TOKEN}`),
   ],
   authController.getNewToken
 );
