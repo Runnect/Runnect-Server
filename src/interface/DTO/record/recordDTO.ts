@@ -18,7 +18,7 @@ export interface records {
   id: number;
   courseId: number;
   publicCourseId?: number;
-  machineId: string;
+  userId: number;
   title: string;
   image: string;
   createdAt: string;

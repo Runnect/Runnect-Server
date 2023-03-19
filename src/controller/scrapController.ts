@@ -11,11 +11,11 @@ const createAndDeleteScrap = async (req: Request, res: Response) => {
     const validationErrorMsg = error["errors"][0].msg;
     return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, validationErrorMsg));
   }
-  const machineId = req.header("machineId") as string;
+  const userId: number = req.body.userId;
   const { publicCourseId, scrapTF } = req.body;
 
   const scrapDTO: scrapDTO = {
-    machineId: machineId,
+    userId: userId,
     publicCourseId: +publicCourseId,
     scrapTF: scrapTF,
   };
@@ -34,7 +34,7 @@ const createAndDeleteScrap = async (req: Request, res: Response) => {
       const deleteScrap = await scrapService.deleteScrap(scrapDTO);
       if (!deleteScrap) {
         return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.BAD_REQUEST));
-      } else if (deleteScrap["count"]==0) {
+      } else if (deleteScrap["count"] == 0) {
         return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.NO_PUBLIC_COURSE_ID));
       } else {
         return res.status(sc.OK).send(success(sc.OK, rm.DELETE_SCRAP_SUCCESS));
@@ -52,9 +52,9 @@ const getScrapCourseByUSer = async (req: Request, res: Response) => {
     const validationErrorMsg = error["errors"][0].msg;
     return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, validationErrorMsg));
   }
-  const machineId = req.header("machineId") as string;
+  const userId: number = req.body.userId;
   try {
-    const getScrapCourse = await scrapService.getScrapCourseByUser(machineId);
+    const getScrapCourse = await scrapService.getScrapCourseByUser(userId);
     if (!getScrapCourse) {
       return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.BAD_REQUEST));
     } else {
@@ -74,7 +74,7 @@ const getScrapCourseByUSer = async (req: Request, res: Response) => {
       });
       const getScrapResponseDTO: getScrapResponseDTO = {
         user: {
-          machineId: machineId,
+          id: userId,
         },
         Scraps: scrapsArray,
       };
