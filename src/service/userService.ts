@@ -40,6 +40,20 @@ const getUserByEmail = async (socialCreateRequestDTO: SocialCreateRequestDTO) =>
   }
 };
 
+const getUserByRefreshToken = async (refreshToken: string) => {
+  try {
+    const userByRefreshToken = await prisma.user.findFirst({
+      where: {
+        refresh_token: refreshToken,
+      },
+    });
+    return userByRefreshToken;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};
+
 const createUser = async (socialCreateRequestDTO: SocialCreateRequestDTO, refreshToken: string) => {
   try {
     const newUser = await prisma.user.create({
@@ -48,7 +62,7 @@ const createUser = async (socialCreateRequestDTO: SocialCreateRequestDTO, refres
         social_id: socialCreateRequestDTO.socialId,
         email: socialCreateRequestDTO.email,
         provider: socialCreateRequestDTO.provider,
-        refreshToken: refreshToken,
+        refresh_token: refreshToken,
       },
     });
     if (!newUser) return null;
@@ -174,6 +188,7 @@ const updateUserNickname = async (machineId: string, nickname: string) => {
 const userService = {
   getUserById,
   getUserByEmail,
+  getUserByRefreshToken,
   createUser,
   signUp,
   getUser,

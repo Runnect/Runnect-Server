@@ -12,7 +12,7 @@ const updateRefreshToken = async (userId: number, refreshToken: string) => {
         id: userId,
       },
       data: {
-        refreshToken: refreshToken,
+        refresh_token: refreshToken,
       },
     });
     return updatedUser;
