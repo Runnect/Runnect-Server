@@ -26,8 +26,8 @@ const getSocialLoginInfo = async (req: Request, res: Response) => {
                 break;
 
         }
-        //* 에러 처리 더 해줘야 함..
-        if (!socialUser) {
+        
+        if (typeof socialUser === 'undefined' || socialUser === null) {
             return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.READ_SOCIAL_FAIL));
         }
 
