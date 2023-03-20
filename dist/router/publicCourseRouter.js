@@ -18,19 +18,25 @@ publicCourseRouter.post("/", [
         .withMessage("설명이 없습니다."),
 ], controller_1.publicCourseController.createPublicCourse);
 publicCourseRouter.get("/", [
-    (0, express_validator_1.header)("machineId")
+    (0, express_validator_1.body)("userId")
         .notEmpty()
-        .withMessage("기기넘버가 없습니다."),
+        .withMessage("유저 아이디가 없습니다.")
+        .isNumeric()
+        .withMessage("유저아이디가 숫자가 아닙니다."),
 ], controller_1.publicCourseController.recommendPublicCourse);
 publicCourseRouter.get("/user", [
-    (0, express_validator_1.header)("machineId")
+    (0, express_validator_1.body)("userId")
         .notEmpty()
-        .withMessage("기기넘버가 없습니다."),
+        .withMessage("유저 아이디가 없습니다.")
+        .isNumeric()
+        .withMessage("유저아이디가 숫자가 아닙니다."),
 ], controller_1.publicCourseController.getPublicCourseByUser);
 publicCourseRouter.get("/detail/:publicCourseId", [
-    (0, express_validator_1.header)("machineId")
+    (0, express_validator_1.body)("userId")
         .notEmpty()
-        .withMessage("기기넘버가 없습니다."),
+        .withMessage("유저 아이디가 없습니다.")
+        .isNumeric()
+        .withMessage("유저아이디가 숫자가 아닙니다."),
     (0, express_validator_1.param)("publicCourseId")
         .notEmpty()
         .withMessage("퍼블릭 코스 아이디가 없습니다.")
@@ -38,9 +44,11 @@ publicCourseRouter.get("/detail/:publicCourseId", [
         .withMessage("퍼블릭 코스 아이디가 숫자가 아닙니다."),
 ], controller_1.publicCourseController.getPublicCourseDetail);
 publicCourseRouter.get("/search", [
-    (0, express_validator_1.header)("machineId")
+    (0, express_validator_1.body)("userId")
         .notEmpty()
-        .withMessage("기기넘버가 없습니다."),
+        .withMessage("유저 아이디가 없습니다.")
+        .isNumeric()
+        .withMessage("유저아이디가 숫자가 아닙니다."),
     (0, express_validator_1.query)("keyword")
         .notEmpty()
         .withMessage("검색어가 없습니다."),

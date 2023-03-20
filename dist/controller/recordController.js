@@ -21,9 +21,9 @@ const createRecord = (req, res) => __awaiter(void 0, void 0, void 0, function* (
             const errorMsg = error["errors"][0].msg;
             return res.status(constant_1.sc.BAD_REQUEST).send((0, response_1.fail)(constant_1.sc.BAD_REQUEST, errorMsg));
         }
-        const { courseId, publicCourseId, title, time, pace } = req.body;
+        const { userId, courseId, publicCourseId, title, time, pace } = req.body;
         const recordRequestDTO = {
-            machineId: req.header("machineId"),
+            userId: userId,
             courseId: courseId,
             publicCourseId: publicCourseId,
             title: title,
@@ -38,7 +38,7 @@ const createRecord = (req, res) => __awaiter(void 0, void 0, void 0, function* (
             return res.status(constant_1.sc.BAD_REQUEST).send((0, response_1.fail)(constant_1.sc.BAD_REQUEST, record));
         }
         else {
-            const createdAt = (0, convertTime_1.timestampConvertString)(record.created_at);
+            const createdAt = (0, convertTime_1.dateConvertString)(record.created_at);
             const recordResponseDTO = {
                 record: {
                     id: record.id,
@@ -59,9 +59,9 @@ const getRecordByUser = (req, res) => __awaiter(void 0, void 0, void 0, function
         const validationErrorMsg = error["errors"][0].msg;
         return res.status(constant_1.sc.BAD_REQUEST).send((0, response_1.fail)(constant_1.sc.BAD_REQUEST, validationErrorMsg));
     }
-    const machineId = req.header("machineId");
+    const userId = req.body.userId;
     try {
-        const getRecordByUser = yield service_1.recordService.getRecordByUser(machineId);
+        const getRecordByUser = yield service_1.recordService.getRecordByUser(userId);
         if (!getRecordByUser) {
             return res.status(constant_1.sc.BAD_REQUEST).send((0, response_1.fail)(constant_1.sc.BAD_REQUEST, constant_1.rm.NO_USER));
         }
@@ -71,10 +71,10 @@ const getRecordByUser = (req, res) => __awaiter(void 0, void 0, void 0, function
                     id: pc.id,
                     courseId: pc.Course.id,
                     publicCourseId: pc.public_course_id,
-                    machineId: machineId,
+                    userId: userId,
                     title: pc.title,
                     image: pc.Course.image,
-                    createdAt: (0, convertTime_1.timestampConvertString)(pc.created_at),
+                    createdAt: (0, convertTime_1.dateConvertString)(pc.created_at),
                     distance: pc.Course.distance,
                     time: (0, convertTime_1.dateConvertString)(pc.time).substring(11, 19),
                     pace: (0, convertTime_1.dateConvertString)(pc.pace).substring(11, 19),
@@ -86,7 +86,7 @@ const getRecordByUser = (req, res) => __awaiter(void 0, void 0, void 0, function
                 return record;
             });
             const getRecordByUserResponseDTO = {
-                user: { machineId: machineId },
+                user: { id: userId },
                 records: recordsArray,
             };
             return res.status(constant_1.sc.OK).send((0, response_1.success)(constant_1.sc.OK, constant_1.rm.READ_RECORD_SUCCESS, getRecordByUserResponseDTO));

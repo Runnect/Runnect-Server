@@ -33,7 +33,7 @@ const createCourse = (req, res) => __awaiter(void 0, void 0, void 0, function* (
     if (!departureObject)
         return res.status(constant_1.sc.BAD_REQUEST).send((0, response_1.fail)(constant_1.sc.BAD_REQUEST, constant_1.rm.DEPARTURE_VALIDATION_ERROR));
     const courseCreateDTO = {
-        machineId: req.header("machineId"),
+        userId: req.body.userId,
         path: (0, coorConverPath_1.coorConvertPath)(req.body.path),
         distance: Number(req.body.distance),
         region: departureObject.region,
@@ -63,9 +63,9 @@ const getCourseByUser = (req, res) => __awaiter(void 0, void 0, void 0, function
     const error = (0, express_validator_1.validationResult)(req);
     if (!error.isEmpty())
         return res.status(constant_1.sc.BAD_REQUEST).send((0, response_1.fail)(constant_1.sc.BAD_REQUEST, constant_1.rm.NO_USER));
-    const machineId = req.header("machineId");
+    const userId = req.body.userId;
     try {
-        const data = yield service_1.courseService.getCourseByUser(machineId);
+        const data = yield service_1.courseService.getCourseByUser(userId);
         if (data == "NO_USER")
             return res.status(constant_1.sc.BAD_REQUEST).send((0, response_1.fail)(constant_1.sc.BAD_REQUEST, constant_1.rm.NO_USER));
         return res.status(constant_1.sc.OK).send((0, response_1.success)(constant_1.sc.OK, constant_1.rm.READ_COURSE_SUCCESS, data));
@@ -83,9 +83,9 @@ const getPrivateCourseByUser = (req, res) => __awaiter(void 0, void 0, void 0, f
     const error = (0, express_validator_1.validationResult)(req);
     if (!error.isEmpty())
         return res.status(constant_1.sc.BAD_REQUEST).send((0, response_1.fail)(constant_1.sc.BAD_REQUEST, constant_1.rm.NO_USER));
-    const machineId = req.header("machineId");
+    const userId = req.body.userId;
     try {
-        const data = yield service_1.courseService.getPrivateCourseByUser(machineId);
+        const data = yield service_1.courseService.getPrivateCourseByUser(userId);
         if (data == "NO_USER")
             return res.status(constant_1.sc.BAD_REQUEST).send((0, response_1.fail)(constant_1.sc.BAD_REQUEST, constant_1.rm.NO_USER));
         return res.status(constant_1.sc.OK).send((0, response_1.success)(constant_1.sc.OK, constant_1.rm.READ_PRIVATE_COURSE_SUCCESS, data));
@@ -105,10 +105,10 @@ const getCourseDetail = (req, res) => __awaiter(void 0, void 0, void 0, function
         const validationErrorMsg = error["errors"][0].msg;
         return res.status(constant_1.sc.BAD_REQUEST).send((0, response_1.fail)(constant_1.sc.BAD_REQUEST, validationErrorMsg));
     }
-    const machineId = req.header("machineId");
+    const userId = req.body.userId;
     const { courseId } = req.params;
     try {
-        const data = yield service_1.courseService.getCourseDetail(machineId, +courseId);
+        const data = yield service_1.courseService.getCourseDetail(userId, +courseId);
         if (!data)
             return res.status(constant_1.sc.BAD_REQUEST).send((0, response_1.fail)(constant_1.sc.BAD_REQUEST, constant_1.rm.NO_COURSE));
         return res.status(constant_1.sc.OK).send((0, response_1.success)(constant_1.sc.OK, constant_1.rm.READ_COURSE_SUCCESS, data));

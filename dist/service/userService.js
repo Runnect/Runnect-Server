@@ -9,21 +9,69 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+const randomInitialNickname_1 = require("../module/randomInitialNickname");
 const runtime_1 = require("@prisma/client/runtime");
 const client_1 = require("@prisma/client");
 const convertTime_1 = require("../module/convert/convertTime");
 const prisma = new client_1.PrismaClient();
-const signUp = (machineId, nickname) => __awaiter(void 0, void 0, void 0, function* () {
+const getUserById = (userId) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const createdUser = yield prisma.user.create({
-            data: {
-                machine_id: machineId,
-                nickname: nickname,
+        const getUser = yield prisma.user.findUnique({
+            where: {
+                id: userId,
             },
         });
-        if (!createdUser)
+        if (!getUser)
             return null;
-        return "success";
+        return getUser;
+    }
+    catch (error) {
+        console.log(error);
+        throw error;
+    }
+});
+const getUserByEmail = (socialCreateRequestDTO) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const userByEmail = yield prisma.user.findFirst({
+            where: {
+                AND: [{ email: socialCreateRequestDTO.email }, { provider: socialCreateRequestDTO.provider }],
+            },
+        });
+        return userByEmail;
+    }
+    catch (error) {
+        console.log(error);
+        throw error;
+    }
+});
+const getUserByRefreshToken = (refreshToken) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const userByRefreshToken = yield prisma.user.findFirst({
+            where: {
+                refresh_token: refreshToken,
+            },
+        });
+        return userByRefreshToken;
+    }
+    catch (error) {
+        console.log(error);
+        throw error;
+    }
+});
+const createUser = (socialCreateRequestDTO, refreshToken) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const newUser = yield prisma.user.create({
+            data: {
+                nickname: (0, randomInitialNickname_1.randomInitialNickname)(),
+                social_id: socialCreateRequestDTO.socialId,
+                email: socialCreateRequestDTO.email,
+                provider: socialCreateRequestDTO.provider,
+                refresh_token: refreshToken,
+            },
+        });
+        if (!newUser)
+            return null;
+        return newUser;
     }
     catch (error) {
         if (error instanceof runtime_1.PrismaClientKnownRequestError) {
@@ -38,19 +86,43 @@ const signUp = (machineId, nickname) => __awaiter(void 0, void 0, void 0, functi
         throw error;
     }
 });
-const getUser = (machineId) => __awaiter(void 0, void 0, void 0, function* () {
+/*
+const signUp = async (machineId: string, nickname: string) => {
+  try {
+    const createdUser = await prisma.user.create({
+      data: {
+        machine_id: machineId,
+        nickname: nickname,
+      },
+    });
+    if (!createdUser) return null;
+    return "success";
+  } catch (error) {
+    if (error instanceof PrismaClientKnownRequestError) {
+      if (error.code == "P2002") {
+        // 이미 생성한 유저
+        return `이미 생성된 유저입니다.`;
+      }
+    } else if (error instanceof PrismaClientValidationError) {
+      return `${error.message}`;
+    }
+    throw error;
+  }
+};
+*/
+const getUser = (userId) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const getUser = yield prisma.user.findUnique({
             where: {
-                machine_id: machineId,
+                id: userId,
             },
         });
         if (!getUser)
             return null;
-        const levelPercent = yield getLevelPercent(machineId);
+        const levelPercent = yield getLevelPercent(userId);
         const userGetDTO = {
             user: {
-                machineId: getUser.machine_id,
+                id: getUser.id,
                 nickname: getUser.nickname,
                 latestStamp: getUser.latest_stamp,
                 level: getUser.level,
@@ -64,11 +136,11 @@ const getUser = (machineId) => __awaiter(void 0, void 0, void 0, function* () {
         throw error;
     }
 });
-const getLevelPercent = (machineId) => __awaiter(void 0, void 0, void 0, function* () {
+const getLevelPercent = (userId) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const userStamp = (yield prisma.userStamp.findMany({
             where: {
-                user_machine_id: machineId,
+                user_id: userId,
             },
         })).length;
         const levelPercent = (userStamp % 4) * 25;
@@ -79,11 +151,11 @@ const getLevelPercent = (machineId) => __awaiter(void 0, void 0, void 0, functio
         throw error;
     }
 });
-const updateUserNickname = (machineId, nickname) => __awaiter(void 0, void 0, void 0, function* () {
+const updateUserNickname = (userId, nickname) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const updatedUser = yield prisma.user.update({
             where: {
-                machine_id: machineId,
+                id: userId,
             },
             data: {
                 nickname: nickname,
@@ -92,10 +164,10 @@ const updateUserNickname = (machineId, nickname) => __awaiter(void 0, void 0, vo
         });
         if (!updatedUser)
             return null;
-        const levelPercent = yield getLevelPercent(machineId);
+        const levelPercent = yield getLevelPercent(userId);
         const updatedUserGetDTO = {
             user: {
-                machineId: updatedUser.machine_id,
+                id: updatedUser.id,
                 nickname: updatedUser.nickname,
                 latestStamp: updatedUser.latest_stamp,
                 level: updatedUser.level,
@@ -121,7 +193,11 @@ const updateUserNickname = (machineId, nickname) => __awaiter(void 0, void 0, vo
     }
 });
 const userService = {
-    signUp,
+    getUserById,
+    getUserByEmail,
+    getUserByRefreshToken,
+    createUser,
+    //signUp,
     getUser,
     updateUserNickname,
 };

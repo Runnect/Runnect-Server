@@ -12,9 +12,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const client_1 = require("@prisma/client");
 const prisma = new client_1.PrismaClient();
 // option --> c (코스 그리기), s (스크랩), u (업로드), r (달리기 및 기록)
-const createStampByUser = (machineId, option) => __awaiter(void 0, void 0, void 0, function* () {
+const createStampByUser = (userId, option) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const getCounts = yield getCount(machineId, option); // option에 해당하는 활동 갯수 가져옴 -> c: 코스 몇 번 그렸는지, s: 스크랩 몇 번 했는지, ...
+        const getCounts = yield getCount(userId, option); // option에 해당하는 활동 갯수 가져옴 -> c: 코스 몇 번 그렸는지, s: 스크랩 몇 번 했는지, ...
         if (!getCounts) {
             return;
         }
@@ -23,8 +23,8 @@ const createStampByUser = (machineId, option) => __awaiter(void 0, void 0, void 
             return;
         }
         else {
-            yield createStampToUser(machineId, option, stampLevel); //스탬프 추가 및 유저의 이미지변경
-            yield chkLevel(machineId); //추가된 스탬프를 포함한 유저의 스탬프 개수를 세서 유저의 레벨 업데이트
+            yield createStampToUser(userId, option, stampLevel); //스탬프 추가 및 유저의 이미지변경
+            yield chkLevel(userId); //추가된 스탬프를 포함한 유저의 스탬프 개수를 세서 유저의 레벨 업데이트
         }
     }
     catch (error) {
@@ -32,17 +32,17 @@ const createStampByUser = (machineId, option) => __awaiter(void 0, void 0, void 
         throw error;
     }
 });
-const chkLevel = (machineId) => __awaiter(void 0, void 0, void 0, function* () {
+const chkLevel = (userId) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const stampNumber = (yield prisma.userStamp.findMany({
             where: {
-                user_machine_id: machineId,
+                user_id: userId,
             },
         })).length;
         if (stampNumber % 4 == 0 && stampNumber <= 12) {
             yield prisma.user.update({
                 where: {
-                    machine_id: machineId,
+                    id: userId,
                 },
                 data: {
                     level: stampNumber / 4 + 1,
@@ -69,19 +69,19 @@ const chkStampNumber = (getCounts) => {
         return -1;
     }
 };
-const createStampToUser = (machineId, option, stampLevel) => __awaiter(void 0, void 0, void 0, function* () {
+const createStampToUser = (userId, option, stampLevel) => __awaiter(void 0, void 0, void 0, function* () {
     // 스탬프를 UserStamp에 추가 & User의 latest stamp 업데이트
     try {
         const stampId = option + stampLevel;
         yield prisma.userStamp.create({
             data: {
                 stamp_id: stampId,
-                user_machine_id: machineId,
+                user_id: userId,
             },
         });
         yield prisma.user.update({
             where: {
-                machine_id: machineId,
+                id: userId,
             },
             data: {
                 latest_stamp: stampId,
@@ -93,14 +93,14 @@ const createStampToUser = (machineId, option, stampLevel) => __awaiter(void 0, v
         throw error;
     }
 });
-const getCount = (machineId, option) => __awaiter(void 0, void 0, void 0, function* () {
+const getCount = (userId, option) => __awaiter(void 0, void 0, void 0, function* () {
     // 옵션에 해당하는 활동 횟수 가져옴
     let dataCount;
     if (option == "c") {
         // 코스 그리기
         dataCount = (yield prisma.course.findMany({
             where: {
-                AND: [{ user_machine_id: machineId }, { deleted_at: null }],
+                AND: [{ user_id: userId }, { deleted_at: null }],
             },
         })).length;
     }
@@ -108,7 +108,7 @@ const getCount = (machineId, option) => __awaiter(void 0, void 0, void 0, functi
         // 스크랩
         dataCount = (yield prisma.scrap.findMany({
             where: {
-                user_machine_id: machineId,
+                user_id: userId,
             },
         })).length;
     }
@@ -116,7 +116,7 @@ const getCount = (machineId, option) => __awaiter(void 0, void 0, void 0, functi
         // 업로드
         dataCount = (yield prisma.course.findMany({
             where: {
-                AND: [{ user_machine_id: machineId }, { deleted_at: null }, { private: false }],
+                AND: [{ user_id: userId }, { deleted_at: null }, { private: false }],
             },
         })).length;
         // dataCount = (await prisma.publicCourse.findMany({ // 퍼블릭 코스에서 가져올 때
@@ -134,7 +134,7 @@ const getCount = (machineId, option) => __awaiter(void 0, void 0, void 0, functi
         // 달리기
         dataCount = (yield prisma.record.findMany({
             where: {
-                AND: [{ user_machine_id: machineId }, { deleted_at: null }],
+                AND: [{ user_id: userId }, { deleted_at: null }],
             },
         })).length;
     }
@@ -143,11 +143,11 @@ const getCount = (machineId, option) => __awaiter(void 0, void 0, void 0, functi
     }
     return dataCount;
 });
-const getStampByUser = (machineId) => __awaiter(void 0, void 0, void 0, function* () {
+const getStampByUser = (userId) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const stampData = yield prisma.userStamp.findMany({
             where: {
-                user_machine_id: machineId,
+                user_id: userId,
             },
             orderBy: {
                 stamp_id: "asc",

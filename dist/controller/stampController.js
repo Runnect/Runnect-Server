@@ -19,9 +19,9 @@ const getStampByUser = (req, res) => __awaiter(void 0, void 0, void 0, function*
         const validationErrorMsg = error["errors"][0].msg;
         return res.status(constant_1.sc.BAD_REQUEST).send((0, response_1.fail)(constant_1.sc.BAD_REQUEST, validationErrorMsg));
     }
-    const machineId = req.header("machineId");
+    const userId = req.body.userId;
     try {
-        const stampByUser = yield service_1.stampService.getStampByUser(machineId);
+        const stampByUser = yield service_1.stampService.getStampByUser(userId);
         if (!stampByUser || stampByUser.length == 0) {
             return res.status(constant_1.sc.OK).send((0, response_1.success)(constant_1.sc.OK, constant_1.rm.READ_STAMP_BY_USER, stampByUser));
         }
@@ -34,7 +34,7 @@ const getStampByUser = (req, res) => __awaiter(void 0, void 0, void 0, function*
             });
             const stampGetDto = {
                 user: {
-                    machineId: machineId,
+                    id: userId,
                 },
                 stamps: stamps,
             };

@@ -51,14 +51,14 @@ const createPublicCourse = (req, res) => __awaiter(void 0, void 0, void 0, funct
 });
 const getPublicCourseByUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const error = (0, express_validator_1.validationResult)(req);
-    //에러처리 1 : 필요한 정보(machineId이 안들어왔을때)
+    //에러처리 1 : 필요한 정보가 없을때
     if (!error.isEmpty()) {
         const validationErrorMsg = error["errors"][0].msg;
         return res.status(constant_1.sc.BAD_REQUEST).send((0, response_1.fail)(constant_1.sc.BAD_REQUEST, validationErrorMsg));
     }
-    const machineId = req.header("machineId");
+    const userId = req.body.userId;
     try {
-        const publicCourseByUser = yield service_1.publicCourseService.getPublicCourseByUser(machineId);
+        const publicCourseByUser = yield service_1.publicCourseService.getPublicCourseByUser(userId);
         if (!publicCourseByUser || publicCourseByUser.length == 0) {
             return res.status(constant_1.sc.OK).send((0, response_1.success)(constant_1.sc.OK, constant_1.rm.READ_PUBLIC_COURSE_BY_USER, publicCourseByUser));
         }
@@ -78,7 +78,7 @@ const getPublicCourseByUser = (req, res) => __awaiter(void 0, void 0, void 0, fu
             });
             const publicCourseGetDTO = {
                 user: {
-                    machineId: machineId,
+                    id: userId,
                 },
                 publicCourses: publicCourses,
             };
@@ -98,10 +98,10 @@ const getPublicCourseDetail = (req, res) => __awaiter(void 0, void 0, void 0, fu
         const validationErrorMsg = error["errors"][0].msg;
         return res.status(constant_1.sc.BAD_REQUEST).send((0, response_1.fail)(constant_1.sc.BAD_REQUEST, validationErrorMsg));
     }
-    const machineId = req.header("machineId");
+    const userId = req.body.userId;
     const { publicCourseId } = req.params; //위에서 검사했어도 스트링으로옴
     try {
-        const publicCourseDetail = yield service_1.publicCourseService.getPublicCourseDetail(machineId, +publicCourseId); //퍼블릭 코스아이디 number로 타입변환
+        const publicCourseDetail = yield service_1.publicCourseService.getPublicCourseDetail(userId, +publicCourseId); //퍼블릭 코스아이디 number로 타입변환
         if (!publicCourseDetail) {
             res.status(constant_1.sc.BAD_REQUEST).send((0, response_1.fail)(constant_1.sc.BAD_REQUEST, constant_1.rm.INVALID_PUBLIC_COURSE_ID));
         }
@@ -144,9 +144,9 @@ const recommendPublicCourse = (req, res) => __awaiter(void 0, void 0, void 0, fu
         const validationErrorMsg = error["errors"][0].msg;
         return res.status(constant_1.sc.BAD_REQUEST).send((0, response_1.fail)(constant_1.sc.BAD_REQUEST, validationErrorMsg));
     }
-    const machineId = req.header("machineId");
+    const userId = req.body.userId;
     try {
-        const recommendedPublicCourse = yield service_1.publicCourseService.recommendPublicCourse(machineId);
+        const recommendedPublicCourse = yield service_1.publicCourseService.recommendPublicCourse(userId);
         if (!recommendedPublicCourse || recommendedPublicCourse.length == 0) {
             return res.status(constant_1.sc.OK).send((0, response_1.success)(constant_1.sc.OK, constant_1.rm.READ_RECOMMENDED_COURSE_SUCCESS, recommendedPublicCourse));
         }
@@ -176,15 +176,15 @@ const recommendPublicCourse = (req, res) => __awaiter(void 0, void 0, void 0, fu
 });
 const searchPublicCourse = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const error = (0, express_validator_1.validationResult)(req);
-    //에러처리 1 : 필요한 정보(machineId, keyword이 안들어왔을때)
+    //에러처리 1 : 필요한 정보가 안들어왔을때
     if (!error.isEmpty()) {
         const validationErrorMsg = error["errors"][0].msg;
         return res.status(constant_1.sc.BAD_REQUEST).send((0, response_1.fail)(constant_1.sc.BAD_REQUEST, validationErrorMsg));
     }
-    const machineId = req.header("machineId");
+    const userId = req.body.userId;
     const { keyword } = req.query;
     try {
-        const searchedPublicCourse = yield service_1.publicCourseService.searchPublicCourse(machineId, keyword);
+        const searchedPublicCourse = yield service_1.publicCourseService.searchPublicCourse(userId, keyword);
         if (!searchedPublicCourse || searchedPublicCourse.length == 0) {
             return res.status(constant_1.sc.OK).send((0, response_1.success)(constant_1.sc.OK, constant_1.rm.READ_SEARCHED_COURSE_SUCCESS, searchedPublicCourse));
         }
