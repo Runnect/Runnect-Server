@@ -11,6 +11,7 @@ const config_1 = __importDefault(require("../config"));
 const s3Config_1 = __importDefault(require("../config/s3Config"));
 //? 미들웨어로 사용할 multer 모듈
 const upload = (0, multer_1.default)({
+    limits: { fieldSize: 25 * 1024 * 1024 },
     //? 실질적인 storage 는 multerS3 이용해 aws s3 로 설정
     storage: (0, multer_s3_1.default)({
         s3: s3Config_1.default,

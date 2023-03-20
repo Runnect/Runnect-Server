@@ -16,41 +16,41 @@ const service_1 = require("../service");
 /**
  * @route  POST/user/
  * @desc 회원가입
- */
-const signUp = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const error = (0, express_validator_1.validationResult)(req);
-    if (!error.isEmpty()) {
-        const validationErrorMsg = error["errors"][0].msg;
-        return res.status(constant_1.sc.BAD_REQUEST).send((0, response_1.fail)(constant_1.sc.BAD_REQUEST, validationErrorMsg));
+ 
+const signUp = async (req: Request, res: Response) => {
+  const error = validationResult(req);
+  if (!error.isEmpty()) {
+    const validationErrorMsg = error["errors"][0].msg;
+    return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, validationErrorMsg));
+  }
+
+  const { nickname, userId } = req.body;
+
+  try {
+    const createdUser = await userService.signUp(userId, nickname);
+
+    if (!createdUser) {
+      return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.SIGNUP_FAIL));
+    } else if (createdUser == "success") {
+      return res.status(sc.OK).send(success(sc.OK, rm.SIGNUP_SUCCESS));
+    } else {
+      res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, createdUser as string));
     }
-    const machineId = req.header("machineId");
-    const { nickname } = req.body;
-    try {
-        const createdUser = yield service_1.userService.signUp(machineId, nickname);
-        if (!createdUser) {
-            return res.status(constant_1.sc.BAD_REQUEST).send((0, response_1.fail)(constant_1.sc.BAD_REQUEST, constant_1.rm.SIGNUP_FAIL));
-        }
-        else if (createdUser == "success") {
-            return res.status(constant_1.sc.OK).send((0, response_1.success)(constant_1.sc.OK, constant_1.rm.SIGNUP_SUCCESS));
-        }
-        else {
-            res.status(constant_1.sc.BAD_REQUEST).send((0, response_1.fail)(constant_1.sc.BAD_REQUEST, createdUser));
-        }
-    }
-    catch (e) {
-        console.error(e);
-        return res.status(constant_1.sc.INTERNAL_SERVER_ERROR).send((0, response_1.fail)(constant_1.sc.INTERNAL_SERVER_ERROR, constant_1.rm.INTERNAL_SERVER_ERROR));
-    }
-});
+  } catch (e) {
+    console.error(e);
+    return res.status(sc.INTERNAL_SERVER_ERROR).send(fail(sc.INTERNAL_SERVER_ERROR, rm.INTERNAL_SERVER_ERROR));
+  }
+};
+*/
 const getUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const error = (0, express_validator_1.validationResult)(req);
     if (!error.isEmpty()) {
         const validationErrorMsg = error["errors"][0].msg;
         return res.status(constant_1.sc.BAD_REQUEST).send((0, response_1.fail)(constant_1.sc.BAD_REQUEST, validationErrorMsg));
     }
-    const machineId = req.header("machineId");
+    const userId = req.body.userId;
     try {
-        const data = yield service_1.userService.getUser(machineId);
+        const data = yield service_1.userService.getUser(userId);
         if (!data)
             return res.status(constant_1.sc.BAD_REQUEST).send((0, response_1.fail)(constant_1.sc.BAD_REQUEST, constant_1.rm.READ_USER_FAIL));
         return res.status(constant_1.sc.OK).send((0, response_1.success)(constant_1.sc.OK, constant_1.rm.READ_USER_SUCCESS, data));
@@ -70,10 +70,9 @@ const updateUserNickname = (req, res) => __awaiter(void 0, void 0, void 0, funct
         const validationErrorMsg = error["errors"][0].msg;
         return res.status(constant_1.sc.BAD_REQUEST).send((0, response_1.fail)(constant_1.sc.BAD_REQUEST, validationErrorMsg));
     }
-    const machineId = req.header("machineId");
-    const { nickname } = req.body;
+    const { nickname, userId } = req.body;
     try {
-        const data = yield service_1.userService.updateUserNickname(machineId, nickname);
+        const data = yield service_1.userService.updateUserNickname(userId, nickname);
         if (!data)
             return res.status(constant_1.sc.BAD_REQUEST).send((0, response_1.fail)(constant_1.sc.BAD_REQUEST, constant_1.rm.UPDATE_USER_FAIL));
         else if (typeof data == "string") {
@@ -87,7 +86,7 @@ const updateUserNickname = (req, res) => __awaiter(void 0, void 0, void 0, funct
     }
 });
 const userController = {
-    signUp,
+    //signUp,
     getUser,
     updateUserNickname,
 };

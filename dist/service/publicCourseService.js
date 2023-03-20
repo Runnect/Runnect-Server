@@ -33,7 +33,7 @@ const createPublicCourse = (publicCourseCreateRequestDTO) => __awaiter(void 0, v
                     private: false,
                 },
             });
-            yield service_1.stampService.createStampByUser(courseData.user_machine_id, "u");
+            yield service_1.stampService.createStampByUser(courseData.user_id, "u");
             return publicCourseData;
         }
     }
@@ -58,11 +58,11 @@ const createPublicCourse = (publicCourseCreateRequestDTO) => __awaiter(void 0, v
         throw error;
     }
 });
-const getPublicCourseByUser = (machineId) => __awaiter(void 0, void 0, void 0, function* () {
+const getPublicCourseByUser = (userId) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const courseData = yield prisma.course.findMany({
             where: {
-                AND: [{ user_machine_id: machineId }, { private: false }],
+                AND: [{ user_id: userId }, { private: false }],
             },
             include: {
                 PublicCourse: true,
@@ -79,7 +79,7 @@ const getPublicCourseByUser = (machineId) => __awaiter(void 0, void 0, void 0, f
         throw error;
     }
 });
-const getPublicCourseDetail = (machineId, publicCourseId) => __awaiter(void 0, void 0, void 0, function* () {
+const getPublicCourseDetail = (userId, publicCourseId) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const publicCourseData = yield prisma.publicCourse.findUnique({
             where: {
@@ -93,7 +93,7 @@ const getPublicCourseDetail = (machineId, publicCourseId) => __awaiter(void 0, v
                 },
                 Scrap: {
                     where: {
-                        AND: [{ user_machine_id: machineId }, { scrapTF: true }],
+                        AND: [{ user_id: userId }, { scrapTF: true }],
                     },
                 },
             },
@@ -106,7 +106,7 @@ const getPublicCourseDetail = (machineId, publicCourseId) => __awaiter(void 0, v
         throw error;
     }
 });
-const recommendPublicCourse = (machineId) => __awaiter(void 0, void 0, void 0, function* () {
+const recommendPublicCourse = (userId) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const data = yield prisma.publicCourse.findMany({
             include: {
@@ -116,7 +116,7 @@ const recommendPublicCourse = (machineId) => __awaiter(void 0, void 0, void 0, f
                 Course: true,
                 Scrap: {
                     where: {
-                        AND: [{ user_machine_id: machineId }, { scrapTF: true }],
+                        AND: [{ user_id: userId }, { scrapTF: true }],
                     },
                 },
             },
@@ -134,7 +134,7 @@ const recommendPublicCourse = (machineId) => __awaiter(void 0, void 0, void 0, f
         throw error;
     }
 });
-const searchPublicCourse = (machineId, keyword) => __awaiter(void 0, void 0, void 0, function* () {
+const searchPublicCourse = (userId, keyword) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const data = yield prisma.publicCourse.findMany({
             where: {
@@ -180,7 +180,7 @@ const searchPublicCourse = (machineId, keyword) => __awaiter(void 0, void 0, voi
                 Course: true,
                 Scrap: {
                     where: {
-                        AND: [{ user_machine_id: machineId }, { scrapTF: true }],
+                        AND: [{ user_id: userId }, { scrapTF: true }],
                     },
                 },
             },

@@ -5,9 +5,11 @@ const express_validator_1 = require("express-validator");
 const controller_1 = require("../controller");
 const recordRouter = (0, express_1.Router)();
 recordRouter.post("/", [
-    (0, express_validator_1.header)("machineId")
+    (0, express_validator_1.body)("userId")
         .notEmpty()
-        .withMessage("기기넘버가 없음"),
+        .withMessage("유저 아이디가 없습니다.")
+        .isNumeric()
+        .withMessage("유저아이디가 숫자가 아닙니다."),
     (0, express_validator_1.body)("courseId")
         .notEmpty()
         .withMessage("코스 아이디가 없음")
@@ -24,9 +26,11 @@ recordRouter.post("/", [
         .withMessage("경로 뛴 시간 없음"),
 ], controller_1.recordController.createRecord);
 recordRouter.get("/user", [
-    (0, express_validator_1.header)("machineId")
+    (0, express_validator_1.body)("userId")
         .notEmpty()
-        .withMessage("기기넘버가 없음"),
+        .withMessage("유저 아이디가 없습니다.")
+        .isNumeric()
+        .withMessage("유저아이디가 숫자가 아닙니다."),
 ], controller_1.recordController.getRecordByUser);
 exports.default = recordRouter;
 //# sourceMappingURL=recordRouter.js.map
