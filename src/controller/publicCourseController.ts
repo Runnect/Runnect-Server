@@ -46,15 +46,15 @@ const createPublicCourse = async (req: Request, res: Response) => {
 
 const getPublicCourseByUser = async (req: Request, res: Response) => {
   const error = validationResult(req);
-  //에러처리 1 : 필요한 정보(machineId이 안들어왔을때)
+  //에러처리 1 : 필요한 정보가 없을때
   if (!error.isEmpty()) {
     const validationErrorMsg = error["errors"][0].msg;
     return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, validationErrorMsg));
   }
-  const machineId: string = req.header("machineId") as string;
+  const userId: number = req.body.userId;
 
   try {
-    const publicCourseByUser = await publicCourseService.getPublicCourseByUser(machineId);
+    const publicCourseByUser = await publicCourseService.getPublicCourseByUser(userId);
 
     if (!publicCourseByUser || publicCourseByUser.length == 0) {
       return res.status(sc.OK).send(success(sc.OK, rm.READ_PUBLIC_COURSE_BY_USER, publicCourseByUser));
@@ -75,7 +75,7 @@ const getPublicCourseByUser = async (req: Request, res: Response) => {
 
       const publicCourseGetDTO: PublicCourseGetDTO = {
         user: {
-          machineId: machineId,
+          id: userId,
         },
         publicCourses: publicCourses,
       };
@@ -97,11 +97,11 @@ const getPublicCourseDetail = async (req: Request, res: Response) => {
     return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, validationErrorMsg));
   }
 
-  const machineId: string = req.header("machineId") as string;
+  const userId: number = req.body.userId;
   const { publicCourseId } = req.params; //위에서 검사했어도 스트링으로옴
 
   try {
-    const publicCourseDetail = await publicCourseService.getPublicCourseDetail(machineId, +publicCourseId); //퍼블릭 코스아이디 number로 타입변환
+    const publicCourseDetail = await publicCourseService.getPublicCourseDetail(userId, +publicCourseId); //퍼블릭 코스아이디 number로 타입변환
     if (!publicCourseDetail) {
       res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.INVALID_PUBLIC_COURSE_ID));
     } else {
@@ -144,10 +144,10 @@ const recommendPublicCourse = async (req: Request, res: Response) => {
     const validationErrorMsg = error["errors"][0].msg;
     return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, validationErrorMsg));
   }
-  const machineId: string = req.header("machineId") as string;
+  const userId: number = req.body.userId;
 
   try {
-    const recommendedPublicCourse = await publicCourseService.recommendPublicCourse(machineId);
+    const recommendedPublicCourse = await publicCourseService.recommendPublicCourse(userId);
 
     if (!recommendedPublicCourse || recommendedPublicCourse.length == 0) {
       return res.status(sc.OK).send(success(sc.OK, rm.READ_RECOMMENDED_COURSE_SUCCESS, recommendedPublicCourse));
@@ -179,16 +179,16 @@ const recommendPublicCourse = async (req: Request, res: Response) => {
 
 const searchPublicCourse = async (req: Request, res: Response) => {
   const error = validationResult(req);
-  //에러처리 1 : 필요한 정보(machineId, keyword이 안들어왔을때)
+  //에러처리 1 : 필요한 정보가 안들어왔을때
   if (!error.isEmpty()) {
     const validationErrorMsg = error["errors"][0].msg;
     return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, validationErrorMsg));
   }
-  const machineId: string = req.header("machineId") as string;
+  const userId: number = req.body.userId;
   const { keyword } = req.query;
 
   try {
-    const searchedPublicCourse = await publicCourseService.searchPublicCourse(machineId, keyword as string);
+    const searchedPublicCourse = await publicCourseService.searchPublicCourse(userId, keyword as string);
 
     if (!searchedPublicCourse || searchedPublicCourse.length == 0) {
       return res.status(sc.OK).send(success(sc.OK, rm.READ_SEARCHED_COURSE_SUCCESS, searchedPublicCourse));

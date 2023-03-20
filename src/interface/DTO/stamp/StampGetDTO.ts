@@ -4,7 +4,7 @@ export interface StampDTO {
 
 export interface StampGetDTO {
   user: {
-    machineId: string;
+    id: number;
   };
   stamps: StampDTO[];
 }

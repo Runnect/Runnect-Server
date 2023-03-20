@@ -7,7 +7,7 @@ import { userService } from "../service";
 /**
  * @route  POST/user/
  * @desc 회원가입
- */
+ 
 const signUp = async (req: Request, res: Response) => {
   const error = validationResult(req);
   if (!error.isEmpty()) {
@@ -15,11 +15,10 @@ const signUp = async (req: Request, res: Response) => {
     return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, validationErrorMsg));
   }
 
-  const machineId = req.header("machineId") as string;
-  const { nickname } = req.body;
+  const { nickname, userId } = req.body;
 
   try {
-    const createdUser = await userService.signUp(machineId, nickname);
+    const createdUser = await userService.signUp(userId, nickname);
 
     if (!createdUser) {
       return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.SIGNUP_FAIL));
@@ -33,7 +32,7 @@ const signUp = async (req: Request, res: Response) => {
     return res.status(sc.INTERNAL_SERVER_ERROR).send(fail(sc.INTERNAL_SERVER_ERROR, rm.INTERNAL_SERVER_ERROR));
   }
 };
-
+*/
 const getUser = async (req: Request, res: Response) => {
   const error = validationResult(req);
   if (!error.isEmpty()) {
@@ -41,11 +40,12 @@ const getUser = async (req: Request, res: Response) => {
     return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, validationErrorMsg));
   }
 
-  const machineId = req.header("machineId") as string;
+  const userId: number = req.body.userId;
 
   try {
-    const data = await userService.getUser(machineId);
+    const data = await userService.getUser(userId);
     if (!data) return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.READ_USER_FAIL));
+
     return res.status(sc.OK).send(success(sc.OK, rm.READ_USER_SUCCESS, data));
   } catch (e) {
     console.error(e);
@@ -64,11 +64,10 @@ const updateUserNickname = async (req: Request, res: Response) => {
     return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, validationErrorMsg));
   }
 
-  const machineId = req.header("machineId") as string;
-  const { nickname } = req.body;
+  const { nickname, userId } = req.body;
 
   try {
-    const data = await userService.updateUserNickname(machineId, nickname);
+    const data = await userService.updateUserNickname(userId, nickname);
     if (!data) return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.UPDATE_USER_FAIL));
     else if (typeof data == "string") {
       return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, data as string));
@@ -81,7 +80,7 @@ const updateUserNickname = async (req: Request, res: Response) => {
 };
 
 const userController = {
-  signUp,
+  //signUp,
   getUser,
   updateUserNickname,
 };

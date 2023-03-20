@@ -8,8 +8,8 @@ export default {
   // 회원가입 및 로그인
   SIGNUP_SUCCESS: "회원 가입 성공",
   SIGNUP_FAIL: "회원 가입 실패",
-  SIGNIN_SUCCESS: "로그인 성공",
-  SIGNIN_FAIL: "로그인 실패",
+  LOGIN_SUCCESS: "로그인 성공",
+  LOGIN_FAIL: "로그인 실패",
   ALREADY_NICKNAME: "이미 사용중인 닉네임입니다.",
   INVALID_PASSWORD: "잘못된 비밀번호입니다.",
 
@@ -23,6 +23,9 @@ export default {
   NO_USER: "존재하지 않는 유저",
   UPDATE_USER_FAIL: "유저 업데이트 실패",
 
+  // 소셜로그인
+  READ_SOCIAL_FAIL: "소셜로그인 회원 정보 조회 실패",
+
   // 코스
   READ_COURSE_SUCCESS: "코스 조회 성공",
   READ_PRIVATE_COURSE_SUCCESS: "private 코스 조회 성공",
@@ -33,7 +36,6 @@ export default {
   CREATE_COURSE_FAIL: "코스 생성 실패",
   DEPARTURE_VALIDATION_ERROR: "출발지 정보가 유효하지 않습니다.",
   NO_IMAGE: "이미지가 없습니다.",
-
 
   // 토큰
   CREATE_TOKEN_SUCCESS: "토큰 재발급 성공",
@@ -70,9 +72,8 @@ export default {
   DELETE_SCRAP_SUCCESS: "코스 스크랩 취소 성공",
   INVALID_USER: "유효하지 않은 유저",
   READ_SCRAP_COURSE_SUCCESS: "스크랩한 코스 조회 성공",
-  NO_PUBLIC_COURSE_ID: "존재하지 않는 public course id입니다.",
+  NO_SCRAP_RECORD: "이전에 스크랩한 기록이 없는 public course 입니다.",
 
   //stamp
   READ_STAMP_BY_USER: "유저가 가진 스탬프 조회 성공",
-
 };

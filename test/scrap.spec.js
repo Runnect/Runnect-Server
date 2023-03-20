@@ -1,6 +1,6 @@
 import app from "../src/index";
 import request from "supertest";
-import expect from "chai";
+import { expect } from "chai";
 import dotenv from "dotenv";
 dotenv.config();
 
@@ -12,12 +12,13 @@ describe("POST ~/api/scrap", () => {
       .set("machineId", process.env.MACHINE_ID)
       .send({
         //request.body
-        publicCourseId: 34,
+        publicCourseId: process.env.PUBLIC_COURSE_ID,
         scrapTF: true,
       })
       .expect(200) //예측상태코드
       .expect("Content-Type", /json/)
       .then((res) => {
+        expect(res.body.message).to.equal("코스 스크랩 성공");
         done();
       })
       .catch((err) => {
@@ -32,12 +33,14 @@ describe("POST ~/api/scrap", () => {
       .set("machineId", process.env.MACHINE_ID)
       .send({
         //request.body
-        publicCourseId: 34,
-        scrapTF: true,
+        publicCourseId: process.env.PUBLIC_COURSE_ID,
+        scrapTF: false,
       })
       .expect(200) //예측상태코드
       .expect("Content-Type", /json/)
       .then((res) => {
+        expect(res.body.message).to.equal("코스 스크랩 취소 성공");
+
         done();
       })
       .catch((err) => {

@@ -9,7 +9,7 @@ const createScrap = async (scrapDTO: scrapDTO) => {
   try {
     const scrapId = await prisma.scrap.findFirst({
       where: {
-        user_machine_id: scrapDTO.machineId,
+        user_id: scrapDTO.userId,
         public_course_id: scrapDTO.publicCourseId,
       },
       select: {
@@ -27,14 +27,14 @@ const createScrap = async (scrapDTO: scrapDTO) => {
       // 이미 이전에 해당 유저가 해당 퍼블릭 코스를 스크랩한적이 없는경우
       const addScrap = await prisma.scrap.create({
         data: {
-          user_machine_id: scrapDTO.machineId,
+          user_id: scrapDTO.userId,
           public_course_id: scrapDTO.publicCourseId,
         },
       });
       if (!addScrap) {
         return null;
       } else {
-        await stampService.createStampByUser(scrapDTO.machineId, "s"); //처음 스크랩한것이기 때문에 스탬프검사하기
+        await stampService.createStampByUser(scrapDTO.userId, "s"); //처음 스크랩한것이기 때문에 스탬프검사하기
         return addScrap;
       }
     }
@@ -59,7 +59,7 @@ const deleteScrap = async (scrapDTO: scrapDTO) => {
   try {
     const deleteScrap = await prisma.scrap.updateMany({
       where: {
-        user_machine_id: scrapDTO.machineId,
+        user_id: scrapDTO.userId,
         public_course_id: scrapDTO.publicCourseId,
       },
       data: { scrapTF: false },
@@ -72,11 +72,11 @@ const deleteScrap = async (scrapDTO: scrapDTO) => {
   }
 };
 
-const getScrapCourseByUser = async (machineId: string) => {
+const getScrapCourseByUser = async (userId: number) => {
   try {
     const scrapCourseData = await prisma.scrap.findMany({
       where: {
-        AND: [{ user_machine_id: machineId }, { scrapTF: true }],
+        AND: [{ user_id: userId }, { scrapTF: true }],
       },
       include: {
         PublicCourse: {

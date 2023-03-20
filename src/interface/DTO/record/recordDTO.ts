@@ -1,5 +1,5 @@
 export interface recordRequestDTO {
-  machineId: string;
+  userId: number;
   courseId: number;
   publicCourseId?: number;
   title: string;
@@ -18,7 +18,7 @@ export interface records {
   id: number;
   courseId: number;
   publicCourseId?: number;
-  machineId: string;
+  userId: number;
   title: string;
   image: string;
   createdAt: string;
@@ -33,7 +33,7 @@ export interface records {
 
 export interface getRecordByUserResponseDTO {
   user: {
-    machineId: string;
+    id: number;
   };
   records: records[];
 }

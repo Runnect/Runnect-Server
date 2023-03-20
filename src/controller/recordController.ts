@@ -3,7 +3,7 @@ import { Request, Response } from "express";
 import { rm, sc } from "../constant";
 import { success, fail } from "../constant/response";
 import { validationResult } from "express-validator";
-import { timestampConvertString, stringConvertTime, dateConvertString } from "../module/convert/convertTime";
+import { stringConvertTime, dateConvertString } from "../module/convert/convertTime";
 import { recordService } from "../service";
 import { recordRequestDTO, recordResponseDTO, getRecordByUserResponseDTO, records } from "../interface/DTO/record/recordDTO";
 
@@ -14,10 +14,10 @@ const createRecord = async (req: Request, res: Response) => {
       const errorMsg = error["errors"][0].msg;
       return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, errorMsg));
     }
-    const { courseId, publicCourseId, title, time, pace } = req.body;
+    const { userId, courseId, publicCourseId, title, time, pace } = req.body;
 
     const recordRequestDTO: recordRequestDTO = {
-      machineId: req.header("machineId") as string,
+      userId: userId,
       courseId: courseId,
       publicCourseId: publicCourseId,
       title: title,
@@ -30,7 +30,7 @@ const createRecord = async (req: Request, res: Response) => {
     } else if (typeof record === "string" || record instanceof String) {
       return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, record as string));
     } else {
-      const createdAt = timestampConvertString(record.created_at);
+      const createdAt = dateConvertString(record.created_at);
       const recordResponseDTO: recordResponseDTO = {
         record: {
           id: record.id,
@@ -51,9 +51,9 @@ const getRecordByUser = async (req: Request, res: Response) => {
     const validationErrorMsg = error["errors"][0].msg;
     return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, validationErrorMsg));
   }
-  const machineId = req.header("machineId") as string;
+  const userId: number = req.body.userId;
   try {
-    const getRecordByUser = await recordService.getRecordByUser(machineId);
+    const getRecordByUser = await recordService.getRecordByUser(userId);
     if (!getRecordByUser) {
       return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.NO_USER));
     } else {
@@ -62,10 +62,10 @@ const getRecordByUser = async (req: Request, res: Response) => {
           id: pc.id,
           courseId: pc.Course.id,
           publicCourseId: pc.public_course_id,
-          machineId: machineId,
+          userId: userId,
           title: pc.title,
           image: pc.Course.image,
-          createdAt: timestampConvertString(pc.created_at),
+          createdAt: dateConvertString(pc.created_at),
           distance: pc.Course.distance,
           time: dateConvertString(pc.time).substring(11, 19),
           pace: dateConvertString(pc.pace).substring(11, 19),
@@ -77,7 +77,7 @@ const getRecordByUser = async (req: Request, res: Response) => {
         return record;
       });
       const getRecordByUserResponseDTO: getRecordByUserResponseDTO = {
-        user: { machineId: machineId },
+        user: { id: userId },
         records: recordsArray,
       };
       return res.status(sc.OK).send(success(sc.OK, rm.READ_RECORD_SUCCESS, getRecordByUserResponseDTO));

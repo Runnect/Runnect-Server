@@ -4,25 +4,30 @@ import { userController } from "../controller";
 
 const router: Router = Router();
 
+/*
 router.post(
   "/",
   [
-    header("machineId")
+    body("userId")
       .notEmpty()
-      .withMessage("기기넘버가 없습니다."),
+      .withMessage("유저 아이디가 없습니다.")
+      .isNumeric()
+      .withMessage("유저아이디가 숫자가 아닙니다."),
     body("nickname")
       .notEmpty()
       .withMessage("닉네임이 없습니다."),
   ],
   userController.signUp
-);
+);*/
 
 router.get(
   "/",
   [
-    header("machineId")
+    body("userId")
       .notEmpty()
-      .withMessage("기기넘버가 없습니다."),
+      .withMessage("유저 아이디가 없습니다.")
+      .isNumeric()
+      .withMessage("유저아이디가 숫자가 아닙니다."),
   ],
   userController.getUser
 );
@@ -30,9 +35,11 @@ router.get(
 router.patch(
   "/",
   [
-    header("machineId")
+    body("userId")
       .notEmpty()
-      .withMessage("기기넘버가 없습니다."),
+      .withMessage("유저 아이디가 없습니다.")
+      .isNumeric()
+      .withMessage("유저아이디가 숫자가 아닙니다."),
     body("nickname")
       .notEmpty()
       .withMessage("닉네임이 없습니다."),
