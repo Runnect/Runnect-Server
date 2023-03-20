@@ -7,9 +7,11 @@ const scrapRouter: Router = Router();
 scrapRouter.post(
   "/",
   [
-    header("machineId")
+    body("userId")
       .notEmpty()
-      .withMessage("기기넘버가 없음"),
+      .withMessage("유저 아이디가 없습니다.")
+      .isNumeric()
+      .withMessage("유저아이디가 숫자가 아닙니다."),
     body("publicCourseId")
       .notEmpty()
       .withMessage("퍼블릭 코스 아이디가 없음")
@@ -27,9 +29,11 @@ scrapRouter.post(
 scrapRouter.get(
   "/user",
   [
-    header("machineId")
+    body("userId")
       .notEmpty()
-      .withMessage("기기넘버가 없음"),
+      .withMessage("유저 아이디가 없습니다.")
+      .isNumeric()
+      .withMessage("유저아이디가 숫자가 아닙니다."),
   ],
   scrapController.getScrapCourseByUSer
 );

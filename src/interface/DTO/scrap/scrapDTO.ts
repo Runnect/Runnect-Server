@@ -1,5 +1,5 @@
 export interface scrapDTO {
-  machineId: string;
+  userId: number;
   publicCourseId: number;
   scrapTF: boolean;
 }
@@ -18,7 +18,7 @@ export interface scrap {
 
 export interface getScrapResponseDTO {
   user: {
-    machineId: string;
+    id: number;
   };
   Scraps: scrap[];
 }

@@ -12,7 +12,7 @@ export interface PublicCourse {
 
 export interface PublicCourseGetDTO {
   user: {
-    machineId: string;
+    id: number;
   };
   publicCourses: PublicCourse[];
 }

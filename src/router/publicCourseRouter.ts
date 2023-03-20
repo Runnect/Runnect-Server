@@ -25,9 +25,11 @@ publicCourseRouter.post(
 publicCourseRouter.get(
   "/",
   [
-    header("machineId")
+    body("userId")
       .notEmpty()
-      .withMessage("기기넘버가 없습니다."),
+      .withMessage("유저 아이디가 없습니다.")
+      .isNumeric()
+      .withMessage("유저아이디가 숫자가 아닙니다."),
   ],
   publicCourseController.recommendPublicCourse
 );
@@ -35,9 +37,11 @@ publicCourseRouter.get(
 publicCourseRouter.get(
   "/user",
   [
-    header("machineId")
+    body("userId")
       .notEmpty()
-      .withMessage("기기넘버가 없습니다."),
+      .withMessage("유저 아이디가 없습니다.")
+      .isNumeric()
+      .withMessage("유저아이디가 숫자가 아닙니다."),
   ],
   publicCourseController.getPublicCourseByUser
 );
@@ -45,9 +49,11 @@ publicCourseRouter.get(
 publicCourseRouter.get(
   "/detail/:publicCourseId",
   [
-    header("machineId")
+    body("userId")
       .notEmpty()
-      .withMessage("기기넘버가 없습니다."),
+      .withMessage("유저 아이디가 없습니다.")
+      .isNumeric()
+      .withMessage("유저아이디가 숫자가 아닙니다."),
     param("publicCourseId")
       .notEmpty()
       .withMessage("퍼블릭 코스 아이디가 없습니다.")
@@ -59,9 +65,11 @@ publicCourseRouter.get(
 publicCourseRouter.get(
   "/search",
   [
-    header("machineId")
+    body("userId")
       .notEmpty()
-      .withMessage("기기넘버가 없습니다."),
+      .withMessage("유저 아이디가 없습니다.")
+      .isNumeric()
+      .withMessage("유저아이디가 숫자가 아닙니다."),
     query("keyword")
       .notEmpty()
       .withMessage("검색어가 없습니다."),

@@ -72,7 +72,7 @@ export default {
   DELETE_SCRAP_SUCCESS: "코스 스크랩 취소 성공",
   INVALID_USER: "유효하지 않은 유저",
   READ_SCRAP_COURSE_SUCCESS: "스크랩한 코스 조회 성공",
-  NO_PUBLIC_COURSE_ID: "존재하지 않는 public course id입니다.",
+  NO_SCRAP_RECORD: "이전에 스크랩한 기록이 없는 public course 입니다.",
 
   //stamp
   READ_STAMP_BY_USER: "유저가 가진 스탬프 조회 성공",

@@ -14,16 +14,16 @@ const createCourse = async (courseCreateDTO: CourseCreateDTO) => {
   try {
     if (courseCreateDTO.detail || courseCreateDTO.name) {
       //출발지 디테일과 건물이름 둘다 존재시
-      const k = await prisma.$queryRaw`INSERT INTO "Course" (user_machine_id, departure_region, departure_city, departure_town, departure_detail, distance, image, departure_name, path) VALUES(${courseCreateDTO.machineId}, ${courseCreateDTO.region}, ${courseCreateDTO.city}, ${courseCreateDTO.town}, ${courseCreateDTO.detail}, ${courseCreateDTO.distance}, ${courseCreateDTO.image}, ${courseCreateDTO.name}, ${courseCreateDTO.path}::path)`;
+      const k = await prisma.$queryRaw`INSERT INTO "Course" (user_id, departure_region, departure_city, departure_town, departure_detail, distance, image, departure_name, path) VALUES(${courseCreateDTO.userId}, ${courseCreateDTO.region}, ${courseCreateDTO.city}, ${courseCreateDTO.town}, ${courseCreateDTO.detail}, ${courseCreateDTO.distance}, ${courseCreateDTO.image}, ${courseCreateDTO.name}, ${courseCreateDTO.path}::path)`;
     } else if (courseCreateDTO.detail) {
       //출발지 디테일은 존재안하고 건물이름만 존재시
-      const k = await prisma.$queryRaw`INSERT INTO "Course" (user_machine_id, departure_region, departure_city, departure_town, departure_detail, distance, image, path) VALUES(${courseCreateDTO.machineId}, ${courseCreateDTO.region}, ${courseCreateDTO.city}, ${courseCreateDTO.town}, ${courseCreateDTO.detail}, ${courseCreateDTO.distance}, ${courseCreateDTO.image}, ${courseCreateDTO.path}::path)`;
+      const k = await prisma.$queryRaw`INSERT INTO "Course" (user_id, departure_region, departure_city, departure_town, departure_detail, distance, image, path) VALUES(${courseCreateDTO.userId}, ${courseCreateDTO.region}, ${courseCreateDTO.city}, ${courseCreateDTO.town}, ${courseCreateDTO.detail}, ${courseCreateDTO.distance}, ${courseCreateDTO.image}, ${courseCreateDTO.path}::path)`;
     } else if (courseCreateDTO.name) {
       //출발지 디테일은 존재하고 건물이름만 존재안할때
-      const k = await prisma.$queryRaw`INSERT INTO "Course" (user_machine_id, departure_region, departure_city, departure_town, distance, image, departure_name, path) VALUES(${courseCreateDTO.machineId}, ${courseCreateDTO.region}, ${courseCreateDTO.city}, ${courseCreateDTO.town},  ${courseCreateDTO.distance}, ${courseCreateDTO.image}, ${courseCreateDTO.name}, ${courseCreateDTO.path}::path)`;
+      const k = await prisma.$queryRaw`INSERT INTO "Course" (user_id, departure_region, departure_city, departure_town, distance, image, departure_name, path) VALUES(${courseCreateDTO.userId}, ${courseCreateDTO.region}, ${courseCreateDTO.city}, ${courseCreateDTO.town},  ${courseCreateDTO.distance}, ${courseCreateDTO.image}, ${courseCreateDTO.name}, ${courseCreateDTO.path}::path)`;
     } else {
       //출발지 디테일과 건물이름 둘다 존재안할때
-      const k = await prisma.$queryRaw`INSERT INTO "Course" (user_machine_id, departure_region, departure_city, departure_town,  distance, image,  path) VALUES(${courseCreateDTO.machineId}, ${courseCreateDTO.region}, ${courseCreateDTO.city}, ${courseCreateDTO.town},  ${courseCreateDTO.distance}, ${courseCreateDTO.image}, ${courseCreateDTO.path}::path)`;
+      const k = await prisma.$queryRaw`INSERT INTO "Course" (user_id, departure_region, departure_city, departure_town,  distance, image,  path) VALUES(${courseCreateDTO.userId}, ${courseCreateDTO.region}, ${courseCreateDTO.city}, ${courseCreateDTO.town},  ${courseCreateDTO.distance}, ${courseCreateDTO.image}, ${courseCreateDTO.path}::path)`;
     }
 
     const result = await prisma.course.findFirst({
@@ -32,7 +32,7 @@ const createCourse = async (courseCreateDTO: CourseCreateDTO) => {
       },
     });
 
-    await stampService.createStampByUser(courseCreateDTO.machineId, "c");
+    await stampService.createStampByUser(courseCreateDTO.userId, "c");
 
     const createdCourse = { course: { id: result?.id, createdAt: result?.created_at } };
     return createdCourse;
@@ -42,17 +42,17 @@ const createCourse = async (courseCreateDTO: CourseCreateDTO) => {
   }
 };
 
-const getCourseByUser = async (machineId: string) => {
+const getCourseByUser = async (userId: number) => {
   try {
     const findUser = await prisma.user.findUnique({
       where: {
-        machine_id: machineId,
+        id: userId,
       },
     });
     if (!findUser) return "NO_USER";
     const result = await prisma.course.findMany({
       where: {
-        user_machine_id: machineId,
+        user_id: userId,
       },
       orderBy: {
         created_at: "desc",
@@ -75,7 +75,7 @@ const getCourseByUser = async (machineId: string) => {
 
     const courseGetDTO: CourseGetDTO = {
       user: {
-        machineId: machineId,
+        id: userId,
       },
       courses: courses,
     };
@@ -86,17 +86,17 @@ const getCourseByUser = async (machineId: string) => {
   }
 };
 
-const getPrivateCourseByUser = async (machineId: string) => {
+const getPrivateCourseByUser = async (userId: number) => {
   try {
     const findUser = await prisma.user.findUnique({
       where: {
-        machine_id: machineId,
+        id: userId,
       },
     });
     if (!findUser) return "NO_USER";
     const result = await prisma.course.findMany({
       where: {
-        AND: [{ user_machine_id: machineId }, { private: true }],
+        AND: [{ user_id: userId }, { private: true }],
       },
       orderBy: {
         created_at: "desc",
@@ -122,7 +122,7 @@ const getPrivateCourseByUser = async (machineId: string) => {
 
     const privateCourseGetDTO: PrivateCourseGetDTO = {
       user: {
-        machineId: machineId,
+        id: userId,
       },
       privateCourses: privateCourses,
     };
@@ -133,7 +133,7 @@ const getPrivateCourseByUser = async (machineId: string) => {
   }
 };
 
-const getCourseDetail = async (machineId: string, courseId: number) => {
+const getCourseDetail = async (userId: number, courseId: number) => {
   try {
     const result: any = await prisma.$queryRaw`SELECT id, created_at, path::text, distance::text, departure_region, departure_city, departure_town, departure_name, image FROM "Course" WHERE id=${courseId}`;
 
@@ -141,7 +141,7 @@ const getCourseDetail = async (machineId: string, courseId: number) => {
 
     const courseDetailGetDTO: CourseDetailGetDTO = {
       user: {
-        machineId: machineId,
+        id: userId,
       },
       course: {
         id: courseId,

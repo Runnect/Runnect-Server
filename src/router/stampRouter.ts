@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { header } from "express-validator";
+import { body } from "express-validator";
 import { stampController } from "../controller";
 
 const stampRouter: Router = Router();
@@ -7,9 +7,11 @@ const stampRouter: Router = Router();
 stampRouter.get(
   "/user",
   [
-    header("machineId")
+    body("userId")
       .notEmpty()
-      .withMessage("기기넘버가 없습니다."),
+      .withMessage("유저 아이디가 없습니다.")
+      .isNumeric()
+      .withMessage("유저아이디가 숫자가 아닙니다."),
   ],
 
   stampController.getStampByUser
