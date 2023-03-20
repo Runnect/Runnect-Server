@@ -19,10 +19,10 @@ const createAndDeleteScrap = (req, res) => __awaiter(void 0, void 0, void 0, fun
         const validationErrorMsg = error["errors"][0].msg;
         return res.status(constant_1.sc.BAD_REQUEST).send((0, response_1.fail)(constant_1.sc.BAD_REQUEST, validationErrorMsg));
     }
-    const machineId = req.header("machineId");
+    const userId = req.body.userId;
     const { publicCourseId, scrapTF } = req.body;
     const scrapDTO = {
-        machineId: machineId,
+        userId: userId,
         publicCourseId: +publicCourseId,
         scrapTF: scrapTF,
     };
@@ -45,7 +45,7 @@ const createAndDeleteScrap = (req, res) => __awaiter(void 0, void 0, void 0, fun
                 return res.status(constant_1.sc.BAD_REQUEST).send((0, response_1.fail)(constant_1.sc.BAD_REQUEST, constant_1.rm.BAD_REQUEST));
             }
             else if (deleteScrap["count"] == 0) {
-                return res.status(constant_1.sc.BAD_REQUEST).send((0, response_1.fail)(constant_1.sc.BAD_REQUEST, constant_1.rm.NO_PUBLIC_COURSE_ID));
+                return res.status(constant_1.sc.BAD_REQUEST).send((0, response_1.fail)(constant_1.sc.BAD_REQUEST, constant_1.rm.NO_SCRAP_RECORD));
             }
             else {
                 return res.status(constant_1.sc.OK).send((0, response_1.success)(constant_1.sc.OK, constant_1.rm.DELETE_SCRAP_SUCCESS));
@@ -63,9 +63,9 @@ const getScrapCourseByUSer = (req, res) => __awaiter(void 0, void 0, void 0, fun
         const validationErrorMsg = error["errors"][0].msg;
         return res.status(constant_1.sc.BAD_REQUEST).send((0, response_1.fail)(constant_1.sc.BAD_REQUEST, validationErrorMsg));
     }
-    const machineId = req.header("machineId");
+    const userId = req.body.userId;
     try {
-        const getScrapCourse = yield service_1.scrapService.getScrapCourseByUser(machineId);
+        const getScrapCourse = yield service_1.scrapService.getScrapCourseByUser(userId);
         if (!getScrapCourse) {
             return res.status(constant_1.sc.BAD_REQUEST).send((0, response_1.fail)(constant_1.sc.BAD_REQUEST, constant_1.rm.BAD_REQUEST));
         }
@@ -86,7 +86,7 @@ const getScrapCourseByUSer = (req, res) => __awaiter(void 0, void 0, void 0, fun
             });
             const getScrapResponseDTO = {
                 user: {
-                    machineId: machineId,
+                    id: userId,
                 },
                 Scraps: scrapsArray,
             };

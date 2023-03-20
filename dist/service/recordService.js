@@ -18,7 +18,7 @@ const createRecord = (recordRequestDTO) => __awaiter(void 0, void 0, void 0, fun
     try {
         const recordData = yield prisma.record.create({
             data: {
-                user_machine_id: recordRequestDTO.machineId,
+                user_id: recordRequestDTO.userId,
                 course_id: +recordRequestDTO.courseId,
                 public_course_id: recordRequestDTO.publicCourseId,
                 title: recordRequestDTO.title,
@@ -30,7 +30,7 @@ const createRecord = (recordRequestDTO) => __awaiter(void 0, void 0, void 0, fun
             return null;
         }
         else {
-            yield service_1.stampService.createStampByUser(recordRequestDTO.machineId, "r");
+            yield service_1.stampService.createStampByUser(recordRequestDTO.userId, "r");
             return recordData;
         }
     }
@@ -55,17 +55,17 @@ const createRecord = (recordRequestDTO) => __awaiter(void 0, void 0, void 0, fun
         throw error;
     }
 });
-const getRecordByUser = (machineId) => __awaiter(void 0, void 0, void 0, function* () {
+const getRecordByUser = (userId) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const userData = yield prisma.user.findUnique({
-            where: { machine_id: machineId },
+            where: { id: userId },
         });
         if (!userData) {
             return null;
         }
         else {
             const recordData = yield prisma.record.findMany({
-                where: { user_machine_id: machineId },
+                where: { user_id: userId },
                 include: {
                     Course: {
                         include: {

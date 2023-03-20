@@ -15,6 +15,11 @@ const sign = (userId) => {
     const accessToken = jsonwebtoken_1.default.sign(payload, process.env.JWT_SECRET, { expiresIn: "2h" });
     return accessToken;
 };
+//* refreshToken 발급
+const createRefreshToken = () => {
+    const refreshToken = jsonwebtoken_1.default.sign({}, process.env.JWT_SECRET, { expiresIn: "14d" });
+    return refreshToken;
+};
 //* token 검사!
 const verify = (token) => {
     let decoded;
@@ -22,14 +27,19 @@ const verify = (token) => {
         decoded = jsonwebtoken_1.default.verify(token, process.env.JWT_SECRET);
     }
     catch (error) {
-        if (error.message === "jwt expired") {
-            return constant_1.tokenType.TOKEN_EXPIRED;
-        }
-        else if (error.message === "invalid token") {
-            return constant_1.tokenType.TOKEN_INVALID;
+        if (error instanceof Error) {
+            if (error.message === "jwt expired") {
+                return constant_1.tokenType.TOKEN_EXPIRED;
+            }
+            else if (error.message === "invalid token") {
+                return constant_1.tokenType.TOKEN_INVALID;
+            }
+            else {
+                return constant_1.tokenType.TOKEN_INVALID;
+            }
         }
         else {
-            return constant_1.tokenType.TOKEN_INVALID;
+            console.log(error);
         }
     }
     return decoded;
@@ -37,5 +47,6 @@ const verify = (token) => {
 exports.default = {
     sign,
     verify,
+    createRefreshToken,
 };
 //# sourceMappingURL=jwtHandler.js.map

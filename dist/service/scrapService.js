@@ -18,7 +18,7 @@ const createScrap = (scrapDTO) => __awaiter(void 0, void 0, void 0, function* ()
     try {
         const scrapId = yield prisma.scrap.findFirst({
             where: {
-                user_machine_id: scrapDTO.machineId,
+                user_id: scrapDTO.userId,
                 public_course_id: scrapDTO.publicCourseId,
             },
             select: {
@@ -37,7 +37,7 @@ const createScrap = (scrapDTO) => __awaiter(void 0, void 0, void 0, function* ()
             // 이미 이전에 해당 유저가 해당 퍼블릭 코스를 스크랩한적이 없는경우
             const addScrap = yield prisma.scrap.create({
                 data: {
-                    user_machine_id: scrapDTO.machineId,
+                    user_id: scrapDTO.userId,
                     public_course_id: scrapDTO.publicCourseId,
                 },
             });
@@ -45,7 +45,7 @@ const createScrap = (scrapDTO) => __awaiter(void 0, void 0, void 0, function* ()
                 return null;
             }
             else {
-                yield service_1.stampService.createStampByUser(scrapDTO.machineId, "s"); //처음 스크랩한것이기 때문에 스탬프검사하기
+                yield service_1.stampService.createStampByUser(scrapDTO.userId, "s"); //처음 스크랩한것이기 때문에 스탬프검사하기
                 return addScrap;
             }
         }
@@ -70,7 +70,7 @@ const deleteScrap = (scrapDTO) => __awaiter(void 0, void 0, void 0, function* ()
     try {
         const deleteScrap = yield prisma.scrap.updateMany({
             where: {
-                user_machine_id: scrapDTO.machineId,
+                user_id: scrapDTO.userId,
                 public_course_id: scrapDTO.publicCourseId,
             },
             data: { scrapTF: false },
@@ -82,11 +82,11 @@ const deleteScrap = (scrapDTO) => __awaiter(void 0, void 0, void 0, function* ()
         throw error;
     }
 });
-const getScrapCourseByUser = (machineId) => __awaiter(void 0, void 0, void 0, function* () {
+const getScrapCourseByUser = (userId) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const scrapCourseData = yield prisma.scrap.findMany({
             where: {
-                AND: [{ user_machine_id: machineId }, { scrapTF: true }],
+                AND: [{ user_id: userId }, { scrapTF: true }],
             },
             include: {
                 PublicCourse: {

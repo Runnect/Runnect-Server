@@ -18,6 +18,7 @@ const createCourse = async (req: Request, res: Response) => {
     return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, validationErrorMsg));
   }
 
+  console.log(req.body);
   const image: Express.MulterS3.File = req.file as Express.MulterS3.File;
   if (!image) return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.NO_IMAGE));
   const { location } = image;

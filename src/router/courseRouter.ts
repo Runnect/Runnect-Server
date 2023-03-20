@@ -10,6 +10,12 @@ const router: Router = Router();
 router.post(
   "/",
   upload.single("image"),
+  /*(req: Request, res: Response, next: NextFunction) => {
+    console.log("~~~~~~~~~~~~~~~~~~~~~~~~~~~s3 multer 업로드후 req 시작~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+    console.log(req.body);
+    console.log("~~~~~~~~~~~~~~~~~~~~~~~~~~~s3 multer 업로드후 req 끝~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+    next();
+  },*/
   multiformDataConvert,
   auth,
   [

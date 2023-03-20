@@ -22,17 +22,21 @@ const createRefreshToken = () => {
 
 //* token 검사!
 const verify = (token: string) => {
-  let decoded: string | jwt.JwtPayload;
+  let decoded: string | jwt.JwtPayload | undefined;
 
   try {
     decoded = jwt.verify(token, process.env.JWT_SECRET as string);
   } catch (error) {
-    if (error.message === "jwt expired") {
-      return tokenType.TOKEN_EXPIRED;
-    } else if (error.message === "invalid token") {
-      return tokenType.TOKEN_INVALID;
+    if (error instanceof Error) {
+      if (error.message === "jwt expired") {
+        return tokenType.TOKEN_EXPIRED;
+      } else if (error.message === "invalid token") {
+        return tokenType.TOKEN_INVALID;
+      } else {
+        return tokenType.TOKEN_INVALID;
+      }
     } else {
-      return tokenType.TOKEN_INVALID;
+      console.log(error);
     }
   }
 

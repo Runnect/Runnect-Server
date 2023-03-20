@@ -19,26 +19,26 @@ const createCourse = (courseCreateDTO) => __awaiter(void 0, void 0, void 0, func
     try {
         if (courseCreateDTO.detail || courseCreateDTO.name) {
             //출발지 디테일과 건물이름 둘다 존재시
-            const k = yield prisma.$queryRaw `INSERT INTO "Course" (user_machine_id, departure_region, departure_city, departure_town, departure_detail, distance, image, departure_name, path) VALUES(${courseCreateDTO.machineId}, ${courseCreateDTO.region}, ${courseCreateDTO.city}, ${courseCreateDTO.town}, ${courseCreateDTO.detail}, ${courseCreateDTO.distance}, ${courseCreateDTO.image}, ${courseCreateDTO.name}, ${courseCreateDTO.path}::path)`;
+            const k = yield prisma.$queryRaw `INSERT INTO "Course" (user_id, departure_region, departure_city, departure_town, departure_detail, distance, image, departure_name, path) VALUES(${courseCreateDTO.userId}, ${courseCreateDTO.region}, ${courseCreateDTO.city}, ${courseCreateDTO.town}, ${courseCreateDTO.detail}, ${courseCreateDTO.distance}, ${courseCreateDTO.image}, ${courseCreateDTO.name}, ${courseCreateDTO.path}::path)`;
         }
         else if (courseCreateDTO.detail) {
             //출발지 디테일은 존재안하고 건물이름만 존재시
-            const k = yield prisma.$queryRaw `INSERT INTO "Course" (user_machine_id, departure_region, departure_city, departure_town, departure_detail, distance, image, path) VALUES(${courseCreateDTO.machineId}, ${courseCreateDTO.region}, ${courseCreateDTO.city}, ${courseCreateDTO.town}, ${courseCreateDTO.detail}, ${courseCreateDTO.distance}, ${courseCreateDTO.image}, ${courseCreateDTO.path}::path)`;
+            const k = yield prisma.$queryRaw `INSERT INTO "Course" (user_id, departure_region, departure_city, departure_town, departure_detail, distance, image, path) VALUES(${courseCreateDTO.userId}, ${courseCreateDTO.region}, ${courseCreateDTO.city}, ${courseCreateDTO.town}, ${courseCreateDTO.detail}, ${courseCreateDTO.distance}, ${courseCreateDTO.image}, ${courseCreateDTO.path}::path)`;
         }
         else if (courseCreateDTO.name) {
             //출발지 디테일은 존재하고 건물이름만 존재안할때
-            const k = yield prisma.$queryRaw `INSERT INTO "Course" (user_machine_id, departure_region, departure_city, departure_town, distance, image, departure_name, path) VALUES(${courseCreateDTO.machineId}, ${courseCreateDTO.region}, ${courseCreateDTO.city}, ${courseCreateDTO.town},  ${courseCreateDTO.distance}, ${courseCreateDTO.image}, ${courseCreateDTO.name}, ${courseCreateDTO.path}::path)`;
+            const k = yield prisma.$queryRaw `INSERT INTO "Course" (user_id, departure_region, departure_city, departure_town, distance, image, departure_name, path) VALUES(${courseCreateDTO.userId}, ${courseCreateDTO.region}, ${courseCreateDTO.city}, ${courseCreateDTO.town},  ${courseCreateDTO.distance}, ${courseCreateDTO.image}, ${courseCreateDTO.name}, ${courseCreateDTO.path}::path)`;
         }
         else {
             //출발지 디테일과 건물이름 둘다 존재안할때
-            const k = yield prisma.$queryRaw `INSERT INTO "Course" (user_machine_id, departure_region, departure_city, departure_town,  distance, image,  path) VALUES(${courseCreateDTO.machineId}, ${courseCreateDTO.region}, ${courseCreateDTO.city}, ${courseCreateDTO.town},  ${courseCreateDTO.distance}, ${courseCreateDTO.image}, ${courseCreateDTO.path}::path)`;
+            const k = yield prisma.$queryRaw `INSERT INTO "Course" (user_id, departure_region, departure_city, departure_town,  distance, image,  path) VALUES(${courseCreateDTO.userId}, ${courseCreateDTO.region}, ${courseCreateDTO.city}, ${courseCreateDTO.town},  ${courseCreateDTO.distance}, ${courseCreateDTO.image}, ${courseCreateDTO.path}::path)`;
         }
         const result = yield prisma.course.findFirst({
             orderBy: {
                 created_at: "desc",
             },
         });
-        yield service_1.stampService.createStampByUser(courseCreateDTO.machineId, "c");
+        yield service_1.stampService.createStampByUser(courseCreateDTO.userId, "c");
         const createdCourse = { course: { id: result === null || result === void 0 ? void 0 : result.id, createdAt: result === null || result === void 0 ? void 0 : result.created_at } };
         return createdCourse;
     }
@@ -47,18 +47,18 @@ const createCourse = (courseCreateDTO) => __awaiter(void 0, void 0, void 0, func
         throw error;
     }
 });
-const getCourseByUser = (machineId) => __awaiter(void 0, void 0, void 0, function* () {
+const getCourseByUser = (userId) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const findUser = yield prisma.user.findUnique({
             where: {
-                machine_id: machineId,
+                id: userId,
             },
         });
         if (!findUser)
             return "NO_USER";
         const result = yield prisma.course.findMany({
             where: {
-                user_machine_id: machineId,
+                user_id: userId,
             },
             orderBy: {
                 created_at: "desc",
@@ -80,7 +80,7 @@ const getCourseByUser = (machineId) => __awaiter(void 0, void 0, void 0, functio
         });
         const courseGetDTO = {
             user: {
-                machineId: machineId,
+                id: userId,
             },
             courses: courses,
         };
@@ -91,18 +91,18 @@ const getCourseByUser = (machineId) => __awaiter(void 0, void 0, void 0, functio
         throw error;
     }
 });
-const getPrivateCourseByUser = (machineId) => __awaiter(void 0, void 0, void 0, function* () {
+const getPrivateCourseByUser = (userId) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const findUser = yield prisma.user.findUnique({
             where: {
-                machine_id: machineId,
+                id: userId,
             },
         });
         if (!findUser)
             return "NO_USER";
         const result = yield prisma.course.findMany({
             where: {
-                AND: [{ user_machine_id: machineId }, { private: true }],
+                AND: [{ user_id: userId }, { private: true }],
             },
             orderBy: {
                 created_at: "desc",
@@ -127,7 +127,7 @@ const getPrivateCourseByUser = (machineId) => __awaiter(void 0, void 0, void 0, 
         });
         const privateCourseGetDTO = {
             user: {
-                machineId: machineId,
+                id: userId,
             },
             privateCourses: privateCourses,
         };
@@ -138,14 +138,14 @@ const getPrivateCourseByUser = (machineId) => __awaiter(void 0, void 0, void 0, 
         throw error;
     }
 });
-const getCourseDetail = (machineId, courseId) => __awaiter(void 0, void 0, void 0, function* () {
+const getCourseDetail = (userId, courseId) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const result = yield prisma.$queryRaw `SELECT id, created_at, path::text, distance::text, departure_region, departure_city, departure_town, departure_name, image FROM "Course" WHERE id=${courseId}`;
         if (!result[0])
             return null;
         const courseDetailGetDTO = {
             user: {
-                machineId: machineId,
+                id: userId,
             },
             course: {
                 id: courseId,
