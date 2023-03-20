@@ -2,7 +2,7 @@
 import { Router, Request, Response, NextFunction } from "express";
 
 import { courseController } from "../controller";
-import { multiformDataConvert, upload } from "../middleware";
+import { auth, multiformDataConvert, upload } from "../middleware";
 import { header, body, param } from "express-validator";
 
 const router: Router = Router();
@@ -11,6 +11,7 @@ router.post(
   "/",
   upload.single("image"),
   multiformDataConvert,
+  auth,
   [
     body("userId")
       .notEmpty()
@@ -34,6 +35,7 @@ router.post(
 
 router.get(
   "/user",
+  auth,
   [
     body("userId")
       .notEmpty()
@@ -46,6 +48,7 @@ router.get(
 
 router.get(
   "/private/user",
+  auth,
   [
     body("userId")
       .notEmpty()
@@ -58,6 +61,7 @@ router.get(
 
 router.get(
   "/detail/:courseId",
+  auth,
   [
     body("userId")
       .notEmpty()

@@ -35,7 +35,7 @@ const createAndDeleteScrap = async (req: Request, res: Response) => {
       if (!deleteScrap) {
         return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.BAD_REQUEST));
       } else if (deleteScrap["count"] == 0) {
-        return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.NO_PUBLIC_COURSE_ID));
+        return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.NO_SCRAP_RECORD));
       } else {
         return res.status(sc.OK).send(success(sc.OK, rm.DELETE_SCRAP_SUCCESS));
       }
