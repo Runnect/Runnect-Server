@@ -6,7 +6,14 @@ const controller_1 = require("../controller");
 const middleware_1 = require("../middleware");
 const express_validator_1 = require("express-validator");
 const router = (0, express_1.Router)();
-router.post("/", middleware_1.upload.single("image"), middleware_1.multiformDataConvert, middleware_1.auth, [
+router.post("/", middleware_1.upload.single("image"), 
+/*(req: Request, res: Response, next: NextFunction) => {
+  console.log("~~~~~~~~~~~~~~~~~~~~~~~~~~~s3 multer 업로드후 req 시작~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+  console.log(req.body);
+  console.log("~~~~~~~~~~~~~~~~~~~~~~~~~~~s3 multer 업로드후 req 끝~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+  next();
+},*/
+middleware_1.multiformDataConvert, middleware_1.auth, [
     (0, express_validator_1.body)("userId")
         .notEmpty()
         .withMessage("유저 아이디가 없습니다.")
