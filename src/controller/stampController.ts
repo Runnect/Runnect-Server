@@ -11,10 +11,10 @@ const getStampByUser = async (req: Request, res: Response) => {
     const validationErrorMsg = error["errors"][0].msg;
     return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, validationErrorMsg));
   }
-  const machineId = req.header("machineId") as string;
+  const userId: number = req.body.userId;
 
   try {
-    const stampByUser = await stampService.getStampByUser(machineId);
+    const stampByUser = await stampService.getStampByUser(userId);
     if (!stampByUser || stampByUser.length == 0) {
       return res.status(sc.OK).send(success(sc.OK, rm.READ_STAMP_BY_USER, stampByUser));
     } else {
@@ -27,7 +27,7 @@ const getStampByUser = async (req: Request, res: Response) => {
 
       const stampGetDto: StampGetDTO = {
         user: {
-          machineId: machineId,
+          id: userId,
         },
         stamps: stamps,
       };

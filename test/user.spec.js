@@ -2,20 +2,13 @@ import app from "../src/index";
 import request from "supertest";
 import { expect } from "chai";
 import dotenv from "dotenv";
+import randomInitialNickname from "../src/module/randomInitialNickname";
 dotenv.config();
 
-const randomMachineId = Math.random()
-  .toString(36)
-  .substring(2, 11);
+const randomMachineId = randomInitialNickname();
 
-const randomNickname1 = Math.random()
-  .toString(36)
-  .substring(2, 11);
-
-const randomNickname2 = Math.random()
-  .toString(36)
-  .substring(2, 11);
-
+const randomNickname1 = randomInitialNickname();
+const randomNickname2 = randomInitialNickname();
 //* signUp
 describe("POST ~/api/user", () => {
   it("회원 가입 성공", (done) => {

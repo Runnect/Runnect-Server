@@ -1,11 +1,86 @@
 import { UpdatedUserGetDTO } from "../interface/DTO/user/UpdatedUserGetDTO";
+import { SocialCreateRequestDTO } from "./../interface/DTO/auth/SocialCreateDTO";
 import { UserGetDTO } from "../interface/DTO/user/UserGetDTO";
+import { randomInitialNickname } from "../module/randomInitialNickname";
+
 import { PrismaClientKnownRequestError, PrismaClientValidationError } from "@prisma/client/runtime";
 import { PrismaClient } from "@prisma/client";
-import { dateConvertString, stringConvertTime } from "../module/convert/convertTime";
+import { dateConvertString } from "../module/convert/convertTime";
 
 const prisma = new PrismaClient();
 
+const getUserById = async (userId: number) => {
+  try {
+    const getUser: any = await prisma.user.findUnique({
+      where: {
+        id: userId,
+      },
+    });
+
+    if (!getUser) return null;
+
+    return getUser;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};
+
+const getUserByEmail = async (socialCreateRequestDTO: SocialCreateRequestDTO) => {
+  try {
+    const userByEmail = await prisma.user.findFirst({
+      where: {
+        AND: [{ email: socialCreateRequestDTO.email }, { provider: socialCreateRequestDTO.provider }],
+      },
+    });
+    return userByEmail;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};
+
+const getUserByRefreshToken = async (refreshToken: string) => {
+  try {
+    const userByRefreshToken = await prisma.user.findFirst({
+      where: {
+        refresh_token: refreshToken,
+      },
+    });
+    return userByRefreshToken;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};
+
+const createUser = async (socialCreateRequestDTO: SocialCreateRequestDTO, refreshToken: string) => {
+  try {
+    const newUser = await prisma.user.create({
+      data: {
+        nickname: randomInitialNickname(),
+        social_id: socialCreateRequestDTO.socialId,
+        email: socialCreateRequestDTO.email,
+        provider: socialCreateRequestDTO.provider,
+        refresh_token: refreshToken,
+      },
+    });
+    if (!newUser) return null;
+    return newUser;
+  } catch (error) {
+    if (error instanceof PrismaClientKnownRequestError) {
+      if (error.code == "P2002") {
+        // 이미 생성한 유저
+        return `이미 생성된 유저입니다.`;
+      }
+    } else if (error instanceof PrismaClientValidationError) {
+      return `${error.message}`;
+    }
+    throw error;
+  }
+};
+
+/*
 const signUp = async (machineId: string, nickname: string) => {
   try {
     const createdUser = await prisma.user.create({
@@ -28,20 +103,20 @@ const signUp = async (machineId: string, nickname: string) => {
     throw error;
   }
 };
-
-const getUser = async (machineId: string) => {
+*/
+const getUser = async (userId: number) => {
   try {
     const getUser: any = await prisma.user.findUnique({
       where: {
-        machine_id: machineId,
+        id: userId,
       },
     });
 
     if (!getUser) return null;
-    const levelPercent = await getLevelPercent(machineId);
+    const levelPercent = await getLevelPercent(userId);
     const userGetDTO: UserGetDTO = {
       user: {
-        machineId: getUser.machine_id,
+        id: getUser.id,
         nickname: getUser.nickname,
         latestStamp: getUser.latest_stamp,
         level: getUser.level,
@@ -55,12 +130,12 @@ const getUser = async (machineId: string) => {
   }
 };
 
-const getLevelPercent = async (machineId: string) => {
+const getLevelPercent = async (userId: number) => {
   try {
     const userStamp = (
       await prisma.userStamp.findMany({
         where: {
-          user_machine_id: machineId,
+          user_id: userId,
         },
       })
     ).length;
@@ -72,11 +147,11 @@ const getLevelPercent = async (machineId: string) => {
   }
 };
 
-const updateUserNickname = async (machineId: string, nickname: string) => {
+const updateUserNickname = async (userId: number, nickname: string) => {
   try {
     const updatedUser: any = await prisma.user.update({
       where: {
-        machine_id: machineId,
+        id: userId,
       },
       data: {
         nickname: nickname,
@@ -84,11 +159,11 @@ const updateUserNickname = async (machineId: string, nickname: string) => {
       },
     });
     if (!updatedUser) return null;
-    const levelPercent = await getLevelPercent(machineId);
+    const levelPercent = await getLevelPercent(userId);
 
     const updatedUserGetDTO: UpdatedUserGetDTO = {
       user: {
-        machineId: updatedUser.machine_id,
+        id: updatedUser.id,
         nickname: updatedUser.nickname,
         latestStamp: updatedUser.latest_stamp,
         level: updatedUser.level,
@@ -112,7 +187,11 @@ const updateUserNickname = async (machineId: string, nickname: string) => {
 };
 
 const userService = {
-  signUp,
+  getUserById,
+  getUserByEmail,
+  getUserByRefreshToken,
+  createUser,
+  //signUp,
   getUser,
   updateUserNickname,
 };

@@ -9,7 +9,7 @@ const createRecord = async (recordRequestDTO: recordRequestDTO) => {
   try {
     const recordData = await prisma.record.create({
       data: {
-        user_machine_id: recordRequestDTO.machineId,
+        user_id: recordRequestDTO.userId,
         course_id: +recordRequestDTO.courseId,
         public_course_id: recordRequestDTO.publicCourseId,
         title: recordRequestDTO.title,
@@ -20,7 +20,7 @@ const createRecord = async (recordRequestDTO: recordRequestDTO) => {
     if (!recordData) {
       return null;
     } else {
-      await stampService.createStampByUser(recordRequestDTO.machineId, "r");
+      await stampService.createStampByUser(recordRequestDTO.userId, "r");
       return recordData;
     }
   } catch (error) {
@@ -45,16 +45,16 @@ const createRecord = async (recordRequestDTO: recordRequestDTO) => {
   }
 };
 
-const getRecordByUser = async (machineId: string) => {
+const getRecordByUser = async (userId: number) => {
   try {
     const userData = await prisma.user.findUnique({
-      where: { machine_id: machineId },
+      where: { id: userId },
     });
     if (!userData) {
       return null;
     } else {
       const recordData = await prisma.record.findMany({
-        where: { user_machine_id: machineId },
+        where: { user_id: userId },
         include: {
           Course: {
             include: {

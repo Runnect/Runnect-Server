@@ -12,7 +12,7 @@ describe("POST ~/api/scrap", () => {
       .set("machineId", process.env.MACHINE_ID)
       .send({
         //request.body
-        publicCourseId: 34,
+        publicCourseId: process.env.PUBLIC_COURSE_ID,
         scrapTF: true,
       })
       .expect(200) //예측상태코드
@@ -33,7 +33,7 @@ describe("POST ~/api/scrap", () => {
       .set("machineId", process.env.MACHINE_ID)
       .send({
         //request.body
-        publicCourseId: 34,
+        publicCourseId: process.env.PUBLIC_COURSE_ID,
         scrapTF: false,
       })
       .expect(200) //예측상태코드

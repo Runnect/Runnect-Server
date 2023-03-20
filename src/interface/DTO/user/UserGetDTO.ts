@@ -1,9 +1,9 @@
 export interface UserGetDTO {
-    user: {
-        machineId: string;
-        nickname: string;
-        latestStamp: string;
-        level: number;
-        levelPercent: number;
-    };
-};
+  user: {
+    id: number;
+    nickname: string;
+    latestStamp: string;
+    level: number;
+    levelPercent: number;
+  };
+}

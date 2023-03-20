@@ -27,7 +27,7 @@ const createPublicCourse = async (publicCourseCreateRequestDTO: PublicCourseCrea
         },
       });
 
-      await stampService.createStampByUser(courseData.user_machine_id, "u");
+      await stampService.createStampByUser(courseData.user_id, "u");
 
       return publicCourseData;
     }
@@ -52,11 +52,11 @@ const createPublicCourse = async (publicCourseCreateRequestDTO: PublicCourseCrea
   }
 };
 
-const getPublicCourseByUser = async (machineId: string) => {
+const getPublicCourseByUser = async (userId: number) => {
   try {
     const courseData = await prisma.course.findMany({
       where: {
-        AND: [{ user_machine_id: machineId }, { private: false }],
+        AND: [{ user_id: userId }, { private: false }],
       },
       include: {
         PublicCourse: true,
@@ -74,7 +74,7 @@ const getPublicCourseByUser = async (machineId: string) => {
   }
 };
 
-const getPublicCourseDetail = async (machineId: string, publicCourseId: number) => {
+const getPublicCourseDetail = async (userId: number, publicCourseId: number) => {
   try {
     const publicCourseData = await prisma.publicCourse.findUnique({
       where: {
@@ -88,7 +88,7 @@ const getPublicCourseDetail = async (machineId: string, publicCourseId: number) 
         },
         Scrap: {
           where: {
-            AND: [{ user_machine_id: machineId }, { scrapTF: true }],
+            AND: [{ user_id: userId }, { scrapTF: true }],
           },
         },
       },
@@ -102,7 +102,7 @@ const getPublicCourseDetail = async (machineId: string, publicCourseId: number) 
   }
 };
 
-const recommendPublicCourse = async (machineId: string) => {
+const recommendPublicCourse = async (userId: number) => {
   try {
     const data = await prisma.publicCourse.findMany({
       include: {
@@ -112,7 +112,7 @@ const recommendPublicCourse = async (machineId: string) => {
         Course: true,
         Scrap: {
           where: {
-            AND: [{ user_machine_id: machineId }, { scrapTF: true }],
+            AND: [{ user_id: userId }, { scrapTF: true }],
           },
         },
       },
@@ -131,7 +131,7 @@ const recommendPublicCourse = async (machineId: string) => {
   }
 };
 
-const searchPublicCourse = async (machineId: string, keyword: string) => {
+const searchPublicCourse = async (userId: number, keyword: string) => {
   try {
     const data = await prisma.publicCourse.findMany({
       where: {
@@ -177,7 +177,7 @@ const searchPublicCourse = async (machineId: string, keyword: string) => {
         Course: true,
         Scrap: {
           where: {
-            AND: [{ user_machine_id: machineId }, { scrapTF: true }],
+            AND: [{ user_id: userId }, { scrapTF: true }],
           },
         },
       },

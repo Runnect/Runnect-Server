@@ -27,7 +27,7 @@ const createCourse = async (req: Request, res: Response) => {
   if (!departureObject) return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.DEPARTURE_VALIDATION_ERROR));
 
   const courseCreateDTO: CourseCreateDTO = {
-    machineId: req.header("machineId") as string,
+    userId: req.body.userId,
     path: coorConvertPath(req.body.path),
     distance: Number(req.body.distance),
     region: departureObject.region,
@@ -59,9 +59,9 @@ const getCourseByUser = async (req: Request, res: Response) => {
   const error = validationResult(req);
   if (!error.isEmpty()) return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.NO_USER));
 
-  const machineId = req.header("machineId") as string;
+  const userId = req.body.userId;
   try {
-    const data = await courseService.getCourseByUser(machineId);
+    const data = await courseService.getCourseByUser(userId);
     if (data == "NO_USER") return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.NO_USER));
     return res.status(sc.OK).send(success(sc.OK, rm.READ_COURSE_SUCCESS, data));
   } catch (error) {
@@ -78,9 +78,9 @@ const getPrivateCourseByUser = async (req: Request, res: Response) => {
   const error = validationResult(req);
   if (!error.isEmpty()) return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.NO_USER));
 
-  const machineId = req.header("machineId") as string;
+  const userId = req.body.userId;
   try {
-    const data = await courseService.getPrivateCourseByUser(machineId);
+    const data = await courseService.getPrivateCourseByUser(userId);
     if (data == "NO_USER") return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.NO_USER));
     return res.status(sc.OK).send(success(sc.OK, rm.READ_PRIVATE_COURSE_SUCCESS, data));
   } catch (error) {
@@ -100,11 +100,11 @@ const getCourseDetail = async (req: Request, res: Response) => {
     return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, validationErrorMsg));
   }
 
-  const machineId = req.header("machineId") as string;
+  const userId = req.body.userId;
   const { courseId } = req.params;
 
   try {
-    const data = await courseService.getCourseDetail(machineId, +courseId);
+    const data = await courseService.getCourseDetail(userId, +courseId);
     if (!data) return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.NO_COURSE));
     return res.status(sc.OK).send(success(sc.OK, rm.READ_COURSE_SUCCESS, data));
   } catch (e) {
