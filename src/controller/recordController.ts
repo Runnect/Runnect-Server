@@ -3,7 +3,7 @@ import { Request, Response } from "express";
 import { rm, sc } from "../constant";
 import { success, fail } from "../constant/response";
 import { validationResult } from "express-validator";
-import { timestampConvertString, stringConvertTime, dateConvertString } from "../module/convert/convertTime";
+import { stringConvertTime, dateConvertString } from "../module/convert/convertTime";
 import { recordService } from "../service";
 import { recordRequestDTO, recordResponseDTO, getRecordByUserResponseDTO, records } from "../interface/DTO/record/recordDTO";
 
@@ -30,7 +30,7 @@ const createRecord = async (req: Request, res: Response) => {
     } else if (typeof record === "string" || record instanceof String) {
       return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, record as string));
     } else {
-      const createdAt = timestampConvertString(record.created_at);
+      const createdAt = dateConvertString(record.created_at);
       const recordResponseDTO: recordResponseDTO = {
         record: {
           id: record.id,
@@ -65,7 +65,7 @@ const getRecordByUser = async (req: Request, res: Response) => {
           userId: userId,
           title: pc.title,
           image: pc.Course.image,
-          createdAt: timestampConvertString(pc.created_at),
+          createdAt: dateConvertString(pc.created_at),
           distance: pc.Course.distance,
           time: dateConvertString(pc.time).substring(11, 19),
           pace: dateConvertString(pc.pace).substring(11, 19),

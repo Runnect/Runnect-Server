@@ -4,6 +4,7 @@ import { userController } from "../controller";
 
 const router: Router = Router();
 
+/*
 router.post(
   "/",
   [
@@ -17,7 +18,7 @@ router.post(
       .withMessage("닉네임이 없습니다."),
   ],
   userController.signUp
-);
+);*/
 
 router.get(
   "/",

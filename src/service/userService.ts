@@ -5,7 +5,7 @@ import { randomInitialNickname } from "../module/randomInitialNickname";
 
 import { PrismaClientKnownRequestError, PrismaClientValidationError } from "@prisma/client/runtime";
 import { PrismaClient } from "@prisma/client";
-import { dateConvertString, stringConvertTime } from "../module/convert/convertTime";
+import { dateConvertString } from "../module/convert/convertTime";
 
 const prisma = new PrismaClient();
 

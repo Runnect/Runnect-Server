@@ -6,13 +6,6 @@ export const dateConvertString = (date: Date): string => {
   return timestampString;
 };
 
-export const timestampConvertString = (timestamp: Date): string => {
-  const responseTimestamp: string = dayjs(timestamp).format(
-    "YYYY-MM-DD HH:mm:ss.SSS"
-  );
-  return responseTimestamp;
-};
-
 export const stringConvertTime = (string: string) => {
   var time = new Date();
   var [hours, minutes, seconds] = string.split(":");
