@@ -33,10 +33,28 @@ const apple = async (appleToken: string) => {
   }
 };
 
+const kakao = async (kakaoAccessToken: string) => {
+  try {
+    const user = await axios({
+      method: "get",
+      url: "https://kapi.kakao.com/v2/user/me",
+      headers: {
+        Authorization: `Bearer ${kakaoAccessToken}`,
+      },
+    });
+    console.log(user.data.id.toString());
+    console.log(user.data.kakao_account.email);
+
+    return { socialId: user.data.id.toString(), email: user.data.kakao_account.email, provider: "KAKAO" };
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 const social = {
-    google,
+  google,
   apple,
-    kakao,
+  kakao,
 };
 
 export default social;
