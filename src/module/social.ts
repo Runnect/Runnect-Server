@@ -42,8 +42,6 @@ const kakao = async (kakaoAccessToken: string) => {
         Authorization: `Bearer ${kakaoAccessToken}`,
       },
     });
-    console.log(user.data.id.toString());
-    console.log(user.data.kakao_account.email);
 
     return { socialId: user.data.id.toString(), email: user.data.kakao_account.email, provider: "KAKAO" };
   } catch (error) {
