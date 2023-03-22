@@ -26,6 +26,11 @@ const getSocialLoginInfo = async (req: Request, res: Response) => {
         socialUser = await social.google(token);
 
         break;
+
+      case "KAKAO":
+        socialUser = await social.kakao(token);
+
+        break;
     }
 
     if (typeof socialUser === "undefined" || socialUser === null) {
