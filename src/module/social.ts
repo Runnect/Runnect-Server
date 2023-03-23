@@ -1,5 +1,6 @@
 import jwt from "jsonwebtoken";
 import { OAuth2Client } from "google-auth-library";
+import axios from "axios";
 
 const google = async (idToken: string) => {
   try {
@@ -32,9 +33,26 @@ const apple = async (appleToken: string) => {
   }
 };
 
+const kakao = async (kakaoAccessToken: string) => {
+  try {
+    const user = await axios({
+      method: "get",
+      url: "https://kapi.kakao.com/v2/user/me",
+      headers: {
+        Authorization: `Bearer ${kakaoAccessToken}`,
+      },
+    });
+
+    return { socialId: user.data.id.toString(), email: user.data.kakao_account.email, provider: "KAKAO" };
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 const social = {
   google,
   apple,
+  kakao,
 };
 
 export default social;
