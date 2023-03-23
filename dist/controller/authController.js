@@ -31,6 +31,12 @@ const getSocialLoginInfo = (req, res) => __awaiter(void 0, void 0, void 0, funct
             case "GOOGLE":
                 socialUser = yield social_1.default.google(token);
                 break;
+            case "APPLE":
+                socialUser = yield social_1.default.apple(token);
+                break;
+            case "KAKAO":
+                socialUser = yield social_1.default.kakao(token);
+                break;
         }
         if (typeof socialUser === "undefined" || socialUser === null) {
             return res.status(constant_1.sc.BAD_REQUEST).send((0, response_1.fail)(constant_1.sc.BAD_REQUEST, constant_1.rm.READ_SOCIAL_FAIL));
