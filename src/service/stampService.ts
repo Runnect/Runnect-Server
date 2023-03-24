@@ -15,8 +15,6 @@ const createStampByUser = async (userId: number, option: string) => {
     } else {
       await createStampToUser(userId, option, stampLevel); //스탬프 추가 및 유저의 이미지변경
       await chkLevel(userId); //추가된 스탬프를 포함한 유저의 스탬프 개수를 세서 유저의 레벨 업데이트
-
-      await prisma.user.update({where: {id: userId}, data: {modified_at: new Date()}}); // modified_at 수정
     }
   } catch (error) {
     console.error(error);
@@ -79,6 +77,7 @@ const createStampToUser = async (userId: number, option: string, stampLevel: num
       },
       data: {
         latest_stamp: stampId,
+        modified_at: new Date(),
       },
     });
   } catch (error) {
