@@ -34,7 +34,7 @@ const createCourse = async (courseCreateDTO: CourseCreateDTO) => {
 
     await stampService.createStampByUser(courseCreateDTO.userId, "c");
 
-    const createdCourse = { course: { id: result?.id, createdAt: result?.created_at } };
+    const createdCourse = { course: { id: result?.id, createdAt: dateConvertString(result?.created_at) } };
     return createdCourse;
   } catch (error) {
     console.error(error);

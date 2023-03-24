@@ -1,8 +1,6 @@
-import { Course } from "../interface/DTO/course/CourseGetDTO";
 import { PublicCourseCreateRequestDTO } from "../interface/DTO/publicCourse/PublicCourseCreateDTO";
 import { PrismaClient } from "@prisma/client";
 import { PrismaClientKnownRequestError, PrismaClientValidationError } from "@prisma/client/runtime";
-import { ElasticInference } from "aws-sdk";
 import { stampService } from "../service";
 
 const prisma = new PrismaClient();

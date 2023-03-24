@@ -77,6 +77,7 @@ const createStampToUser = async (userId: number, option: string, stampLevel: num
       },
       data: {
         latest_stamp: stampId,
+        modified_at: new Date(),
       },
     });
   } catch (error) {
