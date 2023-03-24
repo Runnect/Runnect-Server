@@ -7,6 +7,20 @@ const prisma = new PrismaClient();
 
 const createScrap = async (scrapDTO: scrapDTO) => {
   try {
+    const writerId = await prisma.publicCourse.findUnique({
+      where: {
+        id: scrapDTO.publicCourseId,
+      },
+      select: {
+        Course: true,
+      },
+    });
+
+    // 자신이 생성한 코스를 스크랩하려는 경우
+    if (writerId["Course"]["user_id"] == scrapDTO.userId) {
+      return "자신이 작성한 코스는 스크랩할 수 없습니다.";
+    }
+
     const scrapId = await prisma.scrap.findFirst({
       where: {
         user_id: scrapDTO.userId,
