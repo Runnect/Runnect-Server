@@ -1,3 +1,5 @@
+import { Course } from "./../interface/DTO/course/CourseGetDTO";
+import { PublicCourse } from "./../interface/DTO/publicCourse/PublicCourseGetDTO";
 import { PublicCourseCreateRequestDTO } from "../interface/DTO/publicCourse/PublicCourseCreateDTO";
 import { PrismaClient } from "@prisma/client";
 import { PrismaClientKnownRequestError, PrismaClientValidationError } from "@prisma/client/runtime";
@@ -74,6 +76,7 @@ const getPublicCourseByUser = async (userId: number) => {
 
 const getPublicCourseDetail = async (userId: number, publicCourseId: number) => {
   try {
+    /** 
     const publicCourseData = await prisma.publicCourse.findUnique({
       where: {
         id: publicCourseId,
@@ -93,6 +96,14 @@ const getPublicCourseDetail = async (userId: number, publicCourseId: number) => 
     });
 
     return publicCourseData;
+
+    */
+    console.log("원시쿼리 전디테일DATA 현재유저", userId);
+
+    const publicCourseData = await prisma.$queryRaw`SELECT "PublicCourse"."id" AS "publicCourseid", "PublicCourse"."course_id", "Course"."id" AS "courseid", "Course"."path"::text, "User"."nickname", "User"."id" AS "publicCourseUserID", "Scrap"."scrapTF","Scrap"."id" AS "scrapID", "Scrap"."public_course_id" FROM "PublicCourse" LEFT JOIN "Scrap" ON "PublicCourse"."id" = "Scrap"."public_course_id", "Course", "User" WHERE "PublicCourse"."id"=${publicCourseId}  AND "PublicCourse"."course_id" = "Course"."id" AND "Course"."user_id"="User"."id" AND ("Scrap"."user_id"=${userId} OR "Scrap"."user_id" IS NULL)`; // AND "Scrap"."public_course_id"=${publicCourseId}`;
+
+    console.log("publlicCourse디테일DATA");
+    console.log(publicCourseData);
   } catch (error) {
     //~ get은 에러분기처리를 할게없음... 어차피 데이터가 있냐없냐라서
     console.log(error);

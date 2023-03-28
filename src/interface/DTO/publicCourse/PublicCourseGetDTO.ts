@@ -30,6 +30,7 @@ export interface PublicCourseDetailGetDTO {
     image: string;
     title: string;
     description: string;
+    path: object;
     distance: number;
     departure: {
       region: string;

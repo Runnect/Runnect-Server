@@ -119,6 +119,7 @@ const getPublicCourseDetail = async (req: Request, res: Response) => {
           title: publicCourseDetail.title,
           description: publicCourseDetail.description,
           distance: publicCourseDetail.Course.distance,
+          path: publicCourseDetail.Course.path,
           departure: {
             region: publicCourseDetail.Course.departure_region,
             city: publicCourseDetail.Course.departure_city,
