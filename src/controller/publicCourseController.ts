@@ -233,7 +233,7 @@ const deletePublicCourse = async (req: Request, res: Response) => {
     else if (typeof data == "string") {
       return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, data as string));
     }
-    return res.status(sc.OK).send(success(sc.OK, rm.DELETE_PUBLIC_COURSE_SUCCESS, { "deletedPublicCourseId": data }));
+    return res.status(sc.OK).send(success(sc.OK, rm.DELETE_PUBLIC_COURSE_SUCCESS, { "deletedPublicCourse": data }));
 
   } catch (e) {
     console.error(e);
