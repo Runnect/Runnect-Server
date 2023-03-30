@@ -77,4 +77,16 @@ publicCourseRouter.get(
   publicCourseController.searchPublicCourse
 );
 
+publicCourseRouter.delete(
+  "/:publicCourseId",
+  [
+    param("publicCourseId")
+      .notEmpty()
+      .withMessage("퍼블릭 코스 아이디가 없습니다.")
+      .isNumeric()
+      .withMessage("퍼블릭 코스 아이디가 숫자가 아닙니다."),
+  ],
+  publicCourseController.deletePublicCourse
+);
+
 export default publicCourseRouter;
