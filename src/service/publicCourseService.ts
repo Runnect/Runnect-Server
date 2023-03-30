@@ -2,6 +2,7 @@ import { PublicCourseCreateRequestDTO } from "../interface/DTO/publicCourse/Publ
 import { PrismaClient } from "@prisma/client";
 import { PrismaClientKnownRequestError, PrismaClientValidationError } from "@prisma/client/runtime";
 import { stampService } from "../service";
+import { UpdatePublicCourseDTO } from "../interface/DTO/publicCourse/UpdatePublicCourseDTO";
 
 const prisma = new PrismaClient();
 
@@ -192,12 +193,31 @@ const searchPublicCourse = async (userId: number, keyword: string) => {
   }
 };
 
+const updatePublicCourse = async (UpdatePublicCourseDTO: UpdatePublicCourseDTO) => {
+  try {
+    const updateData = await prisma.publicCourse.update({
+      where: {
+        id: UpdatePublicCourseDTO.publicCourseId,
+      },
+      data: {
+        title: UpdatePublicCourseDTO.title,
+        description: UpdatePublicCourseDTO.description,
+      },
+    });
+
+    return updateData;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 const publicCourseService = {
   createPublicCourse,
   getPublicCourseByUser,
   getPublicCourseDetail,
   recommendPublicCourse,
   searchPublicCourse,
+  updatePublicCourse,
 };
 
 export default publicCourseService;
