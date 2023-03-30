@@ -8,7 +8,7 @@ const google = async (idToken: string) => {
 
     const ticket = await client.verifyIdToken({
       idToken: idToken,
-      audience: process.env.GOOGLE_CLIENT_ID,
+      audience: [process.env.GOOGLE_CLIENT_ID, process.env.GOOGLE_CLIENT_ID_2],
     });
     const payload = ticket.getPayload();
 
