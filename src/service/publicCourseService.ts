@@ -192,12 +192,31 @@ const searchPublicCourse = async (userId: number, keyword: string) => {
   }
 };
 
+const deletePublicCourse = async (publicCourseId: number) => {
+  try {
+    const data = await prisma.publicCourse.delete({
+      where: {
+        id: publicCourseId,
+      },
+    });
+    return data;
+  } catch (error) {
+    if (error instanceof PrismaClientKnownRequestError && error.code === "P2025") {
+      return `존재하지 않는 코스 업로드입니다.`;
+    } else {
+      console.log(error);
+    }
+    throw error;
+  }
+};
+
 const publicCourseService = {
   createPublicCourse,
   getPublicCourseByUser,
   getPublicCourseDetail,
   recommendPublicCourse,
   searchPublicCourse,
+  deletePublicCourse,
 };
 
 export default publicCourseService;
