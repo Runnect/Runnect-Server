@@ -85,6 +85,7 @@ const createStampToUser = (userId, option, stampLevel) => __awaiter(void 0, void
             },
             data: {
                 latest_stamp: stampId,
+                modified_at: new Date(),
             },
         });
     }
