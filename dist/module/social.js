@@ -22,7 +22,7 @@ const google = (idToken) => __awaiter(void 0, void 0, void 0, function* () {
         const ticket = yield client.verifyIdToken({
             idToken: idToken,
             audience: [(_a = process.env.GOOGLE_CLIENT_ID) !== null && _a !== void 0 ? _a : "", (_b = process.env.GOOGLE_CLIENT_ID_2) !== null && _b !== void 0 ? _b : ""],
-        });
+        }); // ' A ?? B : A가 null 또는 undefined일 경우 B를 반환한다
         const payload = ticket.getPayload();
         if (payload) {
             return { socialId: payload["sub"], email: payload["email"], provider: "GOOGLE" };
