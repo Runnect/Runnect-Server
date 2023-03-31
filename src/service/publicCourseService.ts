@@ -1,5 +1,3 @@
-import { Course } from "./../interface/DTO/course/CourseGetDTO";
-import { PublicCourse } from "./../interface/DTO/publicCourse/PublicCourseGetDTO";
 import { PublicCourseCreateRequestDTO } from "../interface/DTO/publicCourse/PublicCourseCreateDTO";
 import { PrismaClient } from "@prisma/client";
 import { PrismaClientKnownRequestError, PrismaClientValidationError } from "@prisma/client/runtime";
