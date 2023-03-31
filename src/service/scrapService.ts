@@ -1,6 +1,7 @@
 import { PrismaClient } from "@prisma/client";
 import { scrapDTO } from "../interface/DTO/scrap/scrapDTO";
 import { stampService } from "../service";
+import { rm } from "../constant";
 import { PrismaClientKnownRequestError, PrismaClientValidationError } from "@prisma/client/runtime";
 
 const prisma = new PrismaClient();
@@ -17,7 +18,7 @@ const createScrap = async (scrapDTO: scrapDTO) => {
     });
     // 자신이 생성한 코스를 스크랩하려는 경우
     if (writerId && writerId["Course"]["user_id"] == scrapDTO.userId) {
-      return "자신이 작성한 코스는 스크랩할 수 없습니다.";
+      return rm.CREATE_OWN_SCRAP_FAIL;
     }
 
     const scrapId = await prisma.scrap.findFirst({
