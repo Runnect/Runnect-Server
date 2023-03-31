@@ -12,6 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const client_1 = require("@prisma/client");
 const service_1 = require("../service");
 const runtime_1 = require("@prisma/client/runtime");
+const constant_1 = require("../constant");
 const prisma = new client_1.PrismaClient();
 const createRecord = (recordRequestDTO) => __awaiter(void 0, void 0, void 0, function* () {
     var _a;
@@ -40,7 +41,7 @@ const createRecord = (recordRequestDTO) => __awaiter(void 0, void 0, void 0, fun
             if (error.code === "P2009") {
                 //~ 쿼리 유효성 검사 실패
                 //db 필드에 맞는 input 값이 아님
-                return `pace또는 time이 올바른 input 형식이 아닙니다.`;
+                return constant_1.rm.OUT_OF_VALUE;
             }
             else if (error.code === "P2003") {
                 //~ fk 외래키제약조건실패
