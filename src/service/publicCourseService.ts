@@ -108,7 +108,6 @@ const getPublicCourseDetail = async (userId: number, publicCourseId: number) => 
     const isPublicScrap = await prisma.scrap.findFirst({
       where: { user_id: userId, public_course_id: publicCourseId, scrapTF: true },
     });
-
     const publicCourseDetailGetDTO: PublicCourseDetailGetDTO = {
       user: {
         nickname: publicCourseData[0].nickname,
