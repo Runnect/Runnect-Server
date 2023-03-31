@@ -15,9 +15,8 @@ const createScrap = async (scrapDTO: scrapDTO) => {
         Course: true,
       },
     });
-
     // 자신이 생성한 코스를 스크랩하려는 경우
-    if (writerId["Course"]["user_id"] == scrapDTO.userId) {
+    if (writerId && writerId["Course"]["user_id"] == scrapDTO.userId) {
       return "자신이 작성한 코스는 스크랩할 수 없습니다.";
     }
 
