@@ -4,6 +4,9 @@ import { PublicCourseCreateRequestDTO } from "../interface/DTO/publicCourse/Publ
 import { PrismaClient } from "@prisma/client";
 import { PrismaClientKnownRequestError, PrismaClientValidationError } from "@prisma/client/runtime";
 import { stampService } from "../service";
+import { checkScrap } from "../module/check/checkScrap";
+import { pathConvertCoor } from "../module/convert/pathConvertCoor";
+import { PublicCourseDetailGetDTO } from "./../interface/DTO/publicCourse/PublicCourseGetDTO";
 
 const prisma = new PrismaClient();
 
@@ -76,7 +79,7 @@ const getPublicCourseByUser = async (userId: number) => {
 
 const getPublicCourseDetail = async (userId: number, publicCourseId: number) => {
   try {
-    /** 
+    /** path정보를 가져오지 않은 prisma orm 사용 코드
     const publicCourseData = await prisma.publicCourse.findUnique({
       where: {
         id: publicCourseId,
@@ -98,12 +101,40 @@ const getPublicCourseDetail = async (userId: number, publicCourseId: number) => 
     return publicCourseData;
 
     */
-    console.log("원시쿼리 전디테일DATA 현재유저", userId);
+    const publicCourseData: any = await prisma.$queryRaw`SELECT "PublicCourse"."id" AS "pid","PublicCourse"."title","PublicCourse"."description", "Course"."id" AS "cid", "Course"."path"::text,"Course"."image","Course"."distance"::text,"Course"."departure_region","Course"."departure_city","Course"."departure_town","Course"."departure_name", "User"."nickname", "User"."id" AS "pcuid", "User"."level", "User"."latest_stamp" FROM "PublicCourse", "Course", "User" WHERE "PublicCourse"."id"=${publicCourseId}  AND "PublicCourse"."course_id" = "Course"."id" AND "Course"."user_id"="User"."id"`;
+    if (!publicCourseData) {
+      return publicCourseData;
+    }
+    const isPublicScrap = await prisma.scrap.findFirst({
+      where: { user_id: userId, public_course_id: publicCourseId, scrapTF: true },
+    });
 
-    const publicCourseData = await prisma.$queryRaw`SELECT "PublicCourse"."id" AS "publicCourseid", "PublicCourse"."course_id", "Course"."id" AS "courseid", "Course"."path"::text, "User"."nickname", "User"."id" AS "publicCourseUserID", "Scrap"."scrapTF","Scrap"."id" AS "scrapID", "Scrap"."public_course_id" FROM "PublicCourse" LEFT JOIN "Scrap" ON "PublicCourse"."id" = "Scrap"."public_course_id", "Course", "User" WHERE "PublicCourse"."id"=${publicCourseId}  AND "PublicCourse"."course_id" = "Course"."id" AND "Course"."user_id"="User"."id" AND ("Scrap"."user_id"=${userId} OR "Scrap"."user_id" IS NULL)`; // AND "Scrap"."public_course_id"=${publicCourseId}`;
+    const publicCourseDetailGetDTO: PublicCourseDetailGetDTO = {
+      user: {
+        nickname: publicCourseData[0].nickname,
+        level: publicCourseData[0].level,
+        image: publicCourseData[0].latest_stamp,
+        isNowUser: publicCourseData[0].pcuid == userId ? true : false,
+      },
+      publicCourse: {
+        id: publicCourseData[0].pid,
+        courseId: publicCourseData[0].cid,
+        scrap: checkScrap(isPublicScrap),
+        image: publicCourseData[0].image,
+        title: publicCourseData[0].title,
+        description: publicCourseData[0].description,
+        path: pathConvertCoor(publicCourseData[0].path),
+        distance: +publicCourseData[0].distance,
+        departure: {
+          region: publicCourseData[0].departure_region,
+          city: publicCourseData[0].departure_city,
+          town: publicCourseData[0].departure_town,
+          name: publicCourseData[0].departure_name,
+        },
+      },
+    };
 
-    console.log("publlicCourse디테일DATA");
-    console.log(publicCourseData);
+    return publicCourseDetailGetDTO;
   } catch (error) {
     //~ get은 에러분기처리를 할게없음... 어차피 데이터가 있냐없냐라서
     console.log(error);
