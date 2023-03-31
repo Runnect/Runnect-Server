@@ -2,7 +2,7 @@ import { PrismaClient } from "@prisma/client";
 import { recordRequestDTO } from "../interface/DTO/record/recordDTO";
 import { stampService } from "../service";
 import { PrismaClientKnownRequestError, PrismaClientValidationError } from "@prisma/client/runtime";
-
+import { rm } from "../constant";
 const prisma = new PrismaClient();
 
 const createRecord = async (recordRequestDTO: recordRequestDTO) => {
@@ -30,7 +30,7 @@ const createRecord = async (recordRequestDTO: recordRequestDTO) => {
       if (error.code === "P2009") {
         //~ 쿼리 유효성 검사 실패
         //db 필드에 맞는 input 값이 아님
-        return `pace또는 time이 올바른 input 형식이 아닙니다.`;
+        return rm.OUT_OF_VALUE;
       } else if (error.code === "P2003") {
         //~ fk 외래키제약조건실패
         //없는 코스
