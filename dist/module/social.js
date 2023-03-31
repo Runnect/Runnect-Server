@@ -16,11 +16,12 @@ const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const google_auth_library_1 = require("google-auth-library");
 const axios_1 = __importDefault(require("axios"));
 const google = (idToken) => __awaiter(void 0, void 0, void 0, function* () {
+    var _a, _b;
     try {
         const client = new google_auth_library_1.OAuth2Client(process.env.GOOGLE_CLIENT_ID);
         const ticket = yield client.verifyIdToken({
             idToken: idToken,
-            audience: process.env.GOOGLE_CLIENT_ID,
+            audience: [(_a = process.env.GOOGLE_CLIENT_ID) !== null && _a !== void 0 ? _a : "", (_b = process.env.GOOGLE_CLIENT_ID_2) !== null && _b !== void 0 ? _b : ""],
         });
         const payload = ticket.getPayload();
         if (payload) {
