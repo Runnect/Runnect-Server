@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { body, header } from "express-validator";
+import { body, header, param } from "express-validator";
 import { recordController } from "../controller";
 
 const recordRouter: Router = Router();
@@ -40,6 +40,18 @@ recordRouter.get(
       .withMessage("유저아이디가 숫자가 아닙니다."),
   ],
   recordController.getRecordByUser
+);
+
+recordRouter.delete(
+  "/:recordId",
+  [
+    param("recordId")
+      .notEmpty()
+      .withMessage("기록 아이디가 없습니다.")
+      .isNumeric()
+      .withMessage("기록 아이디가 숫자가 아닙니다.")
+  ],
+  recordController.deleteRecord
 );
 
 export default recordRouter;
