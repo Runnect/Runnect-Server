@@ -78,6 +78,24 @@ const getRecordByUser = async (userId: number) => {
   }
 };
 
-const recordService = { createRecord, getRecordByUser };
+const deleteRecordById = async (recordId: number) => {
+  try {
+    const data = await prisma.record.delete({
+      where: {
+        id: recordId,
+      },
+    });
+    return data;
+  } catch (error) {
+    if (error instanceof PrismaClientKnownRequestError && error.code === "P2025") {
+      return `존재하지 않는 기록입니다.`;
+    } else {
+      console.log(error);
+    }
+    throw error;
+  }
+};
+
+const recordService = { createRecord, getRecordByUser, deleteRecordById };
 
 export default recordService;
