@@ -85,7 +85,7 @@ const deleteRecordById = async (recordId: number) => {
         id: recordId,
       },
     });
-    return data;
+    return data.id;
   } catch (error) {
     if (error instanceof PrismaClientKnownRequestError && error.code === "P2025") {
       return `존재하지 않는 기록입니다.`;

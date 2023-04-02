@@ -97,13 +97,12 @@ const deleteRecord = async (req: Request, res: Response) => {
   const { recordId } = req.params;
 
   try {
-    const data = recordService.deleteRecordById(+recordId);
-
+    const data = await recordService.deleteRecordById(+recordId);
     if (!data) return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.DELETE_RECORD_FAIL));
     else if (typeof data == "string") {
       return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, data as string));
     }
-    return res.status(sc.OK).send(success(sc.OK, rm.DELETE_RECORD_SUCCESS, { "deletedRecord": data }));
+    return res.status(sc.OK).send(success(sc.OK, rm.DELETE_RECORD_SUCCESS, { "deletedRecordId": data }));
 
   } catch (error) {
     console.log(error);
