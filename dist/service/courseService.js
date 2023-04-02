@@ -39,7 +39,7 @@ const createCourse = (courseCreateDTO) => __awaiter(void 0, void 0, void 0, func
             },
         });
         yield service_1.stampService.createStampByUser(courseCreateDTO.userId, "c");
-        const createdCourse = { course: { id: result === null || result === void 0 ? void 0 : result.id, createdAt: result === null || result === void 0 ? void 0 : result.created_at } };
+        const createdCourse = { course: { id: result === null || result === void 0 ? void 0 : result.id, createdAt: (0, convertTime_1.dateConvertString)(result === null || result === void 0 ? void 0 : result.created_at) } };
         return createdCourse;
     }
     catch (error) {

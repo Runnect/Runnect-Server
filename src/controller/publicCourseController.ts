@@ -105,30 +105,7 @@ const getPublicCourseDetail = async (req: Request, res: Response) => {
     if (!publicCourseDetail) {
       res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.INVALID_PUBLIC_COURSE_ID));
     } else {
-      const publicCourseDetailGetDTO: PublicCourseDetailGetDTO = {
-        user: {
-          nickname: publicCourseDetail.Course.User.nickname,
-          level: publicCourseDetail.Course.User.level as number,
-          image: publicCourseDetail.Course.User.latest_stamp,
-        },
-        publicCourse: {
-          id: publicCourseDetail.id,
-          courseId: publicCourseDetail.course_id,
-          scrap: checkScrap(publicCourseDetail.Scrap),
-          image: publicCourseDetail.Course.image,
-          title: publicCourseDetail.title,
-          description: publicCourseDetail.description,
-          distance: publicCourseDetail.Course.distance,
-          departure: {
-            region: publicCourseDetail.Course.departure_region,
-            city: publicCourseDetail.Course.departure_city,
-            town: publicCourseDetail.Course.departure_town,
-            name: publicCourseDetail.Course.departure_name!,
-          },
-        },
-      };
-
-      return res.status(sc.OK).send(success(sc.OK, rm.READ_PUBLIC_COURSE_DETAIL_SUCCESS, publicCourseDetailGetDTO));
+      return res.status(sc.OK).send(success(sc.OK, rm.READ_PUBLIC_COURSE_DETAIL_SUCCESS, publicCourseDetail));
     }
   } catch (error) {
     console.log(error);
