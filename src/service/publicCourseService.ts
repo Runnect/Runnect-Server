@@ -5,6 +5,7 @@ import { stampService } from "../service";
 import { checkScrap } from "../module/check/checkScrap";
 import { pathConvertCoor } from "../module/convert/pathConvertCoor";
 import { PublicCourseDetailGetDTO } from "./../interface/DTO/publicCourse/PublicCourseGetDTO";
+import { List } from "aws-sdk/lib/model";
 
 const prisma = new PrismaClient();
 
@@ -231,14 +232,16 @@ const searchPublicCourse = async (userId: number, keyword: string) => {
   }
 };
 
-const deletePublicCourse = async (publicCourseId: number) => {
+const deletePublicCourse = async (publicCourseIdList: Array<number>) => {
   try {
-    const data = await prisma.publicCourse.delete({
+    const data = await prisma.publicCourse.deleteMany({
       where: {
-        id: publicCourseId,
+        id: {
+          in: publicCourseIdList,
+        }
       },
     });
-    return data;
+    return data.count;
   } catch (error) {
     if (error instanceof PrismaClientKnownRequestError && error.code === "P2025") {
       return `존재하지 않는 코스 업로드입니다.`;

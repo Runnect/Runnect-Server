@@ -80,7 +80,7 @@ publicCourseRouter.get(
 publicCourseRouter.put(
   "/",
   [
-    body("publicCourseId")
+    body("publicCourseIdList")
       .notEmpty()
       .withMessage("퍼블릭 코스 아이디가 없습니다.")
   ],
