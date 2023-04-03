@@ -193,11 +193,11 @@ const searchPublicCourse = async (userId: number, keyword: string) => {
   }
 };
 
-const updatePublicCourse = async (UpdatePublicCourseDTO: UpdatePublicCourseDTO) => {
+const updatePublicCourse = async (publicCourseId: number, UpdatePublicCourseDTO: UpdatePublicCourseDTO) => {
   try {
     const updateData = await prisma.publicCourse.update({
       where: {
-        id: UpdatePublicCourseDTO.publicCourseId,
+        id: publicCourseId,
       },
       data: {
         title: UpdatePublicCourseDTO.title,

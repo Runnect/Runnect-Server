@@ -78,9 +78,9 @@ publicCourseRouter.get(
 );
 
 publicCourseRouter.patch(
-  "/update",
+  "/:publicCourseId",
   [
-    body("publicCourseId")
+    param("publicCourseId")
       .notEmpty()
       .withMessage("퍼블릭 코스 아이디가 없습니다.")
       .isNumeric()

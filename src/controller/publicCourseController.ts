@@ -227,10 +227,11 @@ const updatePublicCourse = async (req: Request, res: Response) => {
     return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, validationErrorMsg));
   }
 
+  const { publicCourseId } = req.params;
   const UpdatePublicCourseDTO: UpdatePublicCourseDTO = req.body;
 
   try {
-    const updatePublicCourse = await publicCourseService.updatePublicCourse(UpdatePublicCourseDTO);
+    const updatePublicCourse = await publicCourseService.updatePublicCourse(+publicCourseId, UpdatePublicCourseDTO);
 
     if (!updatePublicCourse) {
       return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.BAD_REQUEST));
