@@ -21,7 +21,7 @@ model Course {
   departure_name   String?             @db.VarChar(50)
   private          Boolean             @default(true)
   path             Unsupported("path")
-  User             User                @relation(fields: [user_id], references: [id], onDelete: Cascade, map: "course_user_id_fk")
+  User             User                @relation(fields: [user_id], references: [id], onDelete: SetNull, map: "course_user_id_fk")
   PublicCourse     PublicCourse?
   Record           Record[]
 }
@@ -49,7 +49,7 @@ model Record {
   pace             DateTime      @db.Time(6)
   time             DateTime      @db.Time(6)
   Course           Course        @relation(fields: [course_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "record_course_id_fk")
-  PublicCourse     PublicCourse? @relation(fields: [public_course_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "record_publiccourse_id_fk")
+  PublicCourse     PublicCourse? @relation(fields: [public_course_id], references: [id], map: "record_publiccourse_id_fk")
   User             User          @relation(fields: [user_id], references: [id], onDelete: Cascade, map: "record_user_id_fk")
 }
 
