@@ -66,6 +66,7 @@ export default {
   NO_COURSE_ID: "코스아이디 없음",
   NO_RECORD: "유저의 러닝 기록이 없음",
   READ_RECORD_SUCCESS: "활동 기록 조회 성공",
+  UPDATE_RECORD_SUCCESS: "활동 기록 수정 성공",
 
   //scrap
   CREATE_SCRAP_SUCCESS: "코스 스크랩 성공",
