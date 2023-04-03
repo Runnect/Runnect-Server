@@ -1,3 +1,4 @@
+import { bool } from "aws-sdk/clients/signer";
 export interface PublicCourse {
   id: number;
   courseId: number;
@@ -22,6 +23,7 @@ export interface PublicCourseDetailGetDTO {
     nickname: string;
     level: number;
     image: string;
+    isNowUser: boolean;
   };
   publicCourse: {
     id: number;
@@ -30,6 +32,7 @@ export interface PublicCourseDetailGetDTO {
     image: string;
     title: string;
     description: string;
+    path: object;
     distance: number;
     departure: {
       region: string;

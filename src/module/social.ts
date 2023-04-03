@@ -8,8 +8,8 @@ const google = async (idToken: string) => {
 
     const ticket = await client.verifyIdToken({
       idToken: idToken,
-      audience: process.env.GOOGLE_CLIENT_ID,
-    });
+      audience: [process.env.GOOGLE_CLIENT_ID ?? "", process.env.GOOGLE_CLIENT_ID_2 ?? ""],
+    }); // ' A ?? B : A가 null 또는 undefined일 경우 B를 반환한다
     const payload = ticket.getPayload();
 
     if (payload) {
