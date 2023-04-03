@@ -42,14 +42,12 @@ recordRouter.get(
   recordController.getRecordByUser
 );
 
-recordRouter.delete(
-  "/:recordId",
+recordRouter.put(
+  "/",
   [
-    param("recordId")
+    body("recordIdList")
       .notEmpty()
       .withMessage("기록 아이디가 없습니다.")
-      .isNumeric()
-      .withMessage("기록 아이디가 숫자가 아닙니다.")
   ],
   recordController.deleteRecord
 );

@@ -66,6 +66,8 @@ export default {
   NO_COURSE_ID: "코스아이디 없음",
   NO_RECORD: "유저의 러닝 기록이 없음",
   READ_RECORD_SUCCESS: "활동 기록 조회 성공",
+  DELETE_RECORD_SUCCESS: "기록 삭제 성공",
+  DELETE_RECORD_FAIL: "기록 삭제 실패",
 
   //scrap
   CREATE_SCRAP_SUCCESS: "코스 스크랩 성공",
@@ -74,6 +76,7 @@ export default {
   READ_SCRAP_COURSE_SUCCESS: "스크랩한 코스 조회 성공",
   NO_SCRAP_RECORD: "이전에 스크랩한 기록이 없는 public course 입니다.",
   CREATE_OWN_SCRAP_FAIL: "자신이 작성한 코스는 스크랩할 수 없습니다.",
+
 
   //stamp
   READ_STAMP_BY_USER: "유저가 가진 스탬프 조회 성공",
