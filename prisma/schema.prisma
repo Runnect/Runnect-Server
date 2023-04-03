@@ -49,8 +49,8 @@ model Record {
   pace             DateTime      @db.Time(6)
   time             DateTime      @db.Time(6)
   Course           Course        @relation(fields: [course_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "record_course_id_fk")
-  PublicCourse     PublicCourse? @relation(fields: [public_course_id], references: [id], onUpdate: NoAction, map: "record_publiccourse_id_fk")
-  User             User          @relation(fields: [user_id], references: [id], onDelete: SetNull, map: "record_user_id_fk")
+  PublicCourse     PublicCourse? @relation(fields: [public_course_id], references: [id], map: "record_publiccourse_id_fk")
+  User             User          @relation(fields: [user_id], references: [id], onDelete: Cascade, map: "record_user_id_fk")
 }
 
 model Scrap {
@@ -60,7 +60,7 @@ model Scrap {
   created_at       DateTime     @default(now()) @db.Timestamp(6)
   scrapTF          Boolean      @default(true)
   PublicCourse     PublicCourse @relation(fields: [public_course_id], references: [id], onDelete: Cascade, map: "scrap_publiccourse_id_fk")
-  User             User         @relation(fields: [user_id], references: [id], onDelete: SetNull, map: "scrap_user_id_fk")
+  User             User         @relation(fields: [user_id], references: [id], onDelete: Cascade, map: "scrap_user_id_fk")
 
   @@unique([user_id, public_course_id], map: "scrap_is_unique")
 }
@@ -89,5 +89,5 @@ model UserStamp {
   stamp_id   String   @db.VarChar(2)
   created_at DateTime @default(now()) @db.Timestamp(6)
   user_id    Int
-  User       User     @relation(fields: [user_id], references: [id], onDelete: SetNull, map: "userstamp_user_id_fk")
+  User       User     @relation(fields: [user_id], references: [id], onDelete: Cascade, map: "userstamp_user_id_fk")
 }
