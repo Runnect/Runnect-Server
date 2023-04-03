@@ -84,7 +84,7 @@ publicCourseRouter.patch(
       .notEmpty()
       .withMessage("퍼블릭 코스 아이디가 없습니다.")
       .isNumeric()
-      .withMessage("유저아이디가 숫자가 아닙니다."),
+      .withMessage("퍼블릭 코스 아이디가 숫자가 아닙니다."),
     body("title")
       .notEmpty()
       .withMessage("수정할 제목이 없습니다."),
