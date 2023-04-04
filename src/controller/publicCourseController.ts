@@ -211,7 +211,7 @@ const updatePublicCourse = async (req: Request, res: Response) => {
     const updatePublicCourse = await publicCourseService.updatePublicCourse(+publicCourseId, UpdatePublicCourseDTO);
 
     if (!updatePublicCourse) {
-      return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.BAD_REQUEST));
+      return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.INVALID_PUBLIC_COURSE_ID));
     } else {
       return res.status(sc.OK).send(success(sc.OK, rm.UPDATE_COURSE_SUCCESS, UpdatePublicCourseDTO));
     }
