@@ -102,7 +102,7 @@ const updateRecord = async (req: Request, res: Response) => {
     const updateRecord = await recordService.updateRecord(+recordId, title);
 
     if (!updateRecord) {
-      return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.BAD_REQUEST));
+      return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.NO_RECORD_ID));
     } else {
       return res.status(sc.OK).send(success(sc.OK, rm.UPDATE_RECORD_SUCCESS, updateRecord));
     }
