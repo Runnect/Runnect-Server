@@ -186,6 +186,33 @@ const updateUserNickname = async (userId: number, nickname: string) => {
   }
 };
 
+const deleteUser = async (refreshToken: String) => {
+  try {
+    const user = await prisma.user.findFirst({
+      where: {
+        refresh_token: refreshToken,
+      },
+    });
+    if (!user) return `존재하지 않는 유저입니다.`;
+    console.log(refreshToken);
+    console.log(user.id);
+    const data = await prisma.user.delete({
+      where: {
+        id: user?.id,
+      },
+    });
+    return data.id;
+
+  } catch (error) {
+    if (error instanceof PrismaClientKnownRequestError && error.code == "P2025") {
+      return `존재하지 않는 유저입니다.`;
+    } else {
+      console.log(error);
+    }
+    throw error;
+  }
+};
+
 const userService = {
   getUserById,
   getUserByEmail,
@@ -194,6 +221,7 @@ const userService = {
   //signUp,
   getUser,
   updateUserNickname,
+  deleteUser,
 };
 
 export default userService;

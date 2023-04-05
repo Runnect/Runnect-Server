@@ -47,4 +47,14 @@ router.patch(
   userController.updateUserNickname
 );
 
+router.delete(
+  "/",
+  [
+    header("refreshToken")
+      .notEmpty()
+      .withMessage("refreshToken이 없습니다."),
+  ],
+  userController.deleteUser
+);
+
 export default router;
