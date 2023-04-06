@@ -186,16 +186,11 @@ const updateUserNickname = async (userId: number, nickname: string) => {
   }
 };
 
-const deleteUser = async (refreshToken: String) => {
+const deleteUser = async (refreshToken: string) => {
   try {
-    const user = await prisma.user.findFirst({
-      where: {
-        refresh_token: refreshToken,
-      },
-    });
+    const user = await getUserByRefreshToken(refreshToken);
     if (!user) return `존재하지 않는 유저입니다.`;
-    console.log(refreshToken);
-    console.log(user.id);
+
     const data = await prisma.user.delete({
       where: {
         id: user?.id,
