@@ -78,6 +78,23 @@ const getRecordByUser = async (userId: number) => {
   }
 };
 
-const recordService = { createRecord, getRecordByUser };
+const updateRecord = async (recordId: number, title: string) => {
+  try {
+    const updateTitle = await prisma.record.update({
+      where: {
+        id: recordId,
+      },
+      data: {
+        title: title,
+      },
+    });
+
+    return updateTitle;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+const recordService = { createRecord, getRecordByUser, updateRecord };
 
 export default recordService;
