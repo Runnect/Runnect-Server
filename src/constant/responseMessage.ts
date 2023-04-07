@@ -58,6 +58,7 @@ export default {
   READ_SEARCHED_COURSE_SUCCESS: "업로드된 코스 검색 성공",
   DELETE_PUBLIC_COURSE_SUCCESS: "업로드된 코스 삭제 성공",
   DELETE_PUBLIC_COURSE_FAIL: "업로드된 코스 삭제 실패",
+  UPDATE_COURSE_SUCCESS: "업로드한 코스 수정 성공",
 
 
   //record
@@ -69,6 +70,8 @@ export default {
   NO_COURSE_ID: "코스아이디 없음",
   NO_RECORD: "유저의 러닝 기록이 없음",
   READ_RECORD_SUCCESS: "활동 기록 조회 성공",
+  UPDATE_RECORD_SUCCESS: "활동 기록 수정 성공",
+  NO_RECORD_ID: "존재하지 않는 레코드 아이디입니다.",
   DELETE_RECORD_SUCCESS: "기록 삭제 성공",
   DELETE_RECORD_FAIL: "기록 삭제 실패",
 
