@@ -5,6 +5,7 @@ import { stampService } from "../service";
 import { checkScrap } from "../module/check/checkScrap";
 import { pathConvertCoor } from "../module/convert/pathConvertCoor";
 import { PublicCourseDetailGetDTO } from "./../interface/DTO/publicCourse/PublicCourseGetDTO";
+import { UpdatePublicCourseDTO } from "../interface/DTO/publicCourse/UpdatePublicCourseDTO";
 
 const prisma = new PrismaClient();
 
@@ -231,12 +232,31 @@ const searchPublicCourse = async (userId: number, keyword: string) => {
   }
 };
 
+const updatePublicCourse = async (publicCourseId: number, UpdatePublicCourseDTO: UpdatePublicCourseDTO) => {
+  try {
+    const updateData = await prisma.publicCourse.update({
+      where: {
+        id: publicCourseId,
+      },
+      data: {
+        title: UpdatePublicCourseDTO.title,
+        description: UpdatePublicCourseDTO.description,
+      },
+    });
+
+    return updateData;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 const publicCourseService = {
   createPublicCourse,
   getPublicCourseByUser,
   getPublicCourseDetail,
   recommendPublicCourse,
   searchPublicCourse,
+  updatePublicCourse,
 };
 
 export default publicCourseService;
