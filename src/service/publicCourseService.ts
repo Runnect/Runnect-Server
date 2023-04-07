@@ -6,7 +6,7 @@ import { checkScrap } from "../module/check/checkScrap";
 import { pathConvertCoor } from "../module/convert/pathConvertCoor";
 import { PublicCourseDetailGetDTO } from "./../interface/DTO/publicCourse/PublicCourseGetDTO";
 import { UpdatePublicCourseDTO } from "../interface/DTO/publicCourse/UpdatePublicCourseDTO";
-import { List } from "aws-sdk/lib/model";
+import { rm } from "../constant";
 
 const prisma = new PrismaClient();
 
@@ -257,16 +257,20 @@ const deletePublicCourse = async (publicCourseIdList: Array<number>) => {
       where: {
         id: {
           in: publicCourseIdList,
-        }
+        },
       },
     });
+    console.log(data);
+    if (data.count === 0 || data.count != publicCourseIdList.length) {
+      //리스트 중 유효한 퍼블릭코스는 삭제되지만 유효하지 않은 아이디는 삭제 안될때
+      return rm.NO_DELETED_PUBLIC_COURSE;
+    }
     return data.count;
   } catch (error) {
-    if (error instanceof PrismaClientKnownRequestError && error.code === "P2025") {
-      return `존재하지 않는 코스 업로드입니다.`;
-    } else {
-      console.log(error);
-    }
+    //deletMany 메소드는 없는 코스를 삭제할때 count가 0으로만 나오지 에러가 나오지는 않음.
+
+    console.log(error);
+
     throw error;
   }
 };
