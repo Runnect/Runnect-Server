@@ -222,6 +222,31 @@ const updatePublicCourse = async (req: Request, res: Response) => {
   }
 };
 
+const deletePublicCourse = async (req: Request, res: Response) => {
+  const error = validationResult(req);
+  if (!error.isEmpty()) {
+    const validationErrorMsg = error["errors"][0].msg;
+    return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, validationErrorMsg));
+  }
+
+  const publicCourseIdList = req.body.publicCourseIdList;
+  if (publicCourseIdList.length == 0) return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, "삭제할 퍼블릭 코스 아이디가 없습니다."));
+
+  try {
+    const data = await publicCourseService.deletePublicCourse(publicCourseIdList);
+    if (!data) return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.DELETE_PUBLIC_COURSE_FAIL));
+    else if (typeof data == "string") {
+      return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, data as string));
+    }
+    return res.status(sc.OK).send(success(sc.OK, rm.DELETE_PUBLIC_COURSE_SUCCESS, { "deletedPublicCourseCount": data }));
+
+  } catch (e) {
+    console.error(e);
+    res.status(sc.INTERNAL_SERVER_ERROR).send(fail(sc.INTERNAL_SERVER_ERROR, rm.INTERNAL_SERVER_ERROR));
+  }
+
+};
+
 const publicCourseController = {
   createPublicCourse,
   getPublicCourseByUser,
@@ -229,6 +254,7 @@ const publicCourseController = {
   recommendPublicCourse,
   searchPublicCourse,
   updatePublicCourse,
+  deletePublicCourse,
 };
 
 export default publicCourseController;

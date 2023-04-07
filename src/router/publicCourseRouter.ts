@@ -95,4 +95,14 @@ publicCourseRouter.patch(
   publicCourseController.updatePublicCourse
 );
 
+publicCourseRouter.put(
+  "/",
+  [
+    body("publicCourseIdList")
+      .notEmpty()
+      .withMessage("퍼블릭 코스 아이디가 없습니다.")
+  ],
+  publicCourseController.deletePublicCourse
+);
+
 export default publicCourseRouter;

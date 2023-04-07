@@ -6,6 +6,7 @@ import { checkScrap } from "../module/check/checkScrap";
 import { pathConvertCoor } from "../module/convert/pathConvertCoor";
 import { PublicCourseDetailGetDTO } from "./../interface/DTO/publicCourse/PublicCourseGetDTO";
 import { UpdatePublicCourseDTO } from "../interface/DTO/publicCourse/UpdatePublicCourseDTO";
+import { List } from "aws-sdk/lib/model";
 
 const prisma = new PrismaClient();
 
@@ -250,6 +251,26 @@ const updatePublicCourse = async (publicCourseId: number, UpdatePublicCourseDTO:
   }
 };
 
+const deletePublicCourse = async (publicCourseIdList: Array<number>) => {
+  try {
+    const data = await prisma.publicCourse.deleteMany({
+      where: {
+        id: {
+          in: publicCourseIdList,
+        }
+      },
+    });
+    return data.count;
+  } catch (error) {
+    if (error instanceof PrismaClientKnownRequestError && error.code === "P2025") {
+      return `존재하지 않는 코스 업로드입니다.`;
+    } else {
+      console.log(error);
+    }
+    throw error;
+  }
+};
+
 const publicCourseService = {
   createPublicCourse,
   getPublicCourseByUser,
@@ -257,6 +278,7 @@ const publicCourseService = {
   recommendPublicCourse,
   searchPublicCourse,
   updatePublicCourse,
+  deletePublicCourse,
 };
 
 export default publicCourseService;
