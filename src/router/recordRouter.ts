@@ -57,4 +57,14 @@ recordRouter.patch(
   recordController.updateRecord
 );
 
+recordRouter.put(
+  "/",
+  [
+    body("recordIdList")
+      .notEmpty()
+      .withMessage("기록 아이디가 없습니다.")
+  ],
+  recordController.deleteRecord
+);
+
 export default recordRouter;

@@ -112,6 +112,28 @@ const updateRecord = async (req: Request, res: Response) => {
     res.status(sc.INTERNAL_SERVER_ERROR).send(fail(sc.INTERNAL_SERVER_ERROR, rm.INTERNAL_SERVER_ERROR));
   }
 };
+const deleteRecord = async (req: Request, res: Response) => {
+  const error = validationResult(req);
+  if (!error.isEmpty()) {
+    const validationErrorMsg = error["errors"][0].msg;
+    return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, validationErrorMsg));
+  }
+  const recordIdList = req.body.recordIdList;
+  if (recordIdList.length == 0) return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, "recordIdList가 비었습니다."));
 
-const recordController = { createRecord, getRecordByUser, updateRecord };
+  try {
+    const data = await recordService.deleteRecord(recordIdList);
+    if (!data) return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.DELETE_RECORD_FAIL));
+    else if (typeof data == "string") {
+      return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, data as string));
+    }
+    return res.status(sc.OK).send(success(sc.OK, rm.DELETE_RECORD_SUCCESS, { "deletedRecordIdCount": data }));
+
+  } catch (error) {
+    console.log(error);
+    res.status(sc.INTERNAL_SERVER_ERROR).send(fail(sc.INTERNAL_SERVER_ERROR, rm.INTERNAL_SERVER_ERROR));
+  }
+};
+
+const recordController = { createRecord, getRecordByUser, updateRecord, deleteRecord };
 export default recordController;
