@@ -56,6 +56,7 @@ export default {
   READ_PUBLIC_COURSE_DETAIL_SUCCESS: "업로드 코스 상세 조회 성공",
   READ_RECOMMENDED_COURSE_SUCCESS: "추천 코스 조회 성공",
   READ_SEARCHED_COURSE_SUCCESS: "업로드된 코스 검색 성공",
+  UPDATE_COURSE_SUCCESS: "업로드한 코스 수정 성공",
 
   //record
   UPLOAD_RECORD: "경로기록하기 성공",
