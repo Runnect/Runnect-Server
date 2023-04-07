@@ -5,6 +5,8 @@ import { stampService } from "../service";
 import { checkScrap } from "../module/check/checkScrap";
 import { pathConvertCoor } from "../module/convert/pathConvertCoor";
 import { PublicCourseDetailGetDTO } from "./../interface/DTO/publicCourse/PublicCourseGetDTO";
+import { UpdatePublicCourseDTO } from "../interface/DTO/publicCourse/UpdatePublicCourseDTO";
+import { rm } from "../constant";
 
 const prisma = new PrismaClient();
 
@@ -231,12 +233,56 @@ const searchPublicCourse = async (userId: number, keyword: string) => {
   }
 };
 
+const updatePublicCourse = async (publicCourseId: number, UpdatePublicCourseDTO: UpdatePublicCourseDTO) => {
+  try {
+    const updateData = await prisma.publicCourse.update({
+      where: {
+        id: publicCourseId,
+      },
+      data: {
+        title: UpdatePublicCourseDTO.title,
+        description: UpdatePublicCourseDTO.description,
+      },
+    });
+
+    return updateData;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+const deletePublicCourse = async (publicCourseIdList: Array<number>) => {
+  try {
+    const data = await prisma.publicCourse.deleteMany({
+      where: {
+        id: {
+          in: publicCourseIdList,
+        },
+      },
+    });
+
+    if (data.count === 0 || data.count != publicCourseIdList.length) {
+      //리스트 중 유효한 퍼블릭코스는 삭제되지만 유효하지 않은 아이디는 삭제 안될때
+      return rm.NO_DELETED_PUBLIC_COURSE;
+    }
+    return data.count;
+  } catch (error) {
+    //deletMany 메소드는 없는 코스를 삭제할때 count가 0으로만 나오지 에러가 나오지는 않음.
+
+    console.log(error);
+
+    throw error;
+  }
+};
+
 const publicCourseService = {
   createPublicCourse,
   getPublicCourseByUser,
   getPublicCourseDetail,
   recommendPublicCourse,
   searchPublicCourse,
+  updatePublicCourse,
+  deletePublicCourse,
 };
 
 export default publicCourseService;

@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { body, header } from "express-validator";
+import { body, header, param } from "express-validator";
 import { recordController } from "../controller";
 
 const recordRouter: Router = Router();
@@ -40,6 +40,37 @@ recordRouter.get(
       .withMessage("유저아이디가 숫자가 아닙니다."),
   ],
   recordController.getRecordByUser
+);
+
+recordRouter.patch(
+  "/:recordId",
+  [
+    param("recordId")
+      .notEmpty()
+      .withMessage("레코드 아이디가 없습니다.")
+      .isNumeric()
+      .withMessage("레코드 아이디가 숫자가 아닙니다."),
+    body("title")
+      .notEmpty()
+      .withMessage("수정할 제목이 없습니다."),
+  ],
+  recordController.updateRecord
+);
+
+recordRouter.put(
+  "/",
+
+  [
+    body("recordIdList")
+      .notEmpty()
+      .withMessage("기록 아이디가 없습니다.") //recordIdList=[] 인경우도 여기에서 걸러짐
+      .isArray()
+      .withMessage("기록 아이디들이 리스트 형식이 아닙니다"),
+    body("recordIdList.*") //recordIdList=["ㅇ","ㅇ"] 인 경우를 여기에서 거름
+      .isNumeric()
+      .withMessage("기록 아이디들이 숫자가 아닙니다."),
+  ],
+  recordController.deleteRecord
 );
 
 export default recordRouter;

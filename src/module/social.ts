@@ -18,6 +18,7 @@ const google = async (idToken: string) => {
     return null;
   } catch (error) {
     console.log(error);
+    if (error?.toString().indexOf('Token used too late') != -1) return `만료된 소셜 토큰 입니다.`;
   }
 };
 

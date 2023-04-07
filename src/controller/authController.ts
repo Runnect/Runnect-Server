@@ -18,7 +18,7 @@ const getSocialLoginInfo = async (req: Request, res: Response) => {
 
   const { token, provider } = req.body;
 
-  let socialUser: SocialCreateRequestDTO | null | undefined = null;
+  let socialUser: SocialCreateRequestDTO | null | undefined | string = null;
 
   try {
     switch (provider) {
@@ -38,6 +38,8 @@ const getSocialLoginInfo = async (req: Request, res: Response) => {
 
     if (typeof socialUser === "undefined" || socialUser === null) {
       return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.READ_SOCIAL_FAIL));
+    } else if (typeof socialUser === "string") {
+      return res.status(sc.UNAUTHORIZED).send(fail(sc.UNAUTHORIZED, socialUser));
     }
 
     const existingUser = await userService.getUserByEmail(socialUser);
