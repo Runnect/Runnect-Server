@@ -105,7 +105,7 @@ publicCourseRouter.put(
       .withMessage("퍼블릭 코스들이 리스트 형식이 아닙니다"),
     body("publicCourseIdList.*") //publicCourseIdList=["ㅇ","ㅇ"] 인 경우를 여기에서 거름
       .isNumeric()
-      .withMessage("퍼블릭 코스들가 숫자가 아닙니다."),
+      .withMessage("퍼블릭 코스들이 숫자가 아닙니다."),
   ],
   publicCourseController.deletePublicCourse
 );

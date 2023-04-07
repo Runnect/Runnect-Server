@@ -59,10 +59,16 @@ recordRouter.patch(
 
 recordRouter.put(
   "/",
+
   [
     body("recordIdList")
       .notEmpty()
-      .withMessage("기록 아이디가 없습니다.")
+      .withMessage("기록 아이디가 없습니다.") //recordIdList=[] 인경우도 여기에서 걸러짐
+      .isArray()
+      .withMessage("기록 아이디들이 리스트 형식이 아닙니다"),
+    body("recordIdList.*") //recordIdList=["ㅇ","ㅇ"] 인 경우를 여기에서 거름
+      .isNumeric()
+      .withMessage("기록 아이디들이 숫자가 아닙니다."),
   ],
   recordController.deleteRecord
 );

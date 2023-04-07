@@ -260,7 +260,7 @@ const deletePublicCourse = async (publicCourseIdList: Array<number>) => {
         },
       },
     });
-    console.log(data);
+
     if (data.count === 0 || data.count != publicCourseIdList.length) {
       //리스트 중 유효한 퍼블릭코스는 삭제되지만 유효하지 않은 아이디는 삭제 안될때
       return rm.NO_DELETED_PUBLIC_COURSE;
