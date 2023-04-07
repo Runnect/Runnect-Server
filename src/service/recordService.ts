@@ -97,7 +97,23 @@ const deleteRecord = async (recordIdList: Array<number>) => {
     throw error;
   }
 };
+const updateRecord = async (recordId: number, title: string) => {
+  try {
+    const updateTitle = await prisma.record.update({
+      where: {
+        id: recordId,
+      },
+      data: {
+        title: title,
+      },
+    });
 
-const recordService = { createRecord, getRecordByUser, deleteRecord };
+    return updateTitle;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+const recordService = { createRecord, getRecordByUser, updateRecord, deleteRecord };
 
 export default recordService;

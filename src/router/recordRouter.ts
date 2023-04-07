@@ -42,6 +42,21 @@ recordRouter.get(
   recordController.getRecordByUser
 );
 
+recordRouter.patch(
+  "/:recordId",
+  [
+    param("recordId")
+      .notEmpty()
+      .withMessage("레코드 아이디가 없습니다.")
+      .isNumeric()
+      .withMessage("레코드 아이디가 숫자가 아닙니다."),
+    body("title")
+      .notEmpty()
+      .withMessage("수정할 제목이 없습니다."),
+  ],
+  recordController.updateRecord
+);
+
 recordRouter.put(
   "/",
   [
