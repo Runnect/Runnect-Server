@@ -247,7 +247,11 @@ const updatePublicCourse = async (publicCourseId: number, UpdatePublicCourseDTO:
 
     return updateData;
   } catch (error) {
-    console.log(error);
+    if (error instanceof PrismaClientKnownRequestError && error.code === "P2025") {
+      return null;
+    } else {
+      console.log(error);
+    }
   }
 };
 
