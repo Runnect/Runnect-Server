@@ -24,9 +24,12 @@ const google = async (idToken: string) => {
 const apple = async (appleToken: string) => {
   try {
     const appleUser = jwt.decode(appleToken) as any;
+    console.log(appleUser);
     if (appleUser || appleUser.email_verified == "true") {
       return { socialId: appleUser["sub"], email: appleUser["email"], provider: "APPLE" };
     }
+    //appleUser가 Null인경우 : 토큰자체에러
+    //appleUser.email_verified가 false : 이메일이 확인되지 ㅏㅇㄴㅎ았다
     return null;
   } catch (error) {
     console.log(error);
