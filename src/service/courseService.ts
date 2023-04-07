@@ -5,7 +5,8 @@ import { CourseCreateDTO } from "../interface/DTO/course/CourseCreateDTO";
 import { dateConvertString } from "./../module/convert/convertTime";
 import { PrismaClient } from "@prisma/client";
 import { pathConvertCoor } from "../module/convert/pathConvertCoor";
-import { stampService } from "../service";
+import { publicCourseService, stampService } from "../service";
+import { rm } from "../constant";
 
 const prisma = new PrismaClient();
 
@@ -164,11 +165,42 @@ const getCourseDetail = async (userId: number, courseId: number) => {
   }
 };
 
+const deleteCourse = async (courseIdList: Array<number>) => {
+  try {
+    //1. 코스삭제 -> deleteAt 업데이트
+    //2. update한 코스들에 연결된  publicCourse 삭제
+
+    const deletedCourse = await prisma.course.updateMany({
+      where: {
+        id: {
+          in: courseIdList,
+        },
+      },
+      data: {
+        deleted_at: new Date(),
+      },
+    });
+    //!
+    console.log(deletedCourse);
+    const deletedPublicCourse = await publicCourseService.deletePublicCourse(courseIdList, "course_id");
+
+    if (deletedCourse.count === 0 || deletedCourse.count != courseIdList.length) {
+      return rm.NO_DELETED_COURSE;
+    }
+    return deletedCourse.count;
+  } catch (error) {
+    //updateMany 메소드는 없는 코스를 삭제할때 count가 0으로만 나오지 에러가 나오지는 않음.
+
+    console.log(error);
+  }
+};
+
 const courseService = {
   createCourse,
   getCourseByUser,
   getPrivateCourseByUser,
   getCourseDetail,
+  deleteCourse,
 };
 
 export default courseService;
