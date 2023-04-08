@@ -44,15 +44,12 @@ const createCourse = async (courseCreateDTO: CourseCreateDTO) => {
 
 const getCourseByUser = async (userId: number) => {
   try {
-    const findUser = await prisma.user.findUnique({
-      where: {
-        id: userId,
-      },
-    });
-    if (!findUser) return "NO_USER";
+    // 현재 유저가 우리 회원인지는 auth 미들웨어에서 검사함
+
     const result = await prisma.course.findMany({
       where: {
         user_id: userId,
+        deleted_at: null,
       },
       orderBy: {
         created_at: "desc",
@@ -88,15 +85,11 @@ const getCourseByUser = async (userId: number) => {
 
 const getPrivateCourseByUser = async (userId: number) => {
   try {
-    const findUser = await prisma.user.findUnique({
-      where: {
-        id: userId,
-      },
-    });
-    if (!findUser) return "NO_USER";
+    // 현재 유저가 우리 회원인지는 auth 미들웨어에서 검사함
+
     const result = await prisma.course.findMany({
       where: {
-        AND: [{ user_id: userId }, { private: true }],
+        AND: [{ user_id: userId }, { private: true }, { deleted_at: null }],
       },
       orderBy: {
         created_at: "desc",
@@ -135,7 +128,7 @@ const getPrivateCourseByUser = async (userId: number) => {
 
 const getCourseDetail = async (userId: number, courseId: number) => {
   try {
-    const result: any = await prisma.$queryRaw`SELECT id, created_at, path::text, distance::text, departure_region, departure_city, departure_town, departure_name, image FROM "Course" WHERE id=${courseId}`;
+    const result: any = await prisma.$queryRaw`SELECT id, created_at, path::text, distance::text, departure_region, departure_city, departure_town, departure_name, image FROM "Course" WHERE id=${courseId} AND deleted_at IS NULL`;
 
     if (!result[0]) return null;
 
