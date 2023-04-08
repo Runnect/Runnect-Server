@@ -2,6 +2,12 @@
 
 import jwt from "jsonwebtoken";
 import { tokenType } from "../constant";
+import dayjs from "dayjs";
+import utc from "dayjs/plugin/utc";
+import timezone from "dayjs/plugin/timezone";
+
+dayjs.extend(utc);
+dayjs.extend(timezone);
 
 //* 받아온 userId를 담는 access token 생성
 const sign = (userId: number) => {
@@ -43,8 +49,34 @@ const verify = (token: string) => {
   return decoded;
 };
 
+const createAppleJWT = () => {
+  const p8Key = (process.env.APPLE_P8 as string).replace(/\\n/g, "\n");
+  const appleJWT = jwt.sign(
+    {
+      iss: process.env.APPLE_TEAM_ID,
+      iat: dayjs()
+        .tz()
+        .unix(),
+      exp:
+        dayjs()
+          .tz()
+          .unix() + 120,
+      aud: "https://appleid.apple.com",
+      sub: process.env.APPLE_BUNDLE_ID,
+    },
+    p8Key,
+    {
+      algorithm: "ES256",
+      header: {
+        alg: "ES256",
+        kid: process.env.APPLE_KEY_ID,
+      },
+    }
+  );
+};
 export default {
   sign,
   verify,
   createRefreshToken,
+  createAppleJWT,
 };

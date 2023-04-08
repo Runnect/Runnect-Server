@@ -2,10 +2,12 @@ import { UpdatedUserGetDTO } from "../interface/DTO/user/UpdatedUserGetDTO";
 import { SocialCreateRequestDTO } from "./../interface/DTO/auth/SocialCreateDTO";
 import { UserGetDTO } from "../interface/DTO/user/UserGetDTO";
 import { randomInitialNickname } from "../module/randomInitialNickname";
+import { rm } from "../constant";
 
 import { PrismaClientKnownRequestError, PrismaClientValidationError } from "@prisma/client/runtime";
 import { PrismaClient } from "@prisma/client";
 import { dateConvertString } from "../module/convert/convertTime";
+import jwtHandler from "../module/jwtHandler";
 
 const prisma = new PrismaClient();
 
@@ -189,18 +191,23 @@ const updateUserNickname = async (userId: number, nickname: string) => {
 const deleteUser = async (refreshToken: string) => {
   try {
     const user = await getUserByRefreshToken(refreshToken);
-    if (!user) return `존재하지 않는 유저입니다.`;
+    if (!user) return rm.NO_USER;
 
+    //!
+    console.log(user);
+    if (user.provider === "APPLE") {
+      const clientSecret = jwtHandler.createAppleJWT();
+    }
+    /*
     const data = await prisma.user.delete({
       where: {
         id: user?.id,
       },
     });
-    return data.id;
-
+    return data.id;*/
   } catch (error) {
     if (error instanceof PrismaClientKnownRequestError && error.code == "P2025") {
-      return `존재하지 않는 유저입니다.`;
+      return rm.NO_USER;
     } else {
       console.log(error);
     }

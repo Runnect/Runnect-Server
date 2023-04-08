@@ -48,12 +48,8 @@ router.patch(
 );
 
 router.delete(
+  //토큰 여부는 auth middleware에서 검사함
   "/",
-  [
-    header("refreshToken")
-      .notEmpty()
-      .withMessage("refreshToken이 없습니다."),
-  ],
   userController.deleteUser
 );
 
