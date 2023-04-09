@@ -113,11 +113,34 @@ const getCourseDetail = async (req: Request, res: Response) => {
   }
 };
 
+const deleteCourse = async (req: Request, res: Response) => {
+  const error = validationResult(req);
+  if (!error.isEmpty()) {
+    const validationErrorMsg = error["errors"][0].msg;
+    return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, validationErrorMsg));
+  }
+
+  const courseIdList = req.body.courseIdList;
+
+  try {
+    const deletedData = await courseService.deleteCourse(courseIdList);
+
+    if (!deletedData) return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.DELETE_COURSE_FAIL));
+    else if (typeof deletedData == "string") {
+      return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, deletedData as string));
+    }
+    return res.status(sc.OK).send(success(sc.OK, rm.DELETE_COURSE_SUCCESS, { deletedCourseCount: deletedData }));
+  } catch (error) {
+    console.error(error);
+    res.status(sc.INTERNAL_SERVER_ERROR).send(fail(sc.INTERNAL_SERVER_ERROR, rm.INTERNAL_SERVER_ERROR));
+  }
+};
 const courseController = {
   createCourse,
   getCourseByUser,
   getPrivateCourseByUser,
   getCourseDetail,
+  deleteCourse,
 };
 
 export default courseController;

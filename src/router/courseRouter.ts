@@ -39,6 +39,21 @@ router.post(
   courseController.createCourse
 );
 
+router.put(
+  "/",
+  [
+    body("courseIdList")
+      .notEmpty()
+      .withMessage("코스 아이디가 없습니다.")
+      .isArray()
+      .withMessage("코스 아이디 들이 리스트 형식이 아닙니다"),
+    body("courseIdList.*")
+      .isNumeric()
+      .withMessage("코스 아이디들이 숫자가 아닙니다."),
+  ],
+  courseController.deleteCourse
+);
+
 router.get(
   "/user",
   auth,

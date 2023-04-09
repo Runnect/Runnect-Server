@@ -255,23 +255,25 @@ const updatePublicCourse = async (publicCourseId: number, UpdatePublicCourseDTO:
   }
 };
 
-const deletePublicCourse = async (publicCourseIdList: Array<number>) => {
+const deletePublicCourse = async (IdList: Array<number>, field: string) => {
   try {
     const data = await prisma.publicCourse.deleteMany({
       where: {
-        id: {
-          in: publicCourseIdList,
+        [field]: {
+          in: IdList,
         },
       },
     });
+    //!
+    console.log(data);
 
-    if (data.count === 0 || data.count != publicCourseIdList.length) {
+    if (data.count === 0 || data.count != IdList.length) {
       //리스트 중 유효한 퍼블릭코스는 삭제되지만 유효하지 않은 아이디는 삭제 안될때
       return rm.NO_DELETED_PUBLIC_COURSE;
     }
     return data.count;
   } catch (error) {
-    //deletMany 메소드는 없는 코스를 삭제할때 count가 0으로만 나오지 에러가 나오지는 않음.
+    //deleteMany 메소드는 없는 코스를 삭제할때 count가 0으로만 나오지 에러가 나오지는 않음.
 
     console.log(error);
 
