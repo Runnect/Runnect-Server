@@ -253,6 +253,24 @@ const updatePublicCourse = async (publicCourseId: number, UpdatePublicCourseDTO:
 
 const deletePublicCourse = async (publicCourseIdList: Array<number>) => {
   try {
+    // publicCourseIdList를 사용하여 courseIdList를 만듦
+    const getCourseId = await prisma.publicCourse.findMany({
+      where: {
+        id: {
+          in: publicCourseIdList,
+        }
+      },
+      select: {
+        course_id: true,
+      }
+    });
+
+    const courseIdList: Array<number> = new Array<number>();
+    for (var i = 0; i < getCourseId.length; i++) {
+      courseIdList.push(getCourseId[i]["course_id"]);
+    }
+
+    // publicCourse 삭제
     const data = await prisma.publicCourse.deleteMany({
       where: {
         id: {
@@ -260,6 +278,18 @@ const deletePublicCourse = async (publicCourseIdList: Array<number>) => {
         }
       },
     });
+    // course -> private: true로 업데이트
+    const updatedPublicCourse = await prisma.course.updateMany({
+      where: {
+        id: {
+          in: courseIdList,
+        }
+      },
+      data: {
+        private: true
+      }
+    });
+
     return data.count;
   } catch (error) {
     if (error instanceof PrismaClientKnownRequestError && error.code === "P2025") {
