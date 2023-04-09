@@ -100,7 +100,12 @@ publicCourseRouter.put(
   [
     body("publicCourseIdList")
       .notEmpty()
-      .withMessage("퍼블릭 코스 아이디가 없습니다.")
+      .withMessage("퍼블릭 코스 아이디가 없습니다.") //publicCourseIdList=[] 인경우도 여기에서 걸러짐
+      .isArray()
+      .withMessage("퍼블릭 코스들이 리스트 형식이 아닙니다"),
+    body("publicCourseIdList.*") //publicCourseIdList=["ㅇ","ㅇ"] 인 경우를 여기에서 거름
+      .isNumeric()
+      .withMessage("퍼블릭 코스들이 숫자가 아닙니다."),
   ],
   publicCourseController.deletePublicCourse
 );
