@@ -5,7 +5,7 @@ import { success, fail } from "../constant/response";
 import { validationResult } from "express-validator";
 import { stringConvertTime, dateConvertString } from "../module/convert/convertTime";
 import { recordService } from "../service";
-import { recordRequestDTO, recordResponseDTO, getRecordByUserResponseDTO, records } from "../interface/DTO/record/recordDTO";
+import { UpdateRecordResponseDTO, recordRequestDTO, recordResponseDTO, getRecordByUserResponseDTO, records } from "../interface/DTO/record/recordDTO";
 
 const createRecord = async (req: Request, res: Response) => {
   try {
@@ -104,7 +104,13 @@ const updateRecord = async (req: Request, res: Response) => {
     if (!updateRecord) {
       return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.NO_RECORD_ID));
     } else {
-      return res.status(sc.OK).send(success(sc.OK, rm.UPDATE_RECORD_SUCCESS, updateRecord));
+      const updateRecordResponseDTO: UpdateRecordResponseDTO = {
+        record: {
+          id: updateRecord.id,
+          title: updateRecord.title,
+        },
+      };
+      return res.status(sc.OK).send(success(sc.OK, rm.UPDATE_RECORD_SUCCESS, updateRecordResponseDTO));
     }
   } catch (error) {
     console.log(error);
