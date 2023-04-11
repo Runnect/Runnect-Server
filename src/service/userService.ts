@@ -117,6 +117,8 @@ const getUser = async (userId: number) => {
     const userGetDTO: UserGetDTO = {
       user: {
         id: getUser.id,
+        email: getUser.email,
+        provider: getUser.provider,
         nickname: getUser.nickname,
         latestStamp: getUser.latest_stamp,
         level: getUser.level,
@@ -197,7 +199,6 @@ const deleteUser = async (refreshToken: string) => {
       },
     });
     return data.id;
-
   } catch (error) {
     if (error instanceof PrismaClientKnownRequestError && error.code == "P2025") {
       return `존재하지 않는 유저입니다.`;
