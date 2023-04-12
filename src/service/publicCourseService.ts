@@ -261,14 +261,21 @@ const deletePublicCourse = async (publicCourseIdList: Array<number>) => {
         }
       },
       select: {
+        id: true,
         course_id: true,
       }
     });
 
+    const publicCourseIdListForChk: Array<number> = new Array<number>(); 
     const courseIdList: Array<number> = new Array<number>();
     for (var i = 0; i < getCourseId.length; i++) {
       courseIdList.push(getCourseId[i]["course_id"]);
+      publicCourseIdListForChk.push(getCourseId[i]["id"]);
     }
+
+    // 에러 처리
+    const errorIdList = publicCourseIdList.filter(x => !publicCourseIdListForChk.includes(x));
+    if (errorIdList.length != 0) return `유효하지 않은 publicCourseId가 존재합니다 : ${errorIdList.toString()}`;
 
     // publicCourse 삭제
     const data = await prisma.publicCourse.deleteMany({
