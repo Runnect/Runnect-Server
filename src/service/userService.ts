@@ -216,13 +216,14 @@ const deleteUser = async (refreshToken: string, token?: string) => {
           },
         })
         .then(async (res) => {
+          console.log(res);
           if (res.status == 200) {
             console.log("애플 회원탈퇴 성공");
           }
         })
         .catch((error) => {
           console.log("애플 회원탈퇴 실패", error);
-          return rm.WITHDRAW_APPLE_SOCIAL_FAIL;
+          throw rm.WITHDRAW_APPLE_SOCIAL_FAIL;
         });
     }
 
