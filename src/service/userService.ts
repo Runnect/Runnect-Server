@@ -190,7 +190,7 @@ const updateUserNickname = async (userId: number, nickname: string) => {
   }
 };
 
-const deleteUser = async (refreshToken: string, code?: string, token?: string) => {
+const deleteUser = async (refreshToken: string, token?: string) => {
   try {
     const user = await getUserByRefreshToken(refreshToken);
     if (!user) return rm.NO_USER;
@@ -199,10 +199,8 @@ const deleteUser = async (refreshToken: string, code?: string, token?: string) =
     console.log(user);
 
     if (user.provider === "APPLE") {
-      //^ 이 경우만 request에서 code와 토큰 받아오기
-      //^ 일단 소셜로그인에서 쓰는 엑세스토큰으로 해보고 안되면 리프레쉬토큰 만들기
+      //^ 애플 소셜로그인 회원의 탈퇴 경우만 request에서 토큰 받아오기
       const clientSecret = jwtHandler.createAppleJWT();
-      const authorizationCode = code;
       const accessToken = token;
 
       const data = {
@@ -218,20 +216,22 @@ const deleteUser = async (refreshToken: string, code?: string, token?: string) =
           },
         })
         .then(async (res) => {
-          console.log("애플 회원탈퇴 성공");
+          if (res.status == 200) {
+            console.log("애플 회원탈퇴 성공");
+          }
         })
         .catch((error) => {
           console.log("애플 회원탈퇴 실패", error);
-          throw 400;
+          return rm.WITHDRAW_APPLE_SOCIAL_FAIL;
         });
     }
-    /*
+
     const data = await prisma.user.delete({
       where: {
         id: user?.id,
       },
     });
-    return data.id;*/
+    return data.id;
   } catch (error) {
     if (error instanceof PrismaClientKnownRequestError && error.code == "P2025") {
       return rm.NO_USER;

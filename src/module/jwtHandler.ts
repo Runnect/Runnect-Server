@@ -74,9 +74,8 @@ const createAppleJWT = () => {
       kid: config.appleKeyId,
     },
   });
-  //!
-  //console.log("야ㅣ야이야이");
-  //console.log(appleJWT);
+
+  return appleJWT;
 };
 
 export default {
