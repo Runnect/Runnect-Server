@@ -86,7 +86,7 @@ const deleteUser = async (req: Request, res: Response) => {
     return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, validationErrorMsg));
   }
   const refreshToken = req.header("refreshToken");
-  //!
+  //! 애플의 경우만 헤더에 appleAccessToken  보내기
   const appleAccessToken = req.header("appleAccessToken");
 
   try {
