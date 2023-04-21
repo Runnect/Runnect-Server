@@ -86,13 +86,14 @@ const deleteUser = async (req: Request, res: Response) => {
     return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, validationErrorMsg));
   }
   const refreshToken = req.header("refreshToken");
+  //! 애플의 경우만 헤더에 appleAccessToken  보내기
+  const appleAccessToken = req.header("appleAccessToken");
 
   try {
-    const data = await userService.deleteUser(refreshToken!);
+    const data = await userService.deleteUser(refreshToken!, appleAccessToken);
     if (!data) return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.DELETE_USER_FAIL));
     else if (typeof data == "string") return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, data));
-    return res.status(sc.OK).send(success(sc.OK, rm.DELETE_USER_SUCCESS, { "deletedUserId" : data }));
-
+    return res.status(sc.OK).send(success(sc.OK, rm.DELETE_USER_SUCCESS, { deletedUserId: data }));
   } catch (e) {
     console.log(e);
     return res.status(sc.INTERNAL_SERVER_ERROR).send(fail(sc.INTERNAL_SERVER_ERROR, rm.INTERNAL_SERVER_ERROR));

@@ -25,6 +25,7 @@ export default {
 
   // 소셜로그인
   READ_SOCIAL_FAIL: "소셜로그인 회원 정보 조회 실패",
+  WITHDRAW_APPLE_SOCIAL_FAIL: "애플 소셜회원 탈퇴 실패",
 
   // 코스
   READ_COURSE_SUCCESS: "코스 조회 성공",

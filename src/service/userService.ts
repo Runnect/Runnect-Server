@@ -2,10 +2,14 @@ import { UpdatedUserGetDTO } from "../interface/DTO/user/UpdatedUserGetDTO";
 import { SocialCreateRequestDTO } from "./../interface/DTO/auth/SocialCreateDTO";
 import { UserGetDTO } from "../interface/DTO/user/UserGetDTO";
 import { randomInitialNickname } from "../module/randomInitialNickname";
-
+import { rm } from "../constant";
+import config from "../config";
 import { PrismaClientKnownRequestError, PrismaClientValidationError } from "@prisma/client/runtime";
 import { PrismaClient } from "@prisma/client";
 import { dateConvertString } from "../module/convert/convertTime";
+import jwtHandler from "../module/jwtHandler";
+import axios from "axios";
+import qs from "qs";
 
 const prisma = new PrismaClient();
 
@@ -188,10 +192,42 @@ const updateUserNickname = async (userId: number, nickname: string) => {
   }
 };
 
-const deleteUser = async (refreshToken: string) => {
+const deleteUser = async (refreshToken: string, token?: string) => {
   try {
     const user = await getUserByRefreshToken(refreshToken);
-    if (!user) return `존재하지 않는 유저입니다.`;
+    if (!user) return rm.NO_USER;
+
+    //!
+    console.log(user);
+
+    if (user.provider === "APPLE") {
+      //^ 애플 소셜로그인 회원의 탈퇴 경우만 request에서 토큰 받아오기
+      const clientSecret = jwtHandler.createAppleJWT();
+      const accessToken = token;
+
+      const data = {
+        token: accessToken,
+        client_id: config.appleBundleId,
+        client_secret: clientSecret,
+      };
+
+      await axios
+        .post("https://appleid.apple.com/auth/revoke", qs.stringify(data), {
+          headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+          },
+        })
+        .then(async (res) => {
+          console.log(res);
+          if (res.status == 200) {
+            console.log("애플 회원탈퇴 성공");
+          }
+        })
+        .catch((error) => {
+          console.log("애플 회원탈퇴 실패", error);
+          throw rm.WITHDRAW_APPLE_SOCIAL_FAIL;
+        });
+    }
 
     const data = await prisma.user.delete({
       where: {
@@ -201,7 +237,7 @@ const deleteUser = async (refreshToken: string) => {
     return data.id;
   } catch (error) {
     if (error instanceof PrismaClientKnownRequestError && error.code == "P2025") {
-      return `존재하지 않는 유저입니다.`;
+      return rm.NO_USER;
     } else {
       console.log(error);
     }
