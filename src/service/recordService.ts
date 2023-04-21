@@ -78,6 +78,51 @@ const getRecordByUser = async (userId: number) => {
   }
 };
 
-const recordService = { createRecord, getRecordByUser };
+const deleteRecord = async (recordIdList: Array<number>) => {
+  try {
+    const data = await prisma.record.deleteMany({
+      where: {
+        id: {
+          in: recordIdList,
+        },
+      },
+    });
+
+    if (data.count === 0 || data.count != recordIdList.length) {
+      //리스트 중 유효한 레코드는 삭제되지만 유효하지 않은 아이디는 삭제 안될때
+      return rm.NO_RECORD_ID;
+    }
+    return data.count;
+  } catch (error) {
+    //deletMany 메소드는 없는 코스를 삭제할때 count가 0으로만 나오지 에러가 나오지는 않음.
+
+    console.log(error);
+
+    throw error;
+  }
+};
+
+const updateRecord = async (recordId: number, title: string) => {
+  try {
+    const updateTitle = await prisma.record.update({
+      where: {
+        id: recordId,
+      },
+      data: {
+        title: title,
+      },
+    });
+
+    return updateTitle;
+  } catch (error) {
+    if (error instanceof PrismaClientKnownRequestError && error.code === "P2025") {
+      return null;
+    } else {
+      console.log(error);
+    }
+  }
+};
+
+const recordService = { createRecord, getRecordByUser, updateRecord, deleteRecord };
 
 export default recordService;

@@ -47,4 +47,10 @@ router.patch(
   userController.updateUserNickname
 );
 
+router.delete(
+  //토큰 여부는 auth middleware에서 검사함
+  "/",
+  userController.deleteUser
+);
+
 export default router;

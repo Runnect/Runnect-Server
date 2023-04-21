@@ -77,4 +77,37 @@ publicCourseRouter.get(
   publicCourseController.searchPublicCourse
 );
 
+publicCourseRouter.patch(
+  "/:publicCourseId",
+  [
+    param("publicCourseId")
+      .notEmpty()
+      .withMessage("퍼블릭 코스 아이디가 없습니다.")
+      .isNumeric()
+      .withMessage("퍼블릭 코스 아이디가 숫자가 아닙니다."),
+    body("title")
+      .notEmpty()
+      .withMessage("수정할 제목이 없습니다."),
+    body("description")
+      .notEmpty()
+      .withMessage("수정할 설명이 없습니다."),
+  ],
+  publicCourseController.updatePublicCourse
+);
+
+publicCourseRouter.put(
+  "/",
+  [
+    body("publicCourseIdList")
+      .notEmpty()
+      .withMessage("퍼블릭 코스 아이디가 없습니다.") //publicCourseIdList=[] 인경우도 여기에서 걸러짐
+      .isArray()
+      .withMessage("퍼블릭 코스들이 리스트 형식이 아닙니다"),
+    body("publicCourseIdList.*") //publicCourseIdList=["ㅇ","ㅇ"] 인 경우를 여기에서 거름
+      .isNumeric()
+      .withMessage("퍼블릭 코스들이 숫자가 아닙니다."),
+  ],
+  publicCourseController.deletePublicCourse
+);
+
 export default publicCourseRouter;

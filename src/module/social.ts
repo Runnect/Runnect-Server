@@ -18,15 +18,19 @@ const google = async (idToken: string) => {
     return null;
   } catch (error) {
     console.log(error);
+    if (error?.toString().indexOf('Token used too late') != -1) return `만료된 소셜 토큰 입니다.`;
   }
 };
 
 const apple = async (appleToken: string) => {
   try {
     const appleUser = jwt.decode(appleToken) as any;
+    console.log(appleUser);
     if (appleUser || appleUser.email_verified == "true") {
       return { socialId: appleUser["sub"], email: appleUser["email"], provider: "APPLE" };
     }
+    //appleUser가 Null인경우 : 토큰자체에러
+    //appleUser.email_verified가 false : 이메일이 확인되지 ㅏㅇㄴㅎ았다
     return null;
   } catch (error) {
     console.log(error);
