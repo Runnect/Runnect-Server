@@ -89,7 +89,7 @@ const getNewToken = async (req: Request, res: Response) => {
   const error = validationResult(req);
   if (!error.isEmpty()) {
     const validationErrorMsg = error["errors"][0].msg;
-    return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, validationErrorMsg));
+    return res.status(sc.UNAUTHORIZED).send(fail(sc.BAD_REQUEST, validationErrorMsg));
   }
   //헤더에 저장된 accessToken과 refreshToken 받아오기
   const accessToken = req.header("accessToken");

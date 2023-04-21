@@ -7,7 +7,7 @@ import { PublicCourseCreateRequestDTO, PublicCourseCreateResponseDTO } from "../
 import { validationResult } from "express-validator";
 import { dateConvertString } from "../module/convert/convertTime";
 import { checkScrap } from "../module/check/checkScrap";
-import { UpdatePublicCourseDTO } from "../interface/DTO/publicCourse/UpdatePublicCourseDTO";
+import { UpdatePublicCourseDTO, UpdatePublicCourseResponseDTO } from "../interface/DTO/publicCourse/UpdatePublicCourseDTO";
 
 const createPublicCourse = async (req: Request, res: Response) => {
   const error = validationResult(req);
@@ -213,7 +213,10 @@ const updatePublicCourse = async (req: Request, res: Response) => {
     if (!updatePublicCourse) {
       return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.INVALID_PUBLIC_COURSE_ID));
     } else {
-      return res.status(sc.OK).send(success(sc.OK, rm.UPDATE_COURSE_SUCCESS, UpdatePublicCourseDTO));
+      const updatedPublicCourseResponseDTO: UpdatePublicCourseResponseDTO = {
+        publicCourse: { id: updatePublicCourse.id, title: updatePublicCourse.title, description: updatePublicCourse.description },
+      };
+      return res.status(sc.OK).send(success(sc.OK, rm.UPDATE_COURSE_SUCCESS, updatedPublicCourseResponseDTO));
     }
   } catch (error) {
     console.log(error);
@@ -230,21 +233,18 @@ const deletePublicCourse = async (req: Request, res: Response) => {
   }
 
   const publicCourseIdList = req.body.publicCourseIdList;
-  if (publicCourseIdList.length == 0) return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, "삭제할 퍼블릭 코스 아이디가 없습니다."));
 
   try {
-    const data = await publicCourseService.deletePublicCourse(publicCourseIdList);
+    const data = await publicCourseService.deletePublicCourse(publicCourseIdList, "id");
     if (!data) return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.DELETE_PUBLIC_COURSE_FAIL));
     else if (typeof data == "string") {
       return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, data as string));
     }
-    return res.status(sc.OK).send(success(sc.OK, rm.DELETE_PUBLIC_COURSE_SUCCESS, { "deletedPublicCourseCount": data }));
-
+    return res.status(sc.OK).send(success(sc.OK, rm.DELETE_PUBLIC_COURSE_SUCCESS, { deletedPublicCourseCount: data }));
   } catch (e) {
     console.error(e);
     res.status(sc.INTERNAL_SERVER_ERROR).send(fail(sc.INTERNAL_SERVER_ERROR, rm.INTERNAL_SERVER_ERROR));
   }
-
 };
 
 const publicCourseController = {

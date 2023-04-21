@@ -6,7 +6,7 @@ import { checkScrap } from "../module/check/checkScrap";
 import { pathConvertCoor } from "../module/convert/pathConvertCoor";
 import { PublicCourseDetailGetDTO } from "./../interface/DTO/publicCourse/PublicCourseGetDTO";
 import { UpdatePublicCourseDTO } from "../interface/DTO/publicCourse/UpdatePublicCourseDTO";
-import { List } from "aws-sdk/lib/model";
+import { rm } from "../constant";
 
 const prisma = new PrismaClient();
 
@@ -247,11 +247,15 @@ const updatePublicCourse = async (publicCourseId: number, UpdatePublicCourseDTO:
 
     return updateData;
   } catch (error) {
-    console.log(error);
+    if (error instanceof PrismaClientKnownRequestError && error.code === "P2025") {
+      return null;
+    } else {
+      console.log(error);
+    }
   }
 };
 
-const deletePublicCourse = async (publicCourseIdList: Array<number>) => {
+const deletePublicCourse = async (IdList: Array<number>, field: string) => {
   try {
     // publicCourseIdList를 사용하여 courseIdList를 만듦
     const getCourseId = await prisma.publicCourse.findMany({
@@ -280,9 +284,9 @@ const deletePublicCourse = async (publicCourseIdList: Array<number>) => {
     // publicCourse 삭제
     const data = await prisma.publicCourse.deleteMany({
       where: {
-        id: {
-          in: publicCourseIdList,
-        }
+        [field]: {
+          in: IdList,
+        },
       },
     });
     // course -> private: true로 업데이트
@@ -299,11 +303,10 @@ const deletePublicCourse = async (publicCourseIdList: Array<number>) => {
 
     return data.count;
   } catch (error) {
-    if (error instanceof PrismaClientKnownRequestError && error.code === "P2025") {
-      return `존재하지 않는 코스 업로드입니다.`;
-    } else {
-      console.log(error);
-    }
+    //deleteMany 메소드는 없는 코스를 삭제할때 count가 0으로만 나오지 에러가 나오지는 않음.
+
+    console.log(error);
+
     throw error;
   }
 };

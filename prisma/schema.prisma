@@ -9,7 +9,7 @@ datasource db {
 
 model Course {
   id               Int                 @id @unique @default(autoincrement())
-  user_id          Int
+  user_id          Int?
   departure_region String              @db.VarChar(10)
   departure_city   String              @db.VarChar(10)
   departure_town   String              @db.VarChar(10)
@@ -21,13 +21,13 @@ model Course {
   departure_name   String?             @db.VarChar(50)
   private          Boolean             @default(true)
   path             Unsupported("path")
-  User             User                @relation(fields: [user_id], references: [id], onDelete: SetNull, map: "course_user_id_fk")
+  User             User?               @relation(fields: [user_id], references: [id], map: "course_user_id_fk")
   PublicCourse     PublicCourse?
   Record           Record[]
 }
 
 model PublicCourse {
-  id          Int       @id @default(autoincrement())
+  id          Int       @id @unique @default(autoincrement())
   course_id   Int       @unique
   created_at  DateTime  @default(now()) @db.Timestamp(6)
   deleted_at  DateTime? @db.Timestamp(6)
