@@ -7,12 +7,14 @@ const checkScrap = (scrap) => {
     if (!scrap || scrap.length == 0) {
         return false;
     }
-    // prisma scrap output은 빈 배열 형태안에 객체가 있음. 만약 스크랩기록이있어도 scrapTF가 false면 현재 스크랩 안된것
-    else if (scrap[0].scrapTF === false) {
-        return false;
+    if (scrap instanceof Array && scrap[0].scrapTF === true) {
+        return true;
+    }
+    else if (scrap.scrapTF === true) {
+        return true;
     }
     else {
-        return true;
+        return false;
     }
 };
 exports.checkScrap = checkScrap;

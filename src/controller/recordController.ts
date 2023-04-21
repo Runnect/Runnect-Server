@@ -5,7 +5,7 @@ import { success, fail } from "../constant/response";
 import { validationResult } from "express-validator";
 import { stringConvertTime, dateConvertString } from "../module/convert/convertTime";
 import { recordService } from "../service";
-import { recordRequestDTO, recordResponseDTO, getRecordByUserResponseDTO, records } from "../interface/DTO/record/recordDTO";
+import { UpdateRecordResponseDTO, recordRequestDTO, recordResponseDTO, getRecordByUserResponseDTO, records } from "../interface/DTO/record/recordDTO";
 
 const createRecord = async (req: Request, res: Response) => {
   try {
@@ -88,5 +88,57 @@ const getRecordByUser = async (req: Request, res: Response) => {
   }
 };
 
-const recordController = { createRecord, getRecordByUser };
+const updateRecord = async (req: Request, res: Response) => {
+  const error = validationResult(req);
+  if (!error.isEmpty()) {
+    const validationErrorMsg = error["errors"][0].msg;
+    return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, validationErrorMsg));
+  }
+
+  const { recordId } = req.params;
+  const title = req.body.title;
+
+  try {
+    const updateRecord = await recordService.updateRecord(+recordId, title);
+
+    if (!updateRecord) {
+      return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.NO_RECORD_ID));
+    } else {
+      const updateRecordResponseDTO: UpdateRecordResponseDTO = {
+        record: {
+          id: updateRecord.id,
+          title: updateRecord.title,
+        },
+      };
+      return res.status(sc.OK).send(success(sc.OK, rm.UPDATE_RECORD_SUCCESS, updateRecordResponseDTO));
+    }
+  } catch (error) {
+    console.log(error);
+    //서버내부오류
+    res.status(sc.INTERNAL_SERVER_ERROR).send(fail(sc.INTERNAL_SERVER_ERROR, rm.INTERNAL_SERVER_ERROR));
+  }
+};
+
+const deleteRecord = async (req: Request, res: Response) => {
+  const error = validationResult(req);
+  if (!error.isEmpty()) {
+    const validationErrorMsg = error["errors"][0].msg;
+    return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, validationErrorMsg));
+  }
+  const recordIdList = req.body.recordIdList;
+
+  try {
+    const data = await recordService.deleteRecord(recordIdList);
+    if (!data) return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.DELETE_RECORD_FAIL));
+    else if (typeof data == "string") {
+      return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, data as string));
+    }
+    return res.status(sc.OK).send(success(sc.OK, rm.DELETE_RECORD_SUCCESS, { deletedRecordIdCount: data }));
+  } catch (error) {
+    console.log(error);
+    res.status(sc.INTERNAL_SERVER_ERROR).send(fail(sc.INTERNAL_SERVER_ERROR, rm.INTERNAL_SERVER_ERROR));
+  }
+};
+
+const recordController = { createRecord, getRecordByUser, updateRecord, deleteRecord };
 export default recordController;

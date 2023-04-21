@@ -106,29 +106,7 @@ const getPublicCourseDetail = (req, res) => __awaiter(void 0, void 0, void 0, fu
             res.status(constant_1.sc.BAD_REQUEST).send((0, response_1.fail)(constant_1.sc.BAD_REQUEST, constant_1.rm.INVALID_PUBLIC_COURSE_ID));
         }
         else {
-            const publicCourseDetailGetDTO = {
-                user: {
-                    nickname: publicCourseDetail.Course.User.nickname,
-                    level: publicCourseDetail.Course.User.level,
-                    image: publicCourseDetail.Course.User.latest_stamp,
-                },
-                publicCourse: {
-                    id: publicCourseDetail.id,
-                    courseId: publicCourseDetail.course_id,
-                    scrap: (0, checkScrap_1.checkScrap)(publicCourseDetail.Scrap),
-                    image: publicCourseDetail.Course.image,
-                    title: publicCourseDetail.title,
-                    description: publicCourseDetail.description,
-                    distance: publicCourseDetail.Course.distance,
-                    departure: {
-                        region: publicCourseDetail.Course.departure_region,
-                        city: publicCourseDetail.Course.departure_city,
-                        town: publicCourseDetail.Course.departure_town,
-                        name: publicCourseDetail.Course.departure_name,
-                    },
-                },
-            };
-            return res.status(constant_1.sc.OK).send((0, response_1.success)(constant_1.sc.OK, constant_1.rm.READ_PUBLIC_COURSE_DETAIL_SUCCESS, publicCourseDetailGetDTO));
+            return res.status(constant_1.sc.OK).send((0, response_1.success)(constant_1.sc.OK, constant_1.rm.READ_PUBLIC_COURSE_DETAIL_SUCCESS, publicCourseDetail));
         }
     }
     catch (error) {

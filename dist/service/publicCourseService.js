@@ -12,6 +12,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const client_1 = require("@prisma/client");
 const runtime_1 = require("@prisma/client/runtime");
 const service_1 = require("../service");
+const checkScrap_1 = require("../module/check/checkScrap");
+const pathConvertCoor_1 = require("../module/convert/pathConvertCoor");
 const prisma = new client_1.PrismaClient();
 const createPublicCourse = (publicCourseCreateRequestDTO) => __awaiter(void 0, void 0, void 0, function* () {
     var _a, _b;
@@ -81,24 +83,60 @@ const getPublicCourseByUser = (userId) => __awaiter(void 0, void 0, void 0, func
 });
 const getPublicCourseDetail = (userId, publicCourseId) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const publicCourseData = yield prisma.publicCourse.findUnique({
-            where: {
-                id: publicCourseId,
+        /** path정보를 가져오지 않은 prisma orm 사용 코드
+        const publicCourseData = await prisma.publicCourse.findUnique({
+          where: {
+            id: publicCourseId,
+          },
+          include: {
+            Course: {
+              include: {
+                User: true,
+              },
             },
-            include: {
-                Course: {
-                    include: {
-                        User: true,
-                    },
-                },
-                Scrap: {
-                    where: {
-                        AND: [{ user_id: userId }, { scrapTF: true }],
-                    },
-                },
+            Scrap: {
+              where: {
+                AND: [{ user_id: userId }, { scrapTF: true }],
+              },
             },
+          },
         });
+    
         return publicCourseData;
+    
+        */
+        const publicCourseData = yield prisma.$queryRaw `SELECT "PublicCourse"."id" AS "pid","PublicCourse"."title","PublicCourse"."description", "Course"."id" AS "cid", "Course"."path"::text,"Course"."image","Course"."distance"::text,"Course"."departure_region","Course"."departure_city","Course"."departure_town","Course"."departure_name", "User"."nickname", "User"."id" AS "pcuid", "User"."level", "User"."latest_stamp" FROM "PublicCourse", "Course", "User" WHERE "PublicCourse"."id"=${publicCourseId}  AND "PublicCourse"."course_id" = "Course"."id" AND "Course"."user_id"="User"."id"`;
+        if (!publicCourseData) {
+            return publicCourseData;
+        }
+        const isPublicScrap = yield prisma.scrap.findFirst({
+            where: { user_id: userId, public_course_id: publicCourseId, scrapTF: true },
+        });
+        const publicCourseDetailGetDTO = {
+            user: {
+                nickname: publicCourseData[0].nickname,
+                level: publicCourseData[0].level,
+                image: publicCourseData[0].latest_stamp,
+                isNowUser: publicCourseData[0].pcuid == userId ? true : false,
+            },
+            publicCourse: {
+                id: publicCourseData[0].pid,
+                courseId: publicCourseData[0].cid,
+                scrap: (0, checkScrap_1.checkScrap)(isPublicScrap),
+                image: publicCourseData[0].image,
+                title: publicCourseData[0].title,
+                description: publicCourseData[0].description,
+                path: (0, pathConvertCoor_1.pathConvertCoor)(publicCourseData[0].path),
+                distance: +publicCourseData[0].distance,
+                departure: {
+                    region: publicCourseData[0].departure_region,
+                    city: publicCourseData[0].departure_city,
+                    town: publicCourseData[0].departure_town,
+                    name: publicCourseData[0].departure_name,
+                },
+            },
+        };
+        return publicCourseDetailGetDTO;
     }
     catch (error) {
         //~ get은 에러분기처리를 할게없음... 어차피 데이터가 있냐없냐라서

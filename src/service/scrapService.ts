@@ -1,6 +1,7 @@
 import { PrismaClient } from "@prisma/client";
 import { scrapDTO } from "../interface/DTO/scrap/scrapDTO";
 import { stampService } from "../service";
+import { rm } from "../constant";
 import { PrismaClientKnownRequestError, PrismaClientValidationError } from "@prisma/client/runtime";
 
 const prisma = new PrismaClient();

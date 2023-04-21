@@ -37,3 +37,10 @@ export interface getRecordByUserResponseDTO {
   };
   records: records[];
 }
+
+export interface UpdateRecordResponseDTO {
+  record: {
+    id: number;
+    title: string;
+  };
+}
