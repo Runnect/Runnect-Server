@@ -255,28 +255,59 @@ const updatePublicCourse = async (publicCourseId: number, UpdatePublicCourseDTO:
   }
 };
 
-const deletePublicCourse = async (IdList: Array<number>, field: string) => {
+const deletePublicCourse = async (publicCourseIdList: Array<number>) => {
   try {
+    // publicCourseIdList를 사용하여 courseIdList를 만듦
+    const getCourseId = await prisma.publicCourse.findMany({
+      where: {
+        id: {
+          in: publicCourseIdList,
+        }
+      },
+      select: {
+        id: true,
+        course_id: true,
+      }
+    });
+
+    const publicCourseIdListForChk: Array<number> = new Array<number>(); 
+    const courseIdList: Array<number> = new Array<number>();
+    for (var i = 0; i < getCourseId.length; i++) {
+      courseIdList.push(getCourseId[i]["course_id"]);
+      publicCourseIdListForChk.push(getCourseId[i]["id"]);
+    }
+
+    // 에러 처리
+    const errorIdList = publicCourseIdList.filter(x => !publicCourseIdListForChk.includes(x));
+    if (errorIdList.length != 0) return `유효하지 않은 publicCourseId가 존재합니다 : ${errorIdList.toString()}`;
+
+    // publicCourse 삭제
     const data = await prisma.publicCourse.deleteMany({
       where: {
-        [field]: {
-          in: IdList,
-        },
+        id: {
+          in: publicCourseIdList,
+        }
       },
     });
-    //!
-    console.log(data);
+    // course -> private: true로 업데이트
+    const updatedPublicCourse = await prisma.course.updateMany({
+      where: {
+        id: {
+          in: courseIdList,
+        }
+      },
+      data: {
+        private: true
+      }
+    });
 
-    if (data.count === 0 || data.count != IdList.length) {
-      //리스트 중 유효한 퍼블릭코스는 삭제되지만 유효하지 않은 아이디는 삭제 안될때
-      return rm.NO_DELETED_PUBLIC_COURSE;
-    }
     return data.count;
   } catch (error) {
-    //deleteMany 메소드는 없는 코스를 삭제할때 count가 0으로만 나오지 에러가 나오지는 않음.
-
-    console.log(error);
-
+    if (error instanceof PrismaClientKnownRequestError && error.code === "P2025") {
+      return `존재하지 않는 코스 업로드입니다.`;
+    } else {
+      console.log(error);
+    }
     throw error;
   }
 };
