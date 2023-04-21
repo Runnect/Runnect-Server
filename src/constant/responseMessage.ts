@@ -31,12 +31,13 @@ export default {
   READ_COURSE_SUCCESS: "코스 조회 성공",
   READ_PRIVATE_COURSE_SUCCESS: "private 코스 조회 성공",
   NO_COURSE: "존재하지 않는 코스입니다.",
-
-  // 코스
   CREATE_COURSE_SUCCESS: "코스 생성 성공",
   CREATE_COURSE_FAIL: "코스 생성 실패",
   DEPARTURE_VALIDATION_ERROR: "출발지 정보가 유효하지 않습니다.",
   NO_IMAGE: "이미지가 없습니다.",
+  DELETE_COURSE_SUCCESS: "코스 삭제 성공",
+  DELETE_COURSE_FAIL: "코스 삭제 실패",
+  NO_DELETED_COURSE: "삭제할 코스가 존재하지 않습니다.",
 
   // 토큰
   CREATE_TOKEN_SUCCESS: "토큰 재발급 성공",
@@ -60,7 +61,7 @@ export default {
   DELETE_PUBLIC_COURSE_SUCCESS: "업로드된 코스 삭제 성공",
   DELETE_PUBLIC_COURSE_FAIL: "업로드된 코스 삭제 실패",
   UPDATE_COURSE_SUCCESS: "업로드한 코스 수정 성공",
-  NO_DELETED_PUBLIC_COURSE: "삭제할 업로드된 코스가 없습니다.",
+  NO_DELETED_PUBLIC_COURSE: "삭제할 업로드된 코스가 존재하지 않습니다.",
 
   //record
   UPLOAD_RECORD: "경로기록하기 성공",
@@ -82,7 +83,6 @@ export default {
   INVALID_USER: "유효하지 않은 유저",
   READ_SCRAP_COURSE_SUCCESS: "스크랩한 코스 조회 성공",
   NO_SCRAP_RECORD: "이전에 스크랩한 기록이 없는 public course 입니다.",
-  CREATE_OWN_SCRAP_FAIL: "자신이 작성한 코스는 스크랩할 수 없습니다.",
 
   //stamp
   READ_STAMP_BY_USER: "유저가 가진 스탬프 조회 성공",

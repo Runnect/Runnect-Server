@@ -115,7 +115,11 @@ const updateRecord = async (recordId: number, title: string) => {
 
     return updateTitle;
   } catch (error) {
-    console.log(error);
+    if (error instanceof PrismaClientKnownRequestError && error.code === "P2025") {
+      return null;
+    } else {
+      console.log(error);
+    }
   }
 };
 

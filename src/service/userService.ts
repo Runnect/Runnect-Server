@@ -121,6 +121,8 @@ const getUser = async (userId: number) => {
     const userGetDTO: UserGetDTO = {
       user: {
         id: getUser.id,
+        email: getUser.email,
+        provider: getUser.provider,
         nickname: getUser.nickname,
         latestStamp: getUser.latest_stamp,
         level: getUser.level,

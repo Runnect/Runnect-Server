@@ -1,4 +1,3 @@
-import { bool } from "aws-sdk/clients/signer";
 export interface PublicCourse {
   id: number;
   courseId: number;
