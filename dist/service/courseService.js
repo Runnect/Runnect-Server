@@ -174,7 +174,7 @@ const deleteCourse = (courseIdList) => __awaiter(void 0, void 0, void 0, functio
         });
         //!
         console.log(deletedCourse);
-        const deletedPublicCourse = yield service_1.publicCourseService.deletePublicCourse(courseIdList, "course_id");
+        const deletedPublicCourse = yield service_1.publicCourseService.deletePublicCourse(courseIdList);
         if (deletedCourse.count === 0 || deletedCourse.count != courseIdList.length) {
             return constant_1.rm.NO_DELETED_COURSE;
         }

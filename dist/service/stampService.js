@@ -56,11 +56,12 @@ const chkLevel = (userId) => __awaiter(void 0, void 0, void 0, function* () {
     }
 });
 const chkStampNumber = (getCounts, option) => {
+    // 여기 스탬프 조건 변경하기
     const stampRule = {
-        "c": [1, 10, 30],
-        "s": [1, 20, 40],
-        "u": [1, 10, 30],
-        "r": [1, 15, 30]
+        c: [1, 10, 30],
+        s: [1, 20, 40],
+        u: [1, 10, 30],
+        r: [1, 15, 30],
     };
     if (getCounts == stampRule[option][2]) {
         return 3;

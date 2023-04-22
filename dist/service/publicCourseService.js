@@ -35,7 +35,8 @@ const createPublicCourse = (publicCourseCreateRequestDTO) => __awaiter(void 0, v
                     private: false,
                 },
             });
-            yield service_1.stampService.createStampByUser(courseData.user_id, "u");
+            if (courseData.user_id)
+                yield service_1.stampService.createStampByUser(courseData.user_id, "u");
             return publicCourseData;
         }
     }
@@ -268,12 +269,12 @@ const deletePublicCourse = (publicCourseIdList) => __awaiter(void 0, void 0, voi
             where: {
                 id: {
                     in: publicCourseIdList,
-                }
+                },
             },
             select: {
                 id: true,
                 course_id: true,
-            }
+            },
         });
         const publicCourseIdListForChk = new Array();
         const courseIdList = new Array();
@@ -282,7 +283,7 @@ const deletePublicCourse = (publicCourseIdList) => __awaiter(void 0, void 0, voi
             publicCourseIdListForChk.push(getCourseId[i]["id"]);
         }
         // 에러 처리
-        const errorIdList = publicCourseIdList.filter(x => !publicCourseIdListForChk.includes(x));
+        const errorIdList = publicCourseIdList.filter((x) => !publicCourseIdListForChk.includes(x));
         if (errorIdList.length != 0)
             return `유효하지 않은 publicCourseId가 존재합니다 : ${errorIdList.toString()}`;
         // publicCourse 삭제
@@ -290,7 +291,7 @@ const deletePublicCourse = (publicCourseIdList) => __awaiter(void 0, void 0, voi
             where: {
                 id: {
                     in: publicCourseIdList,
-                }
+                },
             },
         });
         // course -> private: true로 업데이트
@@ -298,11 +299,11 @@ const deletePublicCourse = (publicCourseIdList) => __awaiter(void 0, void 0, voi
             where: {
                 id: {
                     in: courseIdList,
-                }
+                },
             },
             data: {
-                private: true
-            }
+                private: true,
+            },
         });
         return data.count;
     }
