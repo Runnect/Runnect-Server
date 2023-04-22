@@ -31,14 +31,19 @@ const google = (idToken) => __awaiter(void 0, void 0, void 0, function* () {
     }
     catch (error) {
         console.log(error);
+        if ((error === null || error === void 0 ? void 0 : error.toString().indexOf('Token used too late')) != -1)
+            return `만료된 소셜 토큰 입니다.`;
     }
 });
 const apple = (appleToken) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const appleUser = jsonwebtoken_1.default.decode(appleToken);
+        console.log(appleUser);
         if (appleUser || appleUser.email_verified == "true") {
             return { socialId: appleUser["sub"], email: appleUser["email"], provider: "APPLE" };
         }
+        //appleUser가 Null인경우 : 토큰자체에러
+        //appleUser.email_verified가 false : 이메일이 확인되지 ㅏㅇㄴㅎ았다
         return null;
     }
     catch (error) {

@@ -41,6 +41,9 @@ const getSocialLoginInfo = (req, res) => __awaiter(void 0, void 0, void 0, funct
         if (typeof socialUser === "undefined" || socialUser === null) {
             return res.status(constant_1.sc.BAD_REQUEST).send((0, response_1.fail)(constant_1.sc.BAD_REQUEST, constant_1.rm.READ_SOCIAL_FAIL));
         }
+        else if (typeof socialUser === "string") {
+            return res.status(constant_1.sc.UNAUTHORIZED).send((0, response_1.fail)(constant_1.sc.UNAUTHORIZED, socialUser));
+        }
         const existingUser = yield service_1.userService.getUserByEmail(socialUser);
         const refreshToken = jwtHandler_1.default.createRefreshToken();
         // 기존 유저
@@ -87,7 +90,7 @@ const getNewToken = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
     const error = (0, express_validator_1.validationResult)(req);
     if (!error.isEmpty()) {
         const validationErrorMsg = error["errors"][0].msg;
-        return res.status(constant_1.sc.BAD_REQUEST).send((0, response_1.fail)(constant_1.sc.BAD_REQUEST, validationErrorMsg));
+        return res.status(constant_1.sc.UNAUTHORIZED).send((0, response_1.fail)(constant_1.sc.BAD_REQUEST, validationErrorMsg));
     }
     //헤더에 저장된 accessToken과 refreshToken 받아오기
     const accessToken = req.header("accessToken");

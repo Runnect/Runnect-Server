@@ -97,6 +97,56 @@ const getRecordByUser = (req, res) => __awaiter(void 0, void 0, void 0, function
         return res.status(constant_1.sc.INTERNAL_SERVER_ERROR).send((0, response_1.fail)(constant_1.sc.INTERNAL_SERVER_ERROR, constant_1.rm.INTERNAL_SERVER_ERROR));
     }
 });
-const recordController = { createRecord, getRecordByUser };
+const updateRecord = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const error = (0, express_validator_1.validationResult)(req);
+    if (!error.isEmpty()) {
+        const validationErrorMsg = error["errors"][0].msg;
+        return res.status(constant_1.sc.BAD_REQUEST).send((0, response_1.fail)(constant_1.sc.BAD_REQUEST, validationErrorMsg));
+    }
+    const { recordId } = req.params;
+    const title = req.body.title;
+    try {
+        const updateRecord = yield service_1.recordService.updateRecord(+recordId, title);
+        if (!updateRecord) {
+            return res.status(constant_1.sc.BAD_REQUEST).send((0, response_1.fail)(constant_1.sc.BAD_REQUEST, constant_1.rm.NO_RECORD_ID));
+        }
+        else {
+            const updateRecordResponseDTO = {
+                record: {
+                    id: updateRecord.id,
+                    title: updateRecord.title,
+                },
+            };
+            return res.status(constant_1.sc.OK).send((0, response_1.success)(constant_1.sc.OK, constant_1.rm.UPDATE_RECORD_SUCCESS, updateRecordResponseDTO));
+        }
+    }
+    catch (error) {
+        console.log(error);
+        //서버내부오류
+        res.status(constant_1.sc.INTERNAL_SERVER_ERROR).send((0, response_1.fail)(constant_1.sc.INTERNAL_SERVER_ERROR, constant_1.rm.INTERNAL_SERVER_ERROR));
+    }
+});
+const deleteRecord = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const error = (0, express_validator_1.validationResult)(req);
+    if (!error.isEmpty()) {
+        const validationErrorMsg = error["errors"][0].msg;
+        return res.status(constant_1.sc.BAD_REQUEST).send((0, response_1.fail)(constant_1.sc.BAD_REQUEST, validationErrorMsg));
+    }
+    const recordIdList = req.body.recordIdList;
+    try {
+        const data = yield service_1.recordService.deleteRecord(recordIdList);
+        if (!data)
+            return res.status(constant_1.sc.BAD_REQUEST).send((0, response_1.fail)(constant_1.sc.BAD_REQUEST, constant_1.rm.DELETE_RECORD_FAIL));
+        else if (typeof data == "string") {
+            return res.status(constant_1.sc.BAD_REQUEST).send((0, response_1.fail)(constant_1.sc.BAD_REQUEST, data));
+        }
+        return res.status(constant_1.sc.OK).send((0, response_1.success)(constant_1.sc.OK, constant_1.rm.DELETE_RECORD_SUCCESS, { deletedRecordIdCount: data }));
+    }
+    catch (error) {
+        console.log(error);
+        res.status(constant_1.sc.INTERNAL_SERVER_ERROR).send((0, response_1.fail)(constant_1.sc.INTERNAL_SERVER_ERROR, constant_1.rm.INTERNAL_SERVER_ERROR));
+    }
+});
+const recordController = { createRecord, getRecordByUser, updateRecord, deleteRecord };
 exports.default = recordController;
 //# sourceMappingURL=recordController.js.map

@@ -235,7 +235,7 @@ const deletePublicCourse = async (req: Request, res: Response) => {
   const publicCourseIdList = req.body.publicCourseIdList;
 
   try {
-    const data = await publicCourseService.deletePublicCourse(publicCourseIdList, "id");
+    const data = await publicCourseService.deletePublicCourse(publicCourseIdList);
     if (!data) return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.DELETE_PUBLIC_COURSE_FAIL));
     else if (typeof data == "string") {
       return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, data as string));

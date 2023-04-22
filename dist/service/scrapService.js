@@ -11,24 +11,11 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 const client_1 = require("@prisma/client");
 const service_1 = require("../service");
-const constant_1 = require("../constant");
 const runtime_1 = require("@prisma/client/runtime");
 const prisma = new client_1.PrismaClient();
 const createScrap = (scrapDTO) => __awaiter(void 0, void 0, void 0, function* () {
     var _a;
     try {
-        const writerId = yield prisma.publicCourse.findUnique({
-            where: {
-                id: scrapDTO.publicCourseId,
-            },
-            select: {
-                Course: true,
-            },
-        });
-        // 자신이 생성한 코스를 스크랩하려는 경우
-        if (writerId && writerId["Course"]["user_id"] == scrapDTO.userId) {
-            return constant_1.rm.CREATE_OWN_SCRAP_FAIL;
-        }
         const scrapId = yield prisma.scrap.findFirst({
             where: {
                 user_id: scrapDTO.userId,

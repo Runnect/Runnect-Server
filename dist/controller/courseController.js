@@ -67,8 +67,6 @@ const getCourseByUser = (req, res) => __awaiter(void 0, void 0, void 0, function
     const userId = req.body.userId;
     try {
         const data = yield service_1.courseService.getCourseByUser(userId);
-        if (data == "NO_USER")
-            return res.status(constant_1.sc.BAD_REQUEST).send((0, response_1.fail)(constant_1.sc.BAD_REQUEST, constant_1.rm.NO_USER));
         return res.status(constant_1.sc.OK).send((0, response_1.success)(constant_1.sc.OK, constant_1.rm.READ_COURSE_SUCCESS, data));
     }
     catch (error) {
@@ -87,8 +85,6 @@ const getPrivateCourseByUser = (req, res) => __awaiter(void 0, void 0, void 0, f
     const userId = req.body.userId;
     try {
         const data = yield service_1.courseService.getPrivateCourseByUser(userId);
-        if (data == "NO_USER")
-            return res.status(constant_1.sc.BAD_REQUEST).send((0, response_1.fail)(constant_1.sc.BAD_REQUEST, constant_1.rm.NO_USER));
         return res.status(constant_1.sc.OK).send((0, response_1.success)(constant_1.sc.OK, constant_1.rm.READ_PRIVATE_COURSE_SUCCESS, data));
     }
     catch (error) {
@@ -119,11 +115,33 @@ const getCourseDetail = (req, res) => __awaiter(void 0, void 0, void 0, function
         res.status(constant_1.sc.INTERNAL_SERVER_ERROR).send((0, response_1.fail)(constant_1.sc.INTERNAL_SERVER_ERROR, constant_1.rm.INTERNAL_SERVER_ERROR));
     }
 });
+const deleteCourse = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const error = (0, express_validator_1.validationResult)(req);
+    if (!error.isEmpty()) {
+        const validationErrorMsg = error["errors"][0].msg;
+        return res.status(constant_1.sc.BAD_REQUEST).send((0, response_1.fail)(constant_1.sc.BAD_REQUEST, validationErrorMsg));
+    }
+    const courseIdList = req.body.courseIdList;
+    try {
+        const deletedData = yield service_1.courseService.deleteCourse(courseIdList);
+        if (!deletedData)
+            return res.status(constant_1.sc.BAD_REQUEST).send((0, response_1.fail)(constant_1.sc.BAD_REQUEST, constant_1.rm.DELETE_COURSE_FAIL));
+        else if (typeof deletedData == "string") {
+            return res.status(constant_1.sc.BAD_REQUEST).send((0, response_1.fail)(constant_1.sc.BAD_REQUEST, deletedData));
+        }
+        return res.status(constant_1.sc.OK).send((0, response_1.success)(constant_1.sc.OK, constant_1.rm.DELETE_COURSE_SUCCESS, { deletedCourseCount: deletedData }));
+    }
+    catch (error) {
+        console.error(error);
+        res.status(constant_1.sc.INTERNAL_SERVER_ERROR).send((0, response_1.fail)(constant_1.sc.INTERNAL_SERVER_ERROR, constant_1.rm.INTERNAL_SERVER_ERROR));
+    }
+});
 const courseController = {
     createCourse,
     getCourseByUser,
     getPrivateCourseByUser,
     getCourseDetail,
+    deleteCourse,
 };
 exports.default = courseController;
 //# sourceMappingURL=courseController.js.map

@@ -31,6 +31,16 @@ middleware_1.multiformDataConvert, middleware_1.auth, [
         .notEmpty()
         .withMessage("출발지 정보가 없습니다."),
 ], controller_1.courseController.createCourse);
+router.put("/", [
+    (0, express_validator_1.body)("courseIdList")
+        .notEmpty()
+        .withMessage("코스 아이디가 없습니다.")
+        .isArray()
+        .withMessage("코스 아이디 들이 리스트 형식이 아닙니다"),
+    (0, express_validator_1.body)("courseIdList.*")
+        .isNumeric()
+        .withMessage("코스 아이디들이 숫자가 아닙니다."),
+], controller_1.courseController.deleteCourse);
 router.get("/user", middleware_1.auth, [
     (0, express_validator_1.body)("userId")
         .notEmpty()
