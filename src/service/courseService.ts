@@ -175,7 +175,7 @@ const deleteCourse = async (courseIdList: Array<number>) => {
     });
     //!
     console.log(deletedCourse);
-    const deletedPublicCourse = await publicCourseService.deletePublicCourse(courseIdList, "course_id");
+    const deletedPublicCourse = await publicCourseService.deletePublicCourse(courseIdList);
 
     if (deletedCourse.count === 0 || deletedCourse.count != courseIdList.length) {
       return rm.NO_DELETED_COURSE;

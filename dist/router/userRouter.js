@@ -36,5 +36,8 @@ router.patch("/", [
         .notEmpty()
         .withMessage("닉네임이 없습니다."),
 ], controller_1.userController.updateUserNickname);
+router.delete(
+//토큰 여부는 auth middleware에서 검사함
+"/", controller_1.userController.deleteUser);
 exports.default = router;
 //# sourceMappingURL=userRouter.js.map

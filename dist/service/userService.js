@@ -8,11 +8,19 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 const randomInitialNickname_1 = require("../module/randomInitialNickname");
+const constant_1 = require("../constant");
+const config_1 = __importDefault(require("../config"));
 const runtime_1 = require("@prisma/client/runtime");
 const client_1 = require("@prisma/client");
 const convertTime_1 = require("../module/convert/convertTime");
+const jwtHandler_1 = __importDefault(require("../module/jwtHandler"));
+const axios_1 = __importDefault(require("axios"));
+const qs_1 = __importDefault(require("qs"));
 const prisma = new client_1.PrismaClient();
 const getUserById = (userId) => __awaiter(void 0, void 0, void 0, function* () {
     try {
@@ -123,6 +131,8 @@ const getUser = (userId) => __awaiter(void 0, void 0, void 0, function* () {
         const userGetDTO = {
             user: {
                 id: getUser.id,
+                email: getUser.email,
+                provider: getUser.provider,
                 nickname: getUser.nickname,
                 latestStamp: getUser.latest_stamp,
                 level: getUser.level,
@@ -192,6 +202,56 @@ const updateUserNickname = (userId, nickname) => __awaiter(void 0, void 0, void 
         throw error;
     }
 });
+const deleteUser = (refreshToken, token) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const user = yield getUserByRefreshToken(refreshToken);
+        if (!user)
+            return constant_1.rm.NO_USER;
+        //!
+        console.log(user);
+        if (user.provider === "APPLE") {
+            //^ 애플 소셜로그인 회원의 탈퇴 경우만 request에서 토큰 받아오기
+            const clientSecret = jwtHandler_1.default.createAppleJWT();
+            const accessToken = token;
+            const data = {
+                token: accessToken,
+                client_id: config_1.default.appleBundleId,
+                client_secret: clientSecret,
+            };
+            yield axios_1.default
+                .post("https://appleid.apple.com/auth/revoke", qs_1.default.stringify(data), {
+                headers: {
+                    "Content-Type": "application/x-www-form-urlencoded",
+                },
+            })
+                .then((res) => __awaiter(void 0, void 0, void 0, function* () {
+                console.log(res);
+                if (res.status == 200) {
+                    console.log("애플 회원탈퇴 성공");
+                }
+            }))
+                .catch((error) => {
+                console.log("애플 회원탈퇴 실패", error);
+                throw constant_1.rm.WITHDRAW_APPLE_SOCIAL_FAIL;
+            });
+        }
+        const data = yield prisma.user.delete({
+            where: {
+                id: user === null || user === void 0 ? void 0 : user.id,
+            },
+        });
+        return data.id;
+    }
+    catch (error) {
+        if (error instanceof runtime_1.PrismaClientKnownRequestError && error.code == "P2025") {
+            return constant_1.rm.NO_USER;
+        }
+        else {
+            console.log(error);
+        }
+        throw error;
+    }
+});
 const userService = {
     getUserById,
     getUserByEmail,
@@ -200,6 +260,7 @@ const userService = {
     //signUp,
     getUser,
     updateUserNickname,
+    deleteUser,
 };
 exports.default = userService;
 //# sourceMappingURL=userService.js.map

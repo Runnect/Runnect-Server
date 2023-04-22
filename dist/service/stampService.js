@@ -18,7 +18,7 @@ const createStampByUser = (userId, option) => __awaiter(void 0, void 0, void 0, 
         if (!getCounts) {
             return;
         }
-        const stampLevel = chkStampNumber(getCounts); //스탬프를 추가할지안할지, 한다면 어떤 스탬프인지
+        const stampLevel = chkStampNumber(getCounts, option); //스탬프를 추가할지안할지, 한다면 어떤 스탬프인지
         if (stampLevel == -1) {
             return;
         }
@@ -55,14 +55,21 @@ const chkLevel = (userId) => __awaiter(void 0, void 0, void 0, function* () {
         throw error;
     }
 });
-const chkStampNumber = (getCounts) => {
-    if (getCounts == 10) {
+const chkStampNumber = (getCounts, option) => {
+    // 여기 스탬프 조건 변경하기
+    const stampRule = {
+        c: [1, 10, 30],
+        s: [1, 20, 40],
+        u: [1, 10, 30],
+        r: [1, 15, 30],
+    };
+    if (getCounts == stampRule[option][2]) {
         return 3;
     }
-    else if (getCounts == 5) {
+    else if (getCounts == stampRule[option][1]) {
         return 2;
     }
-    else if (getCounts == 1) {
+    else if (getCounts == stampRule[option][0]) {
         return 1;
     }
     else {

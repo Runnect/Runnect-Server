@@ -48,15 +48,16 @@ const chkLevel = async (userId: number) => {
   }
 };
 
-const chkStampNumber = (getCounts: number, option: string) => { // 여기 스탬프 조건 변경하기
+const chkStampNumber = (getCounts: number, option: string) => {
+  // 여기 스탬프 조건 변경하기
 
   const stampRule = {
-    "c" : [1, 10, 30],
-    "s" : [1, 20, 40],
-    "u" : [1, 10, 30],
-    "r" : [1, 15, 30]
+    c: [1, 10, 30],
+    s: [1, 20, 40],
+    u: [1, 10, 30],
+    r: [1, 15, 30],
   };
-  
+
   if (getCounts == stampRule[option as keyof typeof stampRule][2]) {
     return 3;
   } else if (getCounts == stampRule[option as keyof typeof stampRule][1]) {
