@@ -91,6 +91,48 @@ const getRecordByUser = (userId) => __awaiter(void 0, void 0, void 0, function* 
         throw error;
     }
 });
-const recordService = { createRecord, getRecordByUser };
+const deleteRecord = (recordIdList) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const data = yield prisma.record.deleteMany({
+            where: {
+                id: {
+                    in: recordIdList,
+                },
+            },
+        });
+        if (data.count === 0 || data.count != recordIdList.length) {
+            //리스트 중 유효한 레코드는 삭제되지만 유효하지 않은 아이디는 삭제 안될때
+            return constant_1.rm.NO_RECORD_ID;
+        }
+        return data.count;
+    }
+    catch (error) {
+        //deletMany 메소드는 없는 코스를 삭제할때 count가 0으로만 나오지 에러가 나오지는 않음.
+        console.log(error);
+        throw error;
+    }
+});
+const updateRecord = (recordId, title) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const updateTitle = yield prisma.record.update({
+            where: {
+                id: recordId,
+            },
+            data: {
+                title: title,
+            },
+        });
+        return updateTitle;
+    }
+    catch (error) {
+        if (error instanceof runtime_1.PrismaClientKnownRequestError && error.code === "P2025") {
+            return null;
+        }
+        else {
+            console.log(error);
+        }
+    }
+});
+const recordService = { createRecord, getRecordByUser, updateRecord, deleteRecord };
 exports.default = recordService;
 //# sourceMappingURL=recordService.js.map

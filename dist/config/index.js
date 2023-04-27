@@ -22,5 +22,13 @@ exports.default = {
     s3AccessKey: process.env.S3_ACCESS_KEY,
     s3SecretKey: process.env.S3_SECRET_KEY,
     bucketName: process.env.S3_BUCKET,
+    //?구글소셜
+    googleClientId: process.env.GOOGLE_CLIENT_ID,
+    googleClientId2: process.env.GOOGLE_CLIENT_ID2,
+    //?애플소셜
+    appleKeyId: process.env.APPLE_KEY_ID,
+    appleTeamId: process.env.APPLE_TEAM_ID,
+    appleBundleId: process.env.APPLE_BUNDLE_ID,
+    appleP8Path: process.env.APPLE_P8_PATH,
 };
 //# sourceMappingURL=index.js.map

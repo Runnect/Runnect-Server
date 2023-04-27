@@ -24,15 +24,18 @@ exports.default = {
     UPDATE_USER_FAIL: "유저 업데이트 실패",
     // 소셜로그인
     READ_SOCIAL_FAIL: "소셜로그인 회원 정보 조회 실패",
+    WITHDRAW_APPLE_SOCIAL_FAIL: "애플 소셜회원 탈퇴 실패",
     // 코스
     READ_COURSE_SUCCESS: "코스 조회 성공",
     READ_PRIVATE_COURSE_SUCCESS: "private 코스 조회 성공",
     NO_COURSE: "존재하지 않는 코스입니다.",
-    // 코스
     CREATE_COURSE_SUCCESS: "코스 생성 성공",
     CREATE_COURSE_FAIL: "코스 생성 실패",
     DEPARTURE_VALIDATION_ERROR: "출발지 정보가 유효하지 않습니다.",
     NO_IMAGE: "이미지가 없습니다.",
+    DELETE_COURSE_SUCCESS: "코스 삭제 성공",
+    DELETE_COURSE_FAIL: "코스 삭제 실패",
+    NO_DELETED_COURSE: "삭제할 코스가 존재하지 않습니다.",
     // 토큰
     CREATE_TOKEN_SUCCESS: "토큰 재발급 성공",
     EXPIRED_TOKEN: "토큰이 만료되었습니다.",
@@ -50,6 +53,10 @@ exports.default = {
     READ_PUBLIC_COURSE_DETAIL_SUCCESS: "업로드 코스 상세 조회 성공",
     READ_RECOMMENDED_COURSE_SUCCESS: "추천 코스 조회 성공",
     READ_SEARCHED_COURSE_SUCCESS: "업로드된 코스 검색 성공",
+    DELETE_PUBLIC_COURSE_SUCCESS: "업로드된 코스 삭제 성공",
+    DELETE_PUBLIC_COURSE_FAIL: "업로드된 코스 삭제 실패",
+    UPDATE_COURSE_SUCCESS: "업로드한 코스 수정 성공",
+    NO_DELETED_PUBLIC_COURSE: "삭제할 업로드된 코스가 존재하지 않습니다.",
     //record
     UPLOAD_RECORD: "경로기록하기 성공",
     INVALID_COURSEID: "유효하지 않은 코스 아이디",
@@ -59,13 +66,16 @@ exports.default = {
     NO_COURSE_ID: "코스아이디 없음",
     NO_RECORD: "유저의 러닝 기록이 없음",
     READ_RECORD_SUCCESS: "활동 기록 조회 성공",
+    UPDATE_RECORD_SUCCESS: "활동 기록 수정 성공",
+    NO_RECORD_ID: "존재하지 않는 레코드 아이디입니다.",
+    DELETE_RECORD_SUCCESS: "기록 삭제 성공",
+    DELETE_RECORD_FAIL: "기록 삭제 실패",
     //scrap
     CREATE_SCRAP_SUCCESS: "코스 스크랩 성공",
     DELETE_SCRAP_SUCCESS: "코스 스크랩 취소 성공",
     INVALID_USER: "유효하지 않은 유저",
     READ_SCRAP_COURSE_SUCCESS: "스크랩한 코스 조회 성공",
     NO_SCRAP_RECORD: "이전에 스크랩한 기록이 없는 public course 입니다.",
-    CREATE_OWN_SCRAP_FAIL: "자신이 작성한 코스는 스크랩할 수 없습니다.",
     //stamp
     READ_STAMP_BY_USER: "유저가 가진 스탬프 조회 성공",
 };

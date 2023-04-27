@@ -62,7 +62,6 @@ const getCourseByUser = async (req: Request, res: Response) => {
   const userId = req.body.userId;
   try {
     const data = await courseService.getCourseByUser(userId);
-    if (data == "NO_USER") return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.NO_USER));
     return res.status(sc.OK).send(success(sc.OK, rm.READ_COURSE_SUCCESS, data));
   } catch (error) {
     console.error(error);
@@ -81,7 +80,6 @@ const getPrivateCourseByUser = async (req: Request, res: Response) => {
   const userId = req.body.userId;
   try {
     const data = await courseService.getPrivateCourseByUser(userId);
-    if (data == "NO_USER") return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.NO_USER));
     return res.status(sc.OK).send(success(sc.OK, rm.READ_PRIVATE_COURSE_SUCCESS, data));
   } catch (error) {
     console.error(error);

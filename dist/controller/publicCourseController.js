@@ -190,12 +190,62 @@ const searchPublicCourse = (req, res) => __awaiter(void 0, void 0, void 0, funct
         res.status(constant_1.sc.INTERNAL_SERVER_ERROR).send((0, response_1.fail)(constant_1.sc.INTERNAL_SERVER_ERROR, constant_1.rm.INTERNAL_SERVER_ERROR));
     }
 });
+const updatePublicCourse = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const error = (0, express_validator_1.validationResult)(req);
+    //에러처리 1 : 필요한 정보(courseId, title, description)가 안들어왔을때
+    if (!error.isEmpty()) {
+        const validationErrorMsg = error["errors"][0].msg;
+        return res.status(constant_1.sc.BAD_REQUEST).send((0, response_1.fail)(constant_1.sc.BAD_REQUEST, validationErrorMsg));
+    }
+    const { publicCourseId } = req.params;
+    const UpdatePublicCourseDTO = req.body;
+    try {
+        const updatePublicCourse = yield service_1.publicCourseService.updatePublicCourse(+publicCourseId, UpdatePublicCourseDTO);
+        if (!updatePublicCourse) {
+            return res.status(constant_1.sc.BAD_REQUEST).send((0, response_1.fail)(constant_1.sc.BAD_REQUEST, constant_1.rm.INVALID_PUBLIC_COURSE_ID));
+        }
+        else {
+            const updatedPublicCourseResponseDTO = {
+                publicCourse: { id: updatePublicCourse.id, title: updatePublicCourse.title, description: updatePublicCourse.description },
+            };
+            return res.status(constant_1.sc.OK).send((0, response_1.success)(constant_1.sc.OK, constant_1.rm.UPDATE_COURSE_SUCCESS, updatedPublicCourseResponseDTO));
+        }
+    }
+    catch (error) {
+        console.log(error);
+        //서버내부오류
+        res.status(constant_1.sc.INTERNAL_SERVER_ERROR).send((0, response_1.fail)(constant_1.sc.INTERNAL_SERVER_ERROR, constant_1.rm.INTERNAL_SERVER_ERROR));
+    }
+});
+const deletePublicCourse = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const error = (0, express_validator_1.validationResult)(req);
+    if (!error.isEmpty()) {
+        const validationErrorMsg = error["errors"][0].msg;
+        return res.status(constant_1.sc.BAD_REQUEST).send((0, response_1.fail)(constant_1.sc.BAD_REQUEST, validationErrorMsg));
+    }
+    const publicCourseIdList = req.body.publicCourseIdList;
+    try {
+        const data = yield service_1.publicCourseService.deletePublicCourse(publicCourseIdList);
+        if (!data)
+            return res.status(constant_1.sc.BAD_REQUEST).send((0, response_1.fail)(constant_1.sc.BAD_REQUEST, constant_1.rm.DELETE_PUBLIC_COURSE_FAIL));
+        else if (typeof data == "string") {
+            return res.status(constant_1.sc.BAD_REQUEST).send((0, response_1.fail)(constant_1.sc.BAD_REQUEST, data));
+        }
+        return res.status(constant_1.sc.OK).send((0, response_1.success)(constant_1.sc.OK, constant_1.rm.DELETE_PUBLIC_COURSE_SUCCESS, { deletedPublicCourseCount: data }));
+    }
+    catch (e) {
+        console.error(e);
+        res.status(constant_1.sc.INTERNAL_SERVER_ERROR).send((0, response_1.fail)(constant_1.sc.INTERNAL_SERVER_ERROR, constant_1.rm.INTERNAL_SERVER_ERROR));
+    }
+});
 const publicCourseController = {
     createPublicCourse,
     getPublicCourseByUser,
     getPublicCourseDetail,
     recommendPublicCourse,
     searchPublicCourse,
+    updatePublicCourse,
+    deletePublicCourse,
 };
 exports.default = publicCourseController;
 //# sourceMappingURL=publicCourseController.js.map

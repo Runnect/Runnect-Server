@@ -35,7 +35,8 @@ const createPublicCourse = (publicCourseCreateRequestDTO) => __awaiter(void 0, v
                     private: false,
                 },
             });
-            yield service_1.stampService.createStampByUser(courseData.user_id, "u");
+            if (courseData.user_id)
+                yield service_1.stampService.createStampByUser(courseData.user_id, "u");
             return publicCourseData;
         }
     }
@@ -112,6 +113,11 @@ const getPublicCourseDetail = (userId, publicCourseId) => __awaiter(void 0, void
         const isPublicScrap = yield prisma.scrap.findFirst({
             where: { user_id: userId, public_course_id: publicCourseId, scrapTF: true },
         });
+        if (publicCourseData[0].pcuid == null) {
+            publicCourseData[0].nickname = "알 수 없음";
+            publicCourseData[0].level = "알 수 없음";
+            publicCourseData[0].latest_stamp = "알 수 없음";
+        }
         const publicCourseDetailGetDTO = {
             user: {
                 nickname: publicCourseData[0].nickname,
@@ -234,12 +240,91 @@ const searchPublicCourse = (userId, keyword) => __awaiter(void 0, void 0, void 0
         throw error;
     }
 });
+const updatePublicCourse = (publicCourseId, UpdatePublicCourseDTO) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const updateData = yield prisma.publicCourse.update({
+            where: {
+                id: publicCourseId,
+            },
+            data: {
+                title: UpdatePublicCourseDTO.title,
+                description: UpdatePublicCourseDTO.description,
+            },
+        });
+        return updateData;
+    }
+    catch (error) {
+        if (error instanceof runtime_1.PrismaClientKnownRequestError && error.code === "P2025") {
+            return null;
+        }
+        else {
+            console.log(error);
+        }
+    }
+});
+const deletePublicCourse = (publicCourseIdList) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        // publicCourseIdList를 사용하여 courseIdList를 만듦
+        const getCourseId = yield prisma.publicCourse.findMany({
+            where: {
+                id: {
+                    in: publicCourseIdList,
+                },
+            },
+            select: {
+                id: true,
+                course_id: true,
+            },
+        });
+        const publicCourseIdListForChk = new Array();
+        const courseIdList = new Array();
+        for (var i = 0; i < getCourseId.length; i++) {
+            courseIdList.push(getCourseId[i]["course_id"]);
+            publicCourseIdListForChk.push(getCourseId[i]["id"]);
+        }
+        // 에러 처리
+        const errorIdList = publicCourseIdList.filter((x) => !publicCourseIdListForChk.includes(x));
+        if (errorIdList.length != 0)
+            return `유효하지 않은 publicCourseId가 존재합니다 : ${errorIdList.toString()}`;
+        // publicCourse 삭제
+        const data = yield prisma.publicCourse.deleteMany({
+            where: {
+                id: {
+                    in: publicCourseIdList,
+                },
+            },
+        });
+        // course -> private: true로 업데이트
+        const updatedPublicCourse = yield prisma.course.updateMany({
+            where: {
+                id: {
+                    in: courseIdList,
+                },
+            },
+            data: {
+                private: true,
+            },
+        });
+        return data.count;
+    }
+    catch (error) {
+        if (error instanceof runtime_1.PrismaClientKnownRequestError && error.code === "P2025") {
+            return `존재하지 않는 코스 업로드입니다.`;
+        }
+        else {
+            console.log(error);
+        }
+        throw error;
+    }
+});
 const publicCourseService = {
     createPublicCourse,
     getPublicCourseByUser,
     getPublicCourseDetail,
     recommendPublicCourse,
     searchPublicCourse,
+    updatePublicCourse,
+    deletePublicCourse,
 };
 exports.default = publicCourseService;
 //# sourceMappingURL=publicCourseService.js.map

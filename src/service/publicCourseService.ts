@@ -30,7 +30,7 @@ const createPublicCourse = async (publicCourseCreateRequestDTO: PublicCourseCrea
         },
       });
 
-      await stampService.createStampByUser(courseData.user_id, "u");
+      if (courseData.user_id) await stampService.createStampByUser(courseData.user_id, "u");
 
       return publicCourseData;
     }
@@ -267,15 +267,15 @@ const deletePublicCourse = async (publicCourseIdList: Array<number>) => {
       where: {
         id: {
           in: publicCourseIdList,
-        }
+        },
       },
       select: {
         id: true,
         course_id: true,
-      }
+      },
     });
 
-    const publicCourseIdListForChk: Array<number> = new Array<number>(); 
+    const publicCourseIdListForChk: Array<number> = new Array<number>();
     const courseIdList: Array<number> = new Array<number>();
     for (var i = 0; i < getCourseId.length; i++) {
       courseIdList.push(getCourseId[i]["course_id"]);
@@ -283,7 +283,7 @@ const deletePublicCourse = async (publicCourseIdList: Array<number>) => {
     }
 
     // 에러 처리
-    const errorIdList = publicCourseIdList.filter(x => !publicCourseIdListForChk.includes(x));
+    const errorIdList = publicCourseIdList.filter((x) => !publicCourseIdListForChk.includes(x));
     if (errorIdList.length != 0) return `유효하지 않은 publicCourseId가 존재합니다 : ${errorIdList.toString()}`;
 
     // publicCourse 삭제
@@ -291,7 +291,7 @@ const deletePublicCourse = async (publicCourseIdList: Array<number>) => {
       where: {
         id: {
           in: publicCourseIdList,
-        }
+        },
       },
     });
     // course -> private: true로 업데이트
@@ -299,11 +299,11 @@ const deletePublicCourse = async (publicCourseIdList: Array<number>) => {
       where: {
         id: {
           in: courseIdList,
-        }
+        },
       },
       data: {
-        private: true
-      }
+        private: true,
+      },
     });
 
     return data.count;

@@ -13,6 +13,7 @@ const convertTime_1 = require("./../module/convert/convertTime");
 const client_1 = require("@prisma/client");
 const pathConvertCoor_1 = require("../module/convert/pathConvertCoor");
 const service_1 = require("../service");
+const constant_1 = require("../constant");
 const prisma = new client_1.PrismaClient();
 //* 코스 그리기
 const createCourse = (courseCreateDTO) => __awaiter(void 0, void 0, void 0, function* () {
@@ -49,16 +50,11 @@ const createCourse = (courseCreateDTO) => __awaiter(void 0, void 0, void 0, func
 });
 const getCourseByUser = (userId) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const findUser = yield prisma.user.findUnique({
-            where: {
-                id: userId,
-            },
-        });
-        if (!findUser)
-            return "NO_USER";
+        // 현재 유저가 우리 회원인지는 auth 미들웨어에서 검사함
         const result = yield prisma.course.findMany({
             where: {
                 user_id: userId,
+                deleted_at: null,
             },
             orderBy: {
                 created_at: "desc",
@@ -93,16 +89,10 @@ const getCourseByUser = (userId) => __awaiter(void 0, void 0, void 0, function* 
 });
 const getPrivateCourseByUser = (userId) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const findUser = yield prisma.user.findUnique({
-            where: {
-                id: userId,
-            },
-        });
-        if (!findUser)
-            return "NO_USER";
+        // 현재 유저가 우리 회원인지는 auth 미들웨어에서 검사함
         const result = yield prisma.course.findMany({
             where: {
-                AND: [{ user_id: userId }, { private: true }],
+                AND: [{ user_id: userId }, { private: true }, { deleted_at: null }],
             },
             orderBy: {
                 created_at: "desc",
@@ -140,7 +130,7 @@ const getPrivateCourseByUser = (userId) => __awaiter(void 0, void 0, void 0, fun
 });
 const getCourseDetail = (userId, courseId) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const result = yield prisma.$queryRaw `SELECT id, created_at, path::text, distance::text, departure_region, departure_city, departure_town, departure_name, image FROM "Course" WHERE id=${courseId}`;
+        const result = yield prisma.$queryRaw `SELECT id, created_at, path::text, distance::text, departure_region, departure_city, departure_town, departure_name, image FROM "Course" WHERE id=${courseId} AND deleted_at IS NULL`;
         if (!result[0])
             return null;
         const courseDetailGetDTO = {
@@ -168,11 +158,39 @@ const getCourseDetail = (userId, courseId) => __awaiter(void 0, void 0, void 0, 
         throw error;
     }
 });
+const deleteCourse = (courseIdList) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        //1. 코스삭제 -> deleteAt 업데이트
+        //2. update한 코스들에 연결된  publicCourse 삭제
+        const deletedCourse = yield prisma.course.updateMany({
+            where: {
+                id: {
+                    in: courseIdList,
+                },
+            },
+            data: {
+                deleted_at: new Date(),
+            },
+        });
+        //!
+        console.log(deletedCourse);
+        const deletedPublicCourse = yield service_1.publicCourseService.deletePublicCourse(courseIdList);
+        if (deletedCourse.count === 0 || deletedCourse.count != courseIdList.length) {
+            return constant_1.rm.NO_DELETED_COURSE;
+        }
+        return deletedCourse.count;
+    }
+    catch (error) {
+        //updateMany 메소드는 없는 코스를 삭제할때 count가 0으로만 나오지 에러가 나오지는 않음.
+        console.log(error);
+    }
+});
 const courseService = {
     createCourse,
     getCourseByUser,
     getPrivateCourseByUser,
     getCourseDetail,
+    deleteCourse,
 };
 exports.default = courseService;
 //# sourceMappingURL=courseService.js.map

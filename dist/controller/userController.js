@@ -85,10 +85,33 @@ const updateUserNickname = (req, res) => __awaiter(void 0, void 0, void 0, funct
         return res.status(constant_1.sc.INTERNAL_SERVER_ERROR).send((0, response_1.fail)(constant_1.sc.INTERNAL_SERVER_ERROR, constant_1.rm.INTERNAL_SERVER_ERROR));
     }
 });
+const deleteUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const error = (0, express_validator_1.validationResult)(req);
+    if (!error.isEmpty()) {
+        const validationErrorMsg = error["errors"][0].msg;
+        return res.status(constant_1.sc.BAD_REQUEST).send((0, response_1.fail)(constant_1.sc.BAD_REQUEST, validationErrorMsg));
+    }
+    const refreshToken = req.header("refreshToken");
+    //! 애플의 경우만 헤더에 appleAccessToken  보내기
+    const appleAccessToken = req.header("appleAccessToken");
+    try {
+        const data = yield service_1.userService.deleteUser(refreshToken, appleAccessToken);
+        if (!data)
+            return res.status(constant_1.sc.BAD_REQUEST).send((0, response_1.fail)(constant_1.sc.BAD_REQUEST, constant_1.rm.DELETE_USER_FAIL));
+        else if (typeof data == "string")
+            return res.status(constant_1.sc.BAD_REQUEST).send((0, response_1.fail)(constant_1.sc.BAD_REQUEST, data));
+        return res.status(constant_1.sc.OK).send((0, response_1.success)(constant_1.sc.OK, constant_1.rm.DELETE_USER_SUCCESS, { deletedUserId: data }));
+    }
+    catch (e) {
+        console.log(e);
+        return res.status(constant_1.sc.INTERNAL_SERVER_ERROR).send((0, response_1.fail)(constant_1.sc.INTERNAL_SERVER_ERROR, constant_1.rm.INTERNAL_SERVER_ERROR));
+    }
+});
 const userController = {
     //signUp,
     getUser,
     updateUserNickname,
+    deleteUser,
 };
 exports.default = userController;
 //# sourceMappingURL=userController.js.map
