@@ -111,7 +111,7 @@ const getPublicCourseDetail = async (userId: number, publicCourseId: number) => 
     //!
     console.log(publicCourseData);
 
-    if (!publicCourseData) {
+    if (!publicCourseData || publicCourseData.length == 0) {
       return publicCourseData;
     }
     const isPublicScrap = await prisma.scrap.findFirst({
