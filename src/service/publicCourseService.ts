@@ -102,8 +102,6 @@ const getPublicCourseDetail = async (userId: number, publicCourseId: number) => 
 
     */
 
-    //! await prisma.$queryRaw`SELECT "PublicCourse"."id" AS "pid","PublicCourse"."title","PublicCourse"."description", "Course"."id" AS "cid", "Course"."path"::text,"Course"."image","Course"."distance"::text,"Course"."departure_region","Course"."departure_city","Course"."departure_town","Course"."departure_name", "User"."nickname", "User"."id" AS "pcuid", "User"."level", "User"."latest_stamp" FROM "PublicCourse", "Course", "User" WHERE "PublicCourse"."id"=${publicCourseId}  AND "PublicCourse"."course_id" = "Course"."id" AND "Course"."user_id"="User"."id"`;
-
     const publicCourseData: any = await prisma.$queryRaw`
         SELECT "PublicCourse"."id" AS "pid","PublicCourse"."title","PublicCourse"."description",
          "Course"."id" AS "cid", "Course"."path"::text,"Course"."image","Course"."distance"::text,"Course"."departure_region","Course"."departure_city","Course"."departure_town","Course"."departure_name", 
