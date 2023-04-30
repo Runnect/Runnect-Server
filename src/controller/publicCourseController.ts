@@ -103,7 +103,7 @@ const getPublicCourseDetail = async (req: Request, res: Response) => {
 
   try {
     const publicCourseDetail = await publicCourseService.getPublicCourseDetail(userId, +publicCourseId); //퍼블릭 코스아이디 number로 타입변환
-    if (!publicCourseDetail) {
+    if (!publicCourseDetail || publicCourseDetail.length == 0) {
       res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.INVALID_PUBLIC_COURSE_ID));
     } else {
       return res.status(sc.OK).send(success(sc.OK, rm.READ_PUBLIC_COURSE_DETAIL_SUCCESS, publicCourseDetail));
