@@ -173,8 +173,38 @@ const deleteCourse = (courseIdList) => __awaiter(void 0, void 0, void 0, functio
             },
         });
         //!
+        console.log("업데이트된 코스");
         console.log(deletedCourse);
-        const deletedPublicCourse = yield service_1.publicCourseService.deletePublicCourse(courseIdList);
+        /**
+         * const result = await prisma.course.findMany({
+          where: {
+            AND: [{ user_id: userId }, { private: true }, { deleted_at: null }],
+          },
+          orderBy: {
+            created_at: "desc",
+          },
+        });
+         */
+        const deletedPublicCourseData = yield prisma.course.findMany({
+            where: {
+                AND: [{ id: { in: courseIdList } }, { private: false }],
+            },
+            include: {
+                PublicCourse: true,
+            },
+        });
+        //!
+        console.log("삭제할 퍼블릭코스들");
+        console.log(deletedPublicCourseData);
+        const deletedPublicCourseIdList = new Array;
+        deletedPublicCourseData.forEach((pc) => {
+            var _a;
+            deletedPublicCourseIdList.push((_a = pc.PublicCourse) === null || _a === void 0 ? void 0 : _a.id);
+        });
+        //!
+        console.log("삭제할 퍼블릭코스아이디들");
+        console.log(deletedPublicCourseIdList);
+        const deletedPublicCourse = yield service_1.publicCourseService.deletePublicCourse(deletedPublicCourseIdList);
         if (deletedCourse.count === 0 || deletedCourse.count != courseIdList.length) {
             return constant_1.rm.NO_DELETED_COURSE;
         }

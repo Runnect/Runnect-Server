@@ -102,7 +102,7 @@ const getPublicCourseDetail = (req, res) => __awaiter(void 0, void 0, void 0, fu
     const { publicCourseId } = req.params; //위에서 검사했어도 스트링으로옴
     try {
         const publicCourseDetail = yield service_1.publicCourseService.getPublicCourseDetail(userId, +publicCourseId); //퍼블릭 코스아이디 number로 타입변환
-        if (!publicCourseDetail) {
+        if (!publicCourseDetail || publicCourseDetail.length == 0) {
             res.status(constant_1.sc.BAD_REQUEST).send((0, response_1.fail)(constant_1.sc.BAD_REQUEST, constant_1.rm.INVALID_PUBLIC_COURSE_ID));
         }
         else {
