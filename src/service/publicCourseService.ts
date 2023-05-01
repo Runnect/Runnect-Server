@@ -290,7 +290,7 @@ const deletePublicCourse = async (publicCourseIdList: Array<number>) => {
 
     const publicCourseIdListForChk: Array<number> = new Array<number>();
     const courseIdList: Array<number> = new Array<number>();
-    for (var i = 0; i < getCourseId.length; i++) {
+    for (let i = 0; i < getCourseId.length; i++) {
       courseIdList.push(getCourseId[i]["course_id"]);
       publicCourseIdListForChk.push(getCourseId[i]["id"]);
     }
@@ -319,6 +319,9 @@ const deletePublicCourse = async (publicCourseIdList: Array<number>) => {
       },
     });
 
+    //!
+    console.log("퍼블릭 코스삭제후 private true로 업데이트한 코스들");
+    console.log(updatedPublicCourse);
     return data.count;
   } catch (error) {
     if (error instanceof PrismaClientKnownRequestError && error.code === "P2025") {

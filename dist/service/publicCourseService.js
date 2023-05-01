@@ -106,13 +106,22 @@ const getPublicCourseDetail = (userId, publicCourseId) => __awaiter(void 0, void
         return publicCourseData;
     
         */
-        const publicCourseData = yield prisma.$queryRaw `SELECT "PublicCourse"."id" AS "pid","PublicCourse"."title","PublicCourse"."description", "Course"."id" AS "cid", "Course"."path"::text,"Course"."image","Course"."distance"::text,"Course"."departure_region","Course"."departure_city","Course"."departure_town","Course"."departure_name", "User"."nickname", "User"."id" AS "pcuid", "User"."level", "User"."latest_stamp" FROM "PublicCourse", "Course", "User" WHERE "PublicCourse"."id"=${publicCourseId}  AND "PublicCourse"."course_id" = "Course"."id" AND "Course"."user_id"="User"."id"`;
-        if (!publicCourseData) {
+        const publicCourseData = yield prisma.$queryRaw `
+        SELECT "PublicCourse"."id" AS "pid","PublicCourse"."title","PublicCourse"."description",
+         "Course"."id" AS "cid", "Course"."path"::text,"Course"."image","Course"."distance"::text,"Course"."departure_region","Course"."departure_city","Course"."departure_town","Course"."departure_name", 
+         "User"."nickname", "User"."id" AS "pcuid", "User"."level", "User"."latest_stamp"
+         FROM "PublicCourse", "Course" LEFT JOIN "User" ON "Course"."user_id"="User"."id"
+         WHERE "PublicCourse"."id"=${publicCourseId}  AND "PublicCourse"."course_id" = "Course"."id"`;
+        //!
+        console.log(publicCourseData);
+        if (!publicCourseData || publicCourseData.length == 0) {
             return publicCourseData;
         }
         const isPublicScrap = yield prisma.scrap.findFirst({
             where: { user_id: userId, public_course_id: publicCourseId, scrapTF: true },
         });
+        //!
+        console.log(isPublicScrap);
         if (publicCourseData[0].pcuid == null) {
             publicCourseData[0].nickname = "알 수 없음";
             publicCourseData[0].level = "알 수 없음";
@@ -278,7 +287,7 @@ const deletePublicCourse = (publicCourseIdList) => __awaiter(void 0, void 0, voi
         });
         const publicCourseIdListForChk = new Array();
         const courseIdList = new Array();
-        for (var i = 0; i < getCourseId.length; i++) {
+        for (let i = 0; i < getCourseId.length; i++) {
             courseIdList.push(getCourseId[i]["course_id"]);
             publicCourseIdListForChk.push(getCourseId[i]["id"]);
         }
@@ -305,6 +314,9 @@ const deletePublicCourse = (publicCourseIdList) => __awaiter(void 0, void 0, voi
                 private: true,
             },
         });
+        //!
+        console.log("퍼블릭 코스삭제후 private true로 업데이트한 코스들");
+        console.log(updatedPublicCourse);
         return data.count;
     }
     catch (error) {
