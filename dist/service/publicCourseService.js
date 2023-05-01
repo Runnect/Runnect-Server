@@ -287,7 +287,7 @@ const deletePublicCourse = (publicCourseIdList) => __awaiter(void 0, void 0, voi
         });
         const publicCourseIdListForChk = new Array();
         const courseIdList = new Array();
-        for (var i = 0; i < getCourseId.length; i++) {
+        for (let i = 0; i < getCourseId.length; i++) {
             courseIdList.push(getCourseId[i]["course_id"]);
             publicCourseIdListForChk.push(getCourseId[i]["id"]);
         }
@@ -314,6 +314,9 @@ const deletePublicCourse = (publicCourseIdList) => __awaiter(void 0, void 0, voi
                 private: true,
             },
         });
+        //!
+        console.log("퍼블릭 코스삭제후 private true로 업데이트한 코스들");
+        console.log(updatedPublicCourse);
         return data.count;
     }
     catch (error) {
