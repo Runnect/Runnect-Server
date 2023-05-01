@@ -121,7 +121,7 @@ const getPublicCourseDetail = async (userId: number, publicCourseId: number) => 
     //!
     console.log(isPublicScrap);
 
-    if (publicCourseData[0].pcuid == null) {
+    if (publicCourseData[0]?.pcuid == null) {
       publicCourseData[0].nickname = "알 수 없음";
       publicCourseData[0].level = "알 수 없음";
       publicCourseData[0].latest_stamp = "알 수 없음";
