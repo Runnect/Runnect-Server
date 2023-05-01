@@ -83,6 +83,7 @@ const getPublicCourseByUser = (userId) => __awaiter(void 0, void 0, void 0, func
     }
 });
 const getPublicCourseDetail = (userId, publicCourseId) => __awaiter(void 0, void 0, void 0, function* () {
+    var _c;
     try {
         /** path정보를 가져오지 않은 prisma orm 사용 코드
         const publicCourseData = await prisma.publicCourse.findUnique({
@@ -122,7 +123,7 @@ const getPublicCourseDetail = (userId, publicCourseId) => __awaiter(void 0, void
         });
         //!
         console.log(isPublicScrap);
-        if (publicCourseData[0].pcuid == null) {
+        if (((_c = publicCourseData[0]) === null || _c === void 0 ? void 0 : _c.pcuid) == null) {
             publicCourseData[0].nickname = "알 수 없음";
             publicCourseData[0].level = "알 수 없음";
             publicCourseData[0].latest_stamp = "알 수 없음";
