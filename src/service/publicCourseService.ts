@@ -31,6 +31,7 @@ const createPublicCourse = async (publicCourseCreateRequestDTO: PublicCourseCrea
       });
 
       if (courseData.user_id) {
+        // User: createdPublicCourse + 1
         await prisma.user.update({
           where: {
             id: courseData.user_id,
