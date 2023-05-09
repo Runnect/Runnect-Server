@@ -66,20 +66,24 @@ model Scrap {
 }
 
 model User {
-  id            Int         @id @unique @default(autoincrement())
-  nickname      String      @unique @db.VarChar(14)
-  latest_stamp  String      @default("CSPR0") @db.VarChar(10)
-  level         Int?        @default(1)
-  created_at    DateTime    @default(now()) @db.Timestamp(6)
-  modified_at   DateTime?   @db.Timestamp(6)
-  social_id     String
-  email         String
-  provider      String
-  refresh_token String?
-  Course        Course[]
-  Record        Record[]
-  Scrap         Scrap[]
-  UserStamp     UserStamp[]
+  id                  Int         @id @unique @default(autoincrement())
+  nickname            String      @unique @db.VarChar(14)
+  latest_stamp        String      @default("CSPR0") @db.VarChar(10)
+  level               Int?        @default(1)
+  created_at          DateTime    @default(now()) @db.Timestamp(6)
+  modified_at         DateTime?   @db.Timestamp(6)
+  social_id           String
+  email               String
+  provider            String
+  refresh_token       String?
+  createdCourse       Int         @default(0)
+  createdRecord       Int         @default(0)
+  createdPublicCourse Int         @default(0)
+  createdScrap        Int         @default(0)
+  Course              Course[]
+  Record              Record[]
+  Scrap               Scrap[]
+  UserStamp           UserStamp[]
 
   @@unique([email, provider], map: "user_email_provider_uindex")
 }
