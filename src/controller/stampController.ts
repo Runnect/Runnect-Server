@@ -15,8 +15,8 @@ const getStampByUser = async (req: Request, res: Response) => {
 
   try {
     const stampByUser = await stampService.getStampByUser(userId);
-    if (!stampByUser || stampByUser.length == 0) {
-      return res.status(sc.OK).send(success(sc.OK, rm.READ_STAMP_BY_USER, stampByUser));
+    if (!stampByUser) {
+      return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.BAD_REQUEST));
     } else {
       const stamps: StampDTO[] = stampByUser.map((sbu: any) => {
         let stamp: StampDTO = {
