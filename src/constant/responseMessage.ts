@@ -62,6 +62,7 @@ export default {
   DELETE_PUBLIC_COURSE_FAIL: "업로드된 코스 삭제 실패",
   UPDATE_COURSE_SUCCESS: "업로드한 코스 수정 성공",
   NO_DELETED_PUBLIC_COURSE: "삭제할 업로드된 코스가 존재하지 않습니다.",
+  READ_PUBLIC_COURSE_FAIL: "업로드된 코스 조회 실패",
 
   //record
   UPLOAD_RECORD: "경로기록하기 성공",
