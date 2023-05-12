@@ -20,6 +20,7 @@ const createRecord = async (recordRequestDTO: recordRequestDTO) => {
     if (!recordData) {
       return null;
     } else {
+      // User: createdRecord + 1
       await prisma.user.update({
         where: {
           id: recordRequestDTO.userId,
