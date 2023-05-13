@@ -49,7 +49,6 @@ const chkLevel = async (userId: number) => {
 };
 
 const chkStampNumber = (getCounts: number, option: string) => {
-  // 여기 스탬프 조건 변경하기
 
   const stampRule = {
     c: [1, 10, 30],
@@ -98,53 +97,23 @@ const createStampToUser = async (userId: number, option: string, stampLevel: num
 const getCount = async (userId: number, option: string) => {
   // 옵션에 해당하는 활동 횟수 가져옴
   let dataCount;
+  const userInfo = await prisma.user.findUnique({
+    where: {
+      id: userId
+    }
+  });
   if (option == "c") {
     // 코스 그리기
-    dataCount = (
-      await prisma.course.findMany({
-        where: {
-          AND: [{ user_id: userId }, { deleted_at: null }],
-        },
-      })
-    ).length;
+    dataCount = userInfo?.createdCourse;
   } else if (option == "s") {
     // 스크랩
-    dataCount = (
-      await prisma.scrap.findMany({
-        where: {
-          user_id: userId,
-        },
-      })
-    ).length;
+    dataCount = userInfo?.createdScrap;
   } else if (option == "u") {
     // 업로드
-    dataCount = (
-      await prisma.course.findMany({
-        where: {
-          AND: [{ user_id: userId }, { deleted_at: null }, { private: false }],
-        },
-      })
-    ).length;
-
-    // dataCount = (await prisma.publicCourse.findMany({ // 퍼블릭 코스에서 가져올 때
-    //     where: {
-    //         deleted_at: null,
-    //         Course: {
-    //             User: {
-    //                 machine_id: machineId,
-    //             },
-    //         },
-    //     },
-    // })).length;
+    dataCount = userInfo?.createdPublicCourse;
   } else if (option == "r") {
     // 달리기
-    dataCount = (
-      await prisma.record.findMany({
-        where: {
-          AND: [{ user_id: userId }, { deleted_at: null }],
-        },
-      })
-    ).length;
+    dataCount = userInfo?.createdRecord;
   } else {
     return null;
   }

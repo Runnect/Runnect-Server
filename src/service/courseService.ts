@@ -32,7 +32,15 @@ const createCourse = async (courseCreateDTO: CourseCreateDTO) => {
         created_at: "desc",
       },
     });
-
+    // User: createdCourse + 1
+    await prisma.user.update({
+      where: {
+        id: courseCreateDTO.userId,
+      }, 
+      data: {
+        createdCourse: {increment : 1},
+      },
+    });
     await stampService.createStampByUser(courseCreateDTO.userId, "c");
 
     const createdCourse = { course: { id: result?.id, createdAt: dateConvertString(result?.created_at) } };
