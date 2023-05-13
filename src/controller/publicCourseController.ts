@@ -57,8 +57,8 @@ const getPublicCourseByUser = async (req: Request, res: Response) => {
   try {
     const publicCourseByUser = await publicCourseService.getPublicCourseByUser(userId);
 
-    if (!publicCourseByUser || publicCourseByUser.length == 0) {
-      return res.status(sc.OK).send(success(sc.OK, rm.READ_PUBLIC_COURSE_BY_USER, publicCourseByUser));
+    if (!publicCourseByUser) {
+      return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.READ_PUBLIC_COURSE_FAIL));
     } else {
       const publicCourses: PublicCourse[] = publicCourseByUser.map((pc: any) => {
         let publicCourse: PublicCourse = {
@@ -127,8 +127,8 @@ const recommendPublicCourse = async (req: Request, res: Response) => {
   try {
     const recommendedPublicCourse = await publicCourseService.recommendPublicCourse(userId);
 
-    if (!recommendedPublicCourse || recommendedPublicCourse.length == 0) {
-      return res.status(sc.OK).send(success(sc.OK, rm.READ_RECOMMENDED_COURSE_SUCCESS, recommendedPublicCourse));
+    if (!recommendedPublicCourse) {
+      return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.READ_PUBLIC_COURSE_FAIL));
     } else {
       const publicCourses: PublicCourse[] = recommendedPublicCourse.map((rbc) => {
         const pc: PublicCourse = {
@@ -168,8 +168,8 @@ const searchPublicCourse = async (req: Request, res: Response) => {
   try {
     const searchedPublicCourse = await publicCourseService.searchPublicCourse(userId, keyword as string);
 
-    if (!searchedPublicCourse || searchedPublicCourse.length == 0) {
-      return res.status(sc.OK).send(success(sc.OK, rm.READ_SEARCHED_COURSE_SUCCESS, searchedPublicCourse));
+    if (!searchedPublicCourse) {
+      return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.READ_PUBLIC_COURSE_FAIL));
     } else {
       const publicCourses: PublicCourse[] = searchedPublicCourse.map((spc) => {
         const pc: PublicCourse = {
