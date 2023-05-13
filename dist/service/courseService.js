@@ -39,6 +39,15 @@ const createCourse = (courseCreateDTO) => __awaiter(void 0, void 0, void 0, func
                 created_at: "desc",
             },
         });
+        // User: createdCourse + 1
+        yield prisma.user.update({
+            where: {
+                id: courseCreateDTO.userId,
+            },
+            data: {
+                created_course: { increment: 1 },
+            },
+        });
         yield service_1.stampService.createStampByUser(courseCreateDTO.userId, "c");
         const createdCourse = { course: { id: result === null || result === void 0 ? void 0 : result.id, createdAt: (0, convertTime_1.dateConvertString)(result === null || result === void 0 ? void 0 : result.created_at) } };
         return createdCourse;

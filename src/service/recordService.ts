@@ -26,7 +26,7 @@ const createRecord = async (recordRequestDTO: recordRequestDTO) => {
           id: recordRequestDTO.userId,
         }, 
         data: {
-          createdRecord: {increment : 1},
+          created_record: {increment : 1},
         },
       });
       await stampService.createStampByUser(recordRequestDTO.userId, "r");

@@ -56,7 +56,6 @@ const chkLevel = (userId) => __awaiter(void 0, void 0, void 0, function* () {
     }
 });
 const chkStampNumber = (getCounts, option) => {
-    // 여기 스탬프 조건 변경하기
     const stampRule = {
         c: [1, 10, 30],
         s: [1, 20, 40],
@@ -104,47 +103,26 @@ const createStampToUser = (userId, option, stampLevel) => __awaiter(void 0, void
 const getCount = (userId, option) => __awaiter(void 0, void 0, void 0, function* () {
     // 옵션에 해당하는 활동 횟수 가져옴
     let dataCount;
+    const userInfo = yield prisma.user.findUnique({
+        where: {
+            id: userId
+        }
+    });
     if (option == "c") {
         // 코스 그리기
-        dataCount = (yield prisma.course.findMany({
-            where: {
-                AND: [{ user_id: userId }, { deleted_at: null }],
-            },
-        })).length;
+        dataCount = userInfo === null || userInfo === void 0 ? void 0 : userInfo.created_course;
     }
     else if (option == "s") {
         // 스크랩
-        dataCount = (yield prisma.scrap.findMany({
-            where: {
-                user_id: userId,
-            },
-        })).length;
+        dataCount = userInfo === null || userInfo === void 0 ? void 0 : userInfo.created_scrap;
     }
     else if (option == "u") {
         // 업로드
-        dataCount = (yield prisma.course.findMany({
-            where: {
-                AND: [{ user_id: userId }, { deleted_at: null }, { private: false }],
-            },
-        })).length;
-        // dataCount = (await prisma.publicCourse.findMany({ // 퍼블릭 코스에서 가져올 때
-        //     where: {
-        //         deleted_at: null,
-        //         Course: {
-        //             User: {
-        //                 machine_id: machineId,
-        //             },
-        //         },
-        //     },
-        // })).length;
+        dataCount = userInfo === null || userInfo === void 0 ? void 0 : userInfo.created_public_course;
     }
     else if (option == "r") {
         // 달리기
-        dataCount = (yield prisma.record.findMany({
-            where: {
-                AND: [{ user_id: userId }, { deleted_at: null }],
-            },
-        })).length;
+        dataCount = userInfo === null || userInfo === void 0 ? void 0 : userInfo.created_record;
     }
     else {
         return null;

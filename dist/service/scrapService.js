@@ -45,6 +45,15 @@ const createScrap = (scrapDTO) => __awaiter(void 0, void 0, void 0, function* ()
                 return null;
             }
             else {
+                // User: createdScrap + 1
+                yield prisma.user.update({
+                    where: {
+                        id: scrapDTO.userId,
+                    },
+                    data: {
+                        created_scrap: { increment: 1 },
+                    },
+                });
                 yield service_1.stampService.createStampByUser(scrapDTO.userId, "s"); //처음 스크랩한것이기 때문에 스탬프검사하기
                 return addScrap;
             }
