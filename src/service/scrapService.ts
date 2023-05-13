@@ -35,6 +35,15 @@ const createScrap = async (scrapDTO: scrapDTO) => {
       if (!addScrap) {
         return null;
       } else {
+        // User: createdScrap + 1
+        await prisma.user.update({
+          where: {
+            id: scrapDTO.userId,
+          }, 
+          data: {
+            createdScrap: {increment : 1},
+          },
+        });
         await stampService.createStampByUser(scrapDTO.userId, "s"); //처음 스크랩한것이기 때문에 스탬프검사하기
         return addScrap;
       }

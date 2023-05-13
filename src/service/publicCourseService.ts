@@ -30,7 +30,18 @@ const createPublicCourse = async (publicCourseCreateRequestDTO: PublicCourseCrea
         },
       });
 
-      if (courseData.user_id) await stampService.createStampByUser(courseData.user_id, "u");
+      if (courseData.user_id) {
+        // User: createdPublicCourse + 1
+        await prisma.user.update({
+          where: {
+            id: courseData.user_id,
+          }, 
+          data: {
+            createdPublicCourse: {increment : 1},
+          },
+        });
+        await stampService.createStampByUser(courseData.user_id, "u");
+      }
 
       return publicCourseData;
     }
