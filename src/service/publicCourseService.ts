@@ -37,7 +37,7 @@ const createPublicCourse = async (publicCourseCreateRequestDTO: PublicCourseCrea
             id: courseData.user_id,
           }, 
           data: {
-            createdPublicCourse: {increment : 1},
+            created_public_course: {increment : 1},
           },
         });
         await stampService.createStampByUser(courseData.user_id, "u");

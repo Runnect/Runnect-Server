@@ -38,7 +38,7 @@ const createCourse = async (courseCreateDTO: CourseCreateDTO) => {
         id: courseCreateDTO.userId,
       }, 
       data: {
-        createdCourse: {increment : 1},
+        created_course: {increment : 1},
       },
     });
     await stampService.createStampByUser(courseCreateDTO.userId, "c");
