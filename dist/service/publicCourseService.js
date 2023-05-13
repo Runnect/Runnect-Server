@@ -35,8 +35,18 @@ const createPublicCourse = (publicCourseCreateRequestDTO) => __awaiter(void 0, v
                     private: false,
                 },
             });
-            if (courseData.user_id)
+            if (courseData.user_id) {
+                // User: createdPublicCourse + 1
+                yield prisma.user.update({
+                    where: {
+                        id: courseData.user_id,
+                    },
+                    data: {
+                        created_public_course: { increment: 1 },
+                    },
+                });
                 yield service_1.stampService.createStampByUser(courseData.user_id, "u");
+            }
             return publicCourseData;
         }
     }
