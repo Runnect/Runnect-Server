@@ -104,16 +104,16 @@ const getCount = async (userId: number, option: string) => {
   });
   if (option == "c") {
     // 코스 그리기
-    dataCount = userInfo?.createdCourse;
+    dataCount = userInfo?.created_course;
   } else if (option == "s") {
     // 스크랩
-    dataCount = userInfo?.createdScrap;
+    dataCount = userInfo?.created_scrap;
   } else if (option == "u") {
     // 업로드
-    dataCount = userInfo?.createdPublicCourse;
+    dataCount = userInfo?.created_public_course;
   } else if (option == "r") {
     // 달리기
-    dataCount = userInfo?.createdRecord;
+    dataCount = userInfo?.created_record;
   } else {
     return null;
   }
