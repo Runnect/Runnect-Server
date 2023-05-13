@@ -41,7 +41,7 @@ const createScrap = async (scrapDTO: scrapDTO) => {
             id: scrapDTO.userId,
           }, 
           data: {
-            createdScrap: {increment : 1},
+            created_scrap: {increment : 1},
           },
         });
         await stampService.createStampByUser(scrapDTO.userId, "s"); //처음 스크랩한것이기 때문에 스탬프검사하기
