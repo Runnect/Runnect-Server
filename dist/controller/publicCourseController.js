@@ -59,8 +59,8 @@ const getPublicCourseByUser = (req, res) => __awaiter(void 0, void 0, void 0, fu
     const userId = req.body.userId;
     try {
         const publicCourseByUser = yield service_1.publicCourseService.getPublicCourseByUser(userId);
-        if (!publicCourseByUser || publicCourseByUser.length == 0) {
-            return res.status(constant_1.sc.OK).send((0, response_1.success)(constant_1.sc.OK, constant_1.rm.READ_PUBLIC_COURSE_BY_USER, publicCourseByUser));
+        if (!publicCourseByUser) {
+            return res.status(constant_1.sc.BAD_REQUEST).send((0, response_1.fail)(constant_1.sc.BAD_REQUEST, constant_1.rm.READ_PUBLIC_COURSE_FAIL));
         }
         else {
             const publicCourses = publicCourseByUser.map((pc) => {
@@ -125,8 +125,8 @@ const recommendPublicCourse = (req, res) => __awaiter(void 0, void 0, void 0, fu
     const userId = req.body.userId;
     try {
         const recommendedPublicCourse = yield service_1.publicCourseService.recommendPublicCourse(userId);
-        if (!recommendedPublicCourse || recommendedPublicCourse.length == 0) {
-            return res.status(constant_1.sc.OK).send((0, response_1.success)(constant_1.sc.OK, constant_1.rm.READ_RECOMMENDED_COURSE_SUCCESS, recommendedPublicCourse));
+        if (!recommendedPublicCourse) {
+            return res.status(constant_1.sc.BAD_REQUEST).send((0, response_1.fail)(constant_1.sc.BAD_REQUEST, constant_1.rm.READ_PUBLIC_COURSE_FAIL));
         }
         else {
             const publicCourses = recommendedPublicCourse.map((rbc) => {
@@ -163,8 +163,8 @@ const searchPublicCourse = (req, res) => __awaiter(void 0, void 0, void 0, funct
     const { keyword } = req.query;
     try {
         const searchedPublicCourse = yield service_1.publicCourseService.searchPublicCourse(userId, keyword);
-        if (!searchedPublicCourse || searchedPublicCourse.length == 0) {
-            return res.status(constant_1.sc.OK).send((0, response_1.success)(constant_1.sc.OK, constant_1.rm.READ_SEARCHED_COURSE_SUCCESS, searchedPublicCourse));
+        if (!searchedPublicCourse) {
+            return res.status(constant_1.sc.BAD_REQUEST).send((0, response_1.fail)(constant_1.sc.BAD_REQUEST, constant_1.rm.READ_PUBLIC_COURSE_FAIL));
         }
         else {
             const publicCourses = searchedPublicCourse.map((spc) => {
