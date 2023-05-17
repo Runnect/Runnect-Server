@@ -20,7 +20,7 @@ export interface PublicCourseGetDTO {
 export interface PublicCourseDetailGetDTO {
   user: {
     nickname: string;
-    level: number;
+    level: string;
     image: string;
     isNowUser: boolean;
   };
