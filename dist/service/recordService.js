@@ -31,6 +31,15 @@ const createRecord = (recordRequestDTO) => __awaiter(void 0, void 0, void 0, fun
             return null;
         }
         else {
+            // User: createdRecord + 1
+            yield prisma.user.update({
+                where: {
+                    id: recordRequestDTO.userId,
+                },
+                data: {
+                    created_record: { increment: 1 },
+                },
+            });
             yield service_1.stampService.createStampByUser(recordRequestDTO.userId, "r");
             return recordData;
         }

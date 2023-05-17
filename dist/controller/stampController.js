@@ -22,8 +22,8 @@ const getStampByUser = (req, res) => __awaiter(void 0, void 0, void 0, function*
     const userId = req.body.userId;
     try {
         const stampByUser = yield service_1.stampService.getStampByUser(userId);
-        if (!stampByUser || stampByUser.length == 0) {
-            return res.status(constant_1.sc.OK).send((0, response_1.success)(constant_1.sc.OK, constant_1.rm.READ_STAMP_BY_USER, stampByUser));
+        if (!stampByUser) {
+            return res.status(constant_1.sc.BAD_REQUEST).send((0, response_1.fail)(constant_1.sc.BAD_REQUEST, constant_1.rm.BAD_REQUEST));
         }
         else {
             const stamps = stampByUser.map((sbu) => {
