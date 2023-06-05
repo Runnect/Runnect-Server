@@ -14,6 +14,7 @@ const client_1 = require("@prisma/client");
 const pathConvertCoor_1 = require("../module/convert/pathConvertCoor");
 const service_1 = require("../service");
 const constant_1 = require("../constant");
+const runtime_1 = require("@prisma/client/runtime");
 const prisma = new client_1.PrismaClient();
 //* 코스 그리기
 const createCourse = (courseCreateDTO) => __awaiter(void 0, void 0, void 0, function* () {
@@ -53,7 +54,13 @@ const createCourse = (courseCreateDTO) => __awaiter(void 0, void 0, void 0, func
         return createdCourse;
     }
     catch (error) {
-        console.error(error);
+        if (error instanceof runtime_1.PrismaClientKnownRequestError && (error.code == "22P03" || error.code === "P2010")) {
+            console.log(error);
+            console.log(courseCreateDTO);
+        }
+        else {
+            console.log(error);
+        }
         throw error;
     }
 });
