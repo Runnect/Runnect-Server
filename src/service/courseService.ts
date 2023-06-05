@@ -7,6 +7,7 @@ import { PrismaClient } from "@prisma/client";
 import { pathConvertCoor } from "../module/convert/pathConvertCoor";
 import { publicCourseService, stampService } from "../service";
 import { rm } from "../constant";
+import { PrismaClientKnownRequestError } from "@prisma/client/runtime";
 
 const prisma = new PrismaClient();
 
@@ -46,7 +47,12 @@ const createCourse = async (courseCreateDTO: CourseCreateDTO) => {
     const createdCourse = { course: { id: result?.id, createdAt: dateConvertString(result?.created_at) } };
     return createdCourse;
   } catch (error) {
-    console.error(error);
+    if (error instanceof PrismaClientKnownRequestError && (error.code == "22P03" || error.code === "P2010")) {
+      console.log(error);
+      console.log(courseCreateDTO);
+    } else {
+      console.log(error);
+    }
     throw error;
   }
 };

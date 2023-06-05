@@ -141,7 +141,7 @@ const getPublicCourseDetail = (userId, publicCourseId) => __awaiter(void 0, void
         const publicCourseDetailGetDTO = {
             user: {
                 nickname: publicCourseData[0].nickname,
-                level: publicCourseData[0].level,
+                level: publicCourseData[0].level + "",
                 image: publicCourseData[0].latest_stamp,
                 isNowUser: publicCourseData[0].pcuid == userId ? true : false,
             },
