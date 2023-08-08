@@ -30,6 +30,9 @@ publicCourseRouter.get(
       .withMessage("유저 아이디가 없습니다.")
       .isNumeric()
       .withMessage("유저아이디가 숫자가 아닙니다."),
+    query("pageNo")
+      .notEmpty()
+      .withMessage("페이지 번호가 없습니다."),
   ],
   publicCourseController.recommendPublicCourse
 );

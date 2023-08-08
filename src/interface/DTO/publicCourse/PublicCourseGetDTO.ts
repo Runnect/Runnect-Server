@@ -41,3 +41,16 @@ export interface PublicCourseDetailGetDTO {
     };
   };
 }
+
+export interface RecommendPublicCourse {
+  pageNo: number;
+  id: number;
+  courseId: number;
+  title: string;
+  image: string;
+  scrap?: boolean;
+  departure: {
+    region: string;
+    city: string;
+  };
+}
