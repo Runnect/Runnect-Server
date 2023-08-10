@@ -127,7 +127,9 @@ const recommendPublicCourse = async (req: Request, res: Response) => {
   // countPerPage -> 페이지 크기(한 페이지에 몇 개의 데이터)
   const pageSize = 24; // 24개씩 넘겨줌
   // pageNo -> 페이지 번호(몇 번 페이지)
-  const pageNo = parseInt(req.query.pageNo as string);
+  let pageNo = parseInt(req.query.pageNo as string);
+  // 페이지번호가 요청으로 들어오지 않을시 자동으로 1번 req
+  if (!pageNo) pageNo = 1;
 
   try {
     const recommendedPublicCourse = await publicCourseService.recommendPublicCourse(userId, pageSize, pageNo);
