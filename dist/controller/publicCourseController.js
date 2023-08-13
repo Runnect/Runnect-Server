@@ -123,26 +123,14 @@ const recommendPublicCourse = (req, res) => __awaiter(void 0, void 0, void 0, fu
         return res.status(constant_1.sc.BAD_REQUEST).send((0, response_1.fail)(constant_1.sc.BAD_REQUEST, validationErrorMsg));
     }
     const userId = req.body.userId;
-    // countPerPage -> 페이지 크기(한 페이지에 몇 개의 데이터)
-    const pageSize = 24; // 24개씩 넘겨줌
-    // pageNo -> 페이지 번호(몇 번 페이지)
-    let pageNo = parseInt(req.query.pageNo);
-    // 페이지번호가 요청으로 들어오지 않을시 자동으로 1번 req
-    if (!pageNo)
-        pageNo = 1;
     try {
-        const recommendedPublicCourse = yield service_1.publicCourseService.recommendPublicCourse(userId, pageSize, pageNo);
-        // 가지고 있는 데이터보다 더 큰 페이지 번호를 요청했을 경우
-        if (recommendedPublicCourse == "invalidPageNo") {
-            return res.status(constant_1.sc.BAD_REQUEST).send((0, response_1.fail)(constant_1.sc.BAD_REQUEST, constant_1.rm.INVALID_PAGE_NUMBER));
-        }
+        const recommendedPublicCourse = yield service_1.publicCourseService.recommendPublicCourse(userId);
         if (!recommendedPublicCourse) {
             return res.status(constant_1.sc.BAD_REQUEST).send((0, response_1.fail)(constant_1.sc.BAD_REQUEST, constant_1.rm.READ_PUBLIC_COURSE_FAIL));
         }
         else {
             const publicCourses = recommendedPublicCourse.map((rbc) => {
                 const pc = {
-                    pageNo: pageNo,
                     id: rbc.id,
                     courseId: rbc.course_id,
                     title: rbc.title,
