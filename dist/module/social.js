@@ -71,4 +71,5 @@ const social = {
     kakao,
 };
 exports.default = social;
+
 //# sourceMappingURL=social.js.map
