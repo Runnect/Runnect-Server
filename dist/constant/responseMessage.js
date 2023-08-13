@@ -58,6 +58,7 @@ exports.default = {
     UPDATE_COURSE_SUCCESS: "업로드한 코스 수정 성공",
     NO_DELETED_PUBLIC_COURSE: "삭제할 업로드된 코스가 존재하지 않습니다.",
     READ_PUBLIC_COURSE_FAIL: "업로드된 코스 조회 실패",
+    INVALID_PAGE_NUMBER: "유효하지 않은 페이지 번호입니다.",
     //record
     UPLOAD_RECORD: "경로기록하기 성공",
     INVALID_COURSEID: "유효하지 않은 코스 아이디",
