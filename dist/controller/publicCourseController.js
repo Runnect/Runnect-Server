@@ -260,4 +260,5 @@ const publicCourseController = {
     deletePublicCourse,
 };
 exports.default = publicCourseController;
+
 //# sourceMappingURL=publicCourseController.js.map

@@ -239,4 +239,5 @@ const courseService = {
     deleteCourse,
 };
 exports.default = courseService;
+
 //# sourceMappingURL=courseService.js.map
