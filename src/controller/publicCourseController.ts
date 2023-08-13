@@ -1,4 +1,4 @@
-import { PublicCourse, PublicCourseGetDTO, PublicCourseDetailGetDTO } from "../interface/DTO/publicCourse/PublicCourseGetDTO";
+import { RecommendPublicCourse, PublicCourse, PublicCourseGetDTO, PublicCourseDetailGetDTO } from "../interface/DTO/publicCourse/PublicCourseGetDTO";
 import { Request, Response } from "express";
 import { publicCourseService } from "../service";
 import { rm, sc } from "../constant";
@@ -124,14 +124,27 @@ const recommendPublicCourse = async (req: Request, res: Response) => {
   }
   const userId: number = req.body.userId;
 
+  // countPerPage -> 페이지 크기(한 페이지에 몇 개의 데이터)
+  const pageSize = 24; // 24개씩 넘겨줌
+  // pageNo -> 페이지 번호(몇 번 페이지)
+  let pageNo = parseInt(req.query.pageNo as string);
+  // 페이지번호가 요청으로 들어오지 않을시 자동으로 1번 req
+  if (!pageNo) pageNo = 1;
+
   try {
-    const recommendedPublicCourse = await publicCourseService.recommendPublicCourse(userId);
+    const recommendedPublicCourse = await publicCourseService.recommendPublicCourse(userId, pageSize, pageNo);
+
+    // 가지고 있는 데이터보다 더 큰 페이지 번호를 요청했을 경우
+    if (recommendedPublicCourse == "invalidPageNo") {
+      return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.INVALID_PAGE_NUMBER));
+    }
 
     if (!recommendedPublicCourse) {
       return res.status(sc.BAD_REQUEST).send(fail(sc.BAD_REQUEST, rm.READ_PUBLIC_COURSE_FAIL));
     } else {
-      const publicCourses: PublicCourse[] = recommendedPublicCourse.map((rbc) => {
-        const pc: PublicCourse = {
+      const publicCourses: RecommendPublicCourse[] = recommendedPublicCourse.map((rbc) => {
+        const pc: RecommendPublicCourse = {
+          pageNo: pageNo,
           id: rbc.id,
           courseId: rbc.course_id,
           title: rbc.title,
