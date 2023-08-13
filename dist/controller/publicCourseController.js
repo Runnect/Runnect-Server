@@ -124,7 +124,7 @@ const recommendPublicCourse = (req, res) => __awaiter(void 0, void 0, void 0, fu
     }
     const userId = req.body.userId;
     // countPerPage -> 페이지 크기(한 페이지에 몇 개의 데이터)
-    const pageSize = 24; // 24개씩 넘겨줌
+    const pageSize = 20; // 20개씩 넘겨줌
     // pageNo -> 페이지 번호(몇 번 페이지)
     let pageNo = parseInt(req.query.pageNo);
     // 페이지번호가 요청으로 들어오지 않을시 자동으로 1번 req
