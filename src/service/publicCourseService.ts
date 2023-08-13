@@ -170,8 +170,23 @@ const getPublicCourseDetail = async (userId: number, publicCourseId: number) => 
   }
 };
 
-const recommendPublicCourse = async (userId: number) => {
+const recommendPublicCourse = async (userId: number, pageSize: number, pageNo: number) => {
   try {
+    let start = 0;
+
+    if (pageNo <= 0) {
+      // 1페이지 이하의 페이지를 요청하면 1페이지를 요청한 것으로 간주
+      pageNo = 1;
+    } else {
+      start = (pageNo - 1) * pageSize;
+    }
+
+    // 가지고 있는 데이터보다 더 많은 페이지 수를 요청했을 때 -> invalid page number 리턴
+    const cnt = await prisma.publicCourse.count();
+    if (start >= cnt) {
+      return "invalidPageNo";
+    }
+
     const data = await prisma.publicCourse.findMany({
       include: {
         _count: {
@@ -189,6 +204,8 @@ const recommendPublicCourse = async (userId: number) => {
           _count: "desc",
         },
       },
+      skip: start,
+      take: pageSize,
     });
 
     return data;
